@@ -15,6 +15,6 @@ def loop():
 if __name__ == "__main__":
     p = AntiBotParser()
 
-    input = os.path.join(env_path, "input", "3.bmp")
     template = os.path.join(env_path, "template", "captcha_bot.png")
-    p.parse(input, template)
+    for f in os.listdir(os.path.join(env_path, "input")):
+        p.parse(os.path.join(env_path, "input", f), template)
