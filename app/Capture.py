@@ -1,4 +1,3 @@
-import cv2 as open_cv
 import pyautogui as gui
 
 

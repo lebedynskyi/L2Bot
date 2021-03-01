@@ -1,12 +1,12 @@
 from app.Capture import Capture
-from app.Parser import Parser
+from app.AntiBotParser import AntiBotParser
 
 
 class App:
     def __init__(self, screen_path):
         self.screen_path = screen_path
         self.capture = Capture()
-        self.parser = Parser()
+        self.parser = AntiBotParser()
         pass
 
     def register_handler(self):
