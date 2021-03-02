@@ -3,3 +3,4 @@ numpy=1.20
 pyautogui
 matplotlib
 pytesseract
+imutils

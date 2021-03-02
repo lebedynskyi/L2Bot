@@ -18,3 +18,5 @@ if __name__ == "__main__":
     template = os.path.join(env_path, "template", "captcha_bot.png")
     for f in os.listdir(os.path.join(env_path, "input")):
         p.parse(os.path.join(env_path, "input", f), template)
+
+    # p.parse(os.path.join(env_path, "input", "Yes1.bmp"), template)
