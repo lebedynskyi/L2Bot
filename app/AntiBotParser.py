@@ -66,6 +66,18 @@ class AntiBotParser:
         else:
             print("no match found")
 
+    def find_captcha_warning(self, image, template):
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        res = CVUtil.match_template(img, template)
+
+        threshold = 0.8
+        loc = np.where(res >= threshold)
+        dialog_points = list(zip(*loc[::-1]))
+        if dialog_points:
+            return True
+        return False
+
     def find_captcha_dialog(self, image, template):
         img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)

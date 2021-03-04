@@ -59,33 +59,41 @@ class App:
 
     def _lop(self):
         while not self.is_stop:
-            if GetWindowText(GetForegroundWindow()) != "Lineage II":
+            time.sleep(2.5)
+
+            if GetWindowText(GetForegroundWindow()) == "Lineage II":
                 print("No game found, wait for it, %s" % GetWindowText(GetForegroundWindow()))
-                time.sleep(5)
             else:
                 screenshot = ImageGrab.grab()
                 game_image = np.array(screenshot)
-                for t in os.listdir("res/template"):
-                    dialog_template = cv2.imread(os.path.join("res/template", t))
+                warning_template = cv2.imread("res/template/warning_template.png")
 
-                    if not dialog_template.data:
-                        print("No template found. Skip")
-                        continue
+                if not warning_template.data:
+                    print("No template found. Skip")
+                    continue
 
-                    if not game_image.data:
-                        print("No screenshot found. Skip")
-                        continue
+                if not game_image.data:
+                    print("No screenshot found. Skip")
+                    continue
 
+                # has_captcha = anti_bot_parser.find_captcha_warning(game_image, warning_template)
+                # if has_captcha:
+                #     print("%s Found captcha warning " % datetime.now())
+                #     self.player.play_captcha()
+                #     cv2.imwrite(os.path.join("output/last_captcha_screenshot.png"), game_image)
+                #     continue
+
+                for dialog in os.listdir("res/template/dialogs"):
+                    dialog_template = cv2.imread(os.path.join("res/template/dialogs", dialog))
                     captcha_dialog = anti_bot_parser.find_captcha_dialog(game_image, dialog_template)
                     if captcha_dialog:
-                        print("%s Captcha found" % datetime.now())
+                        print("%s Found captcha dialog" % datetime.now())
                         self.player.play_captcha()
-                        cv2.imwrite(os.path.join("output/last_captcha.png"), game_image)
+                        cv2.imwrite(os.path.join("output/last_captcha_dialog.png"), game_image)
                         break
                 else:
                     print("%s Captcha not found" % datetime.now())
 
-            time.sleep(2.5)
         print("Loop stopped")
 
 
