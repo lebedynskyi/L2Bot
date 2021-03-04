@@ -61,7 +61,7 @@ class App:
         while not self.is_stop:
             time.sleep(2.5)
 
-            if GetWindowText(GetForegroundWindow()) == "Lineage II":
+            if GetWindowText(GetForegroundWindow()) != "Lineage II":
                 print("No game found, wait for it, %s" % GetWindowText(GetForegroundWindow()))
             else:
                 screenshot = ImageGrab.grab()
@@ -76,12 +76,12 @@ class App:
                     print("No screenshot found. Skip")
                     continue
 
-                # has_captcha = anti_bot_parser.find_captcha_warning(game_image, warning_template)
-                # if has_captcha:
-                #     print("%s Found captcha warning " % datetime.now())
-                #     self.player.play_captcha()
-                #     cv2.imwrite(os.path.join("output/last_captcha_screenshot.png"), game_image)
-                #     continue
+                has_captcha = anti_bot_parser.find_captcha_warning(game_image, warning_template)
+                if has_captcha:
+                    print("%s Found captcha warning " % datetime.now())
+                    self.player.play_captcha()
+                    cv2.imwrite(os.path.join("output/last_captcha_screenshot.png"), game_image)
+                    continue
 
                 for dialog in os.listdir("res/template/dialogs"):
                     dialog_template = cv2.imread(os.path.join("res/template/dialogs", dialog))
