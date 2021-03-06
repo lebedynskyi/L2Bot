@@ -14,7 +14,8 @@ class CaptchaParser(BaseParser):
 
         if warn_dialog is not None:
             text_area = self.crop_text_area(warn_dialog)
-            text = self.parse_text(text_area)
+            return self.parse_text(text_area)
+        return None
 
     def crop_text_area(self, dialog_rgb):
         text_area_rgb = dialog_rgb[5:60, 34:300]
