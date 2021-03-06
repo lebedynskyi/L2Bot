@@ -1,10 +1,10 @@
 numpy==1.20
 infi.systray==0.1.11
-win10toast==0.9
 
-opencv-python
-pyautogui
-matplotlib
-pytesseract
-imutils
-playsound
+opencv-python~=4.5.1.48
+pyautogui~=0.9.52
+matplotlib~=3.3.4
+pytesseract~=0.3.7
+imutils~=0.5.4
+playsound~=1.2.2
+Pillow~=8.1.0
