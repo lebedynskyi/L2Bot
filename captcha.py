@@ -35,7 +35,7 @@ def test_captcha_parser():
             is_math = solver.is_ariphmetic(captcha_text)
             if is_math:
                 print("Captcha: Math captcha")
-                solver.solve_math(is_math)
+                solver.solve_math(captcha_text)
             else:
                 print("Captcha: Logic captcha")
                 solver.solve_logic(captcha_text)
