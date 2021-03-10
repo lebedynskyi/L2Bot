@@ -29,16 +29,25 @@ def test_captcha_parser():
     solver = CaptchaSolver()
     for f in os.listdir("input/screens"):
         print("----------------------------------------")
+        print(f)
         img = cv2.imread(os.path.join("input/screens", f))
         captcha_text = captcha_handler.parse_image(img)
         if captcha_text:
             is_math = solver.is_ariphmetic(captcha_text)
             if is_math:
                 print("Captcha: Math captcha")
-                solver.solve_math(captcha_text)
+                math_answer = solver.solve_math(captcha_text)
+                if math_answer:
+                    print("Captcha: Result is OK")
+                else:
+                    print("Captcha: Result is Cancel")
             else:
                 print("Captcha: Logic captcha")
-                solver.solve_logic(captcha_text)
+                logic_answer = solver.solve_logic(captcha_text)
+                if logic_answer:
+                    print("Captcha: Result is OK")
+                else:
+                    print("Captcha: Result is Cancel")
         else:
             print("Captcha: No found")
 
