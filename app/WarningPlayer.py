@@ -1,4 +1,5 @@
-import winsound
+# import winsound
+from playsound import playsound
 
 
 class WarningPlayer:
@@ -6,7 +7,9 @@ class WarningPlayer:
         self.captcha_audio = captcha_file
 
     def play_captcha(self):
-        winsound.PlaySound(self.captcha_audio, winsound.SND_ASYNC)
+        # winsound.PlaySound(self.captcha_audio, winsound.SND_ASYNC)
+        playsound(self.captcha_audio)
 
     def stop_all(self):
-        winsound.PlaySound(None, winsound.SND_PURGE)
+        pass
+        # winsound.PlaySound(None, winsound.SND_PURGE)

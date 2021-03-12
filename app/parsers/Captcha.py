@@ -5,17 +5,15 @@ import pytesseract
 
 
 class CaptchaParser(BaseParser):
-    def __init__(self, env_path, warn_dialog_handler, debug=False):
+    def __init__(self, env_path, debug=False):
         super().__init__(env_path, debug)
-        self.warn_dialog_handler = warn_dialog_handler
 
-    def parse_image(self, image):
-        warn_dialog = self.warn_dialog_handler.parse_image(image)
+    def parse_image(self, dialog):
+        if dialog is None:
+            return None
 
-        if warn_dialog is not None:
-            text_area = self.crop_text_area(warn_dialog)
-            return self.parse_text(text_area)
-        return None
+        text_area = self.crop_text_area(dialog)
+        return self.parse_text(text_area)
 
     def crop_text_area(self, dialog_rgb):
         text_area_rgb = dialog_rgb[5:60, 34:300]

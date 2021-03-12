@@ -9,8 +9,8 @@ class WarnDialogParser(BaseParser):
         super().__init__(env_path, debug)
         self.template = cv2.cvtColor(warning_template, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, image_rgb):
-        image_rgb = image_rgb.copy()
+    def parse_image(self, screen_rgb):
+        image_rgb = screen_rgb.copy()
         image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
 
         match = cv2.matchTemplate(image, self.template, cv2.TM_CCORR_NORMED)
@@ -23,13 +23,28 @@ class WarnDialogParser(BaseParser):
         warning_points = list(zip(*loc[::-1]))
         if warning_points:
             print("WarnDialog: match found")
+
+            warn_pt = warning_points[0]
+            ok_square = ((warn_pt[0] + 92, warn_pt[1] + 92), (warn_pt[0] + 112, warn_pt[1] + 112))
+            cancel_square = ((warn_pt[0] + 175, warn_pt[1] + 92), (warn_pt[0] + 195, warn_pt[1] + 112))
             if self.debug:
-                self.draw_square(image_rgb, warning_points, ww, hh)
-                self.debug_show_im(image_rgb, "Debug dialog")
-            return self.crop_dialog(image_rgb, warning_points)
+                debug_img = image_rgb.copy()
+
+                self.draw_square(debug_img, warning_points, ww, hh)
+                cv2.rectangle(debug_img, ok_square[0], ok_square[1], (0, 0, 255), 1)
+                cv2.rectangle(debug_img, cancel_square[0], cancel_square[1], (0, 0, 255), 1)
+
+                self.debug_show_im(debug_img)
+
+            ok_x = (ok_square[0][0] + ok_square[1][0]) / 2
+            ok_y = (ok_square[1][1] + ok_square[0][1]) / 2
+
+            cancel_x = (cancel_square[0][0] + cancel_square[1][0]) / 2
+            cancel_y = (cancel_square[1][1] + cancel_square[0][1]) / 2
+            return self.crop_dialog(image_rgb, warning_points), (ok_x, ok_y), (cancel_x, cancel_y)
 
         print("WarnDialog: match not found")
-        return None
+        return None, None, None
 
     def crop_dialog(self, image, warn_points):
         pt = warn_points[0]

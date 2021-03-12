@@ -55,5 +55,5 @@ class CaptchaSolver:
         click_index = words.index("click")
 
         action = "".join(words[click_index + 1:click_index + 2])
-        print("Solver: action > %s" % action)
+        print("Solver: dialog click action > %s" % action)
         return len(action) <= 4
