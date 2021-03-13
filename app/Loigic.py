@@ -2,6 +2,8 @@ from datetime import datetime
 
 import numpy as np
 import pyautogui
+# import pydirectinput
+
 from PIL import ImageGrab
 
 
@@ -31,7 +33,8 @@ class Logic:
             return cancel_position
 
     def apply_move(self, button):
-        pyautogui.moveTo(button[0], button[1])
+        pyautogui.moveTo(int(button[0]), int(button[1]), duration=0.5)
 
     def apply_click(self, button):
-        pyautogui.leftClick(button[0], button[1])
+        pyautogui.doubleClick(int(button[0]), int(button[1]))
+

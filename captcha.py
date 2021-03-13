@@ -22,7 +22,7 @@ def test_dialog_warn():
     dialog_handler = WarnDialogParser(env_path, warn_template)
     dialog, ok, cancel = dialog_handler.parse_image(screen)
     pyautogui.moveTo(ok[0], ok[1])
-    WarningPlayer(os.path.join("res/warn.mp3")).play_captcha()
+    WarningPlayer("res/warn.mp3", "res/captcha_warn_long.wav").play_captcha()
 
 
 def test_loop():
@@ -36,6 +36,8 @@ def test_loop():
         btn = logic.check_captcha()
         if btn is not None:
             logic.apply_move(btn)
+            time.sleep(1)
+            logic.apply_click(btn)
         time.sleep(2)
 
 
@@ -87,8 +89,8 @@ def test_captcha_parser():
 if __name__ == "__main__":
     # test_dialog_warn()
     test_loop()
-    # test_tesseract()
     # test_captcha_parser()
+    # test_tesseract()
 
     # warn_template = cv2.imread("res/template/warning_template.png")
     # dialog_parser = WarnDialogParser(env_path, warn_template)
