@@ -35,25 +35,35 @@ def test_loop():
     while True:
         btn = logic.check_captcha()
         if btn is not None:
-            logic.apply_click(btn)
+            logic.apply_move(btn)
         time.sleep(2)
+
+
+def test_tesseract():
+    import pytesseract
+
+    lng = pytesseract.get_languages()
+    print(lng)
 
 
 def test_captcha_parser():
     import cv2
 
     warn_template = cv2.imread("res/template/warning_template.png")
-    screen = cv2.imread("input/screens/Shot00006.bmp")
-
-    dialog_handler = WarnDialogParser(env_path, warn_template)
-    captcha_handler = CaptchaParser(env_path, dialog_handler, False)
+    dialog_handler = WarnDialogParser(env_path, warn_template, False)
+    captcha_handler = CaptchaParser(env_path, False)
 
     solver = CaptchaSolver()
     for f in os.listdir("input/screens"):
         print("----------------------------------------")
         print(f)
         img = cv2.imread(os.path.join("input/screens", f))
-        captcha_text = captcha_handler.parse_image(img)
+        touple = dialog_handler.parse_image(img)
+        if touple[0] is None:
+            print("No dialog found")
+            continue
+
+        captcha_text = captcha_handler.parse_image(touple[0])
         if captcha_text:
             is_math = solver.is_ariphmetic(captcha_text)
             if is_math:
@@ -75,14 +85,16 @@ def test_captcha_parser():
 
 
 if __name__ == "__main__":
-    test_dialog_warn()
-    # test_loop()
+    # test_dialog_warn()
+    test_loop()
+    # test_tesseract()
+    # test_captcha_parser()
 
     # warn_template = cv2.imread("res/template/warning_template.png")
     # dialog_parser = WarnDialogParser(env_path, warn_template)
     # captcha_parser = CaptchaParser(env_path)
     # captcha_solver = CaptchaSolver()
-    # captcha_player = WarningPlayer(os.path.join("res/warn.mp3"))
+    # captcha_player = WarningPlayer("res/warn.mp3", "res/captcha_warn_long.wav")
     #
     # icon_path = os.path.join(env_path, "res/app_ico.png")
     #

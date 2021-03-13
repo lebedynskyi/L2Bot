@@ -20,7 +20,7 @@ class Logic:
             return
 
         captcha_text = self.captcha_parser.parse_image(dialog)
-        if self.captcha_solver.is_ariphmetic:
+        if self.captcha_solver.is_ariphmetic(captcha_text):
             result = self.captcha_solver.solve_math(captcha_text)
         else:
             result = self.captcha_solver.solve_logic(captcha_text)

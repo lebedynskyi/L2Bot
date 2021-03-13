@@ -37,7 +37,7 @@ class CaptchaParser(BaseParser):
         if self.debug:
             self.debug_show_im(blur, "Debug blurred for text")
 
-        tesseract_config = r"--oem 3 --psm 11 -c tessedit_char_whitelist= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.+-/='"
+        tesseract_config = r"--oem 3 --psm 11 -l eng -c tessedit_char_whitelist= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.+-/='"
         text = pytesseract.image_to_string(blur, lang="eng", config=tesseract_config)
         print("Captcha: text -> %s" % text)
         return text
