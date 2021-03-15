@@ -5,9 +5,9 @@ import cv2
 import pyautogui
 
 from app.BotCaptchaLoigic import Logic
-# from app.Ui import Ui
-# from app.WarningPlayer import WarningPlayer
-from app.parsers.GroupDialog import GroupDialog
+from app.Ui import Ui
+from app.WarningPlayer import WarningPlayer
+from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.BotCaptcha import BotCaptchaParser
 from app.solver.CaptchaSolver import CaptchaSolver
@@ -33,10 +33,13 @@ def test_player():
 
 def test_loop():
     warn_template = cv2.imread("res/template/warning_template.png")
+    group_template = cv2.imread("res/template/dualbox_template.png")
+
     dialog_parser = WarnDialogParser(env_path, warn_template)
     captcha_parser = BotCaptchaParser(env_path)
+    group_parser = GroupDialogParser(env_path, group_template)
     captcha_solver = CaptchaSolver()
-    logic = Logic(dialog_parser, captcha_parser, captcha_solver)
+    logic = Logic(dialog_parser, captcha_parser, group_parser, captcha_solver, None)
 
     while True:
         btn = logic.check_captcha()
@@ -58,7 +61,7 @@ def test_dualbox():
     warn_template = cv2.imread("res/template/dualbox_template.png")
     screen = cv2.imread("input/group/Shot00011.bmp")
 
-    dualbox_handler = GroupDialog(env_path, warn_template, True)
+    dualbox_handler = GroupDialogParser(env_path, warn_template, True)
     result = dualbox_handler.parse_image(screen)
 
 
@@ -107,16 +110,19 @@ if __name__ == "__main__":
     # test_tesseract()
     # test_player()
 
-    test_dualbox()
+    # test_dualbox()
 
+    warn_template = cv2.imread("res/template/warning_template.png")
+    group_template = cv2.imread("res/template/dualbox_template.png")
 
-    # warn_template = cv2.imread("res/template/warning_template.png")
-    # dialog_parser = WarnDialogParser(env_path, warn_template)
-    # captcha_parser = BotCaptchaParser(env_path)
-    # captcha_solver = CaptchaSolver()
-    # captcha_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
-    #
-    # icon_path = os.path.join(env_path, "res/app_ico.png")
-    #
-    # app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, captcha_solver, captcha_player))
-    # app.start_ui()
+    dialog_parser = WarnDialogParser(env_path, warn_template)
+    captcha_parser = BotCaptchaParser(env_path)
+    captcha_solver = CaptchaSolver()
+    group_parser = GroupDialogParser(env_path, group_template)
+
+    captcha_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
+
+    icon_path = os.path.join(env_path, "res/app_ico.png")
+
+    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, captcha_solver, group_parser, captcha_player))
+    app.start_ui()

@@ -6,16 +6,25 @@ import pyautogui
 
 from PIL import ImageGrab
 
+
 class Logic:
-    def __init__(self, dialog_parser, captcha_parser, captcha_solver, player):
+    def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver, player):
         self.dialog_parser = dialog_parser
         self.captcha_parser = captcha_parser
         self.captcha_solver = captcha_solver
+        self.group_parser = group_parser
         self.player = player
 
     def check_captcha(self):
         screenshot = ImageGrab.grab()
         screenshot_image = np.array(screenshot)
+        solo_answer = self._check_antibot_captcha(screenshot_image)
+        if not solo_answer:
+            return self._check_group_captcha(screenshot_image)
+        else:
+            return solo_answer
+
+    def _check_antibot_captcha(self, screenshot_image):
         dialog, ok_position, cancel_position = self.dialog_parser.parse_image(screenshot_image)
         if dialog is None:
             print("%s Loop: no warning found" % datetime.now())
@@ -40,6 +49,13 @@ class Logic:
             print(e)
             print("%s Loop: no warning found" % datetime.now())
             cv2.imwrite("output/last_error.png", screenshot_image)
+
+    def _check_group_captcha(self, screenshot_image):
+        result = self.group_parser.parse_image(screenshot_image)
+        if not result:
+            print("%s Loop: no group found" % datetime.now())
+
+        return result
 
     def apply_move(self, button):
         pyautogui.moveTo(int(button[0]), int(button[1]), duration=0.2)

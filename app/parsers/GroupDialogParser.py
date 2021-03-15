@@ -5,7 +5,7 @@ from app.parsers.Base import BaseParser
 
 
 # Todo decompose for different methods
-class GroupDialog(BaseParser):
+class GroupDialogParser(BaseParser):
     def __init__(self, output_path, template, debug=False):
         super().__init__(output_path, debug)
         self.template = cv2.cvtColor(template, cv2.COLOR_RGB2GRAY)
@@ -23,7 +23,7 @@ class GroupDialog(BaseParser):
         hh, ww = self.template.shape[:2]
         warning_points = list(zip(*header_loc[::-1]))
         if not warning_points:
-            return None, None
+            return None
 
         print("WarnDialog: Group found")
 
