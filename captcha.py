@@ -124,5 +124,5 @@ if __name__ == "__main__":
 
     icon_path = os.path.join(env_path, "res/app_ico.png")
 
-    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, captcha_solver, group_parser, captcha_player))
+    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, group_parser, captcha_solver, captcha_player))
     app.start_ui()
