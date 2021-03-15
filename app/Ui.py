@@ -45,7 +45,7 @@ class Ui:
                 if captcha_button is not None:
                     self.logic.apply_click(captcha_button)
                 else:
-                    print("Loop: No captcha found")
+                    print("Loop: No Bot captcha found")
 
             time.sleep(2)
 
