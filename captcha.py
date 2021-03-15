@@ -5,8 +5,7 @@ import cv2
 import pyautogui
 
 from app.Loigic import Logic
-# from app.Ui import Ui
-# from app.WarningPlayer import WarningPlayer
+from app.Ui import Ui
 from app.WarningPlayer import WarningPlayer
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.Captcha import CaptchaParser
@@ -22,7 +21,13 @@ def test_dialog_warn():
     dialog_handler = WarnDialogParser(env_path, warn_template)
     dialog, ok, cancel = dialog_handler.parse_image(screen)
     pyautogui.moveTo(ok[0], ok[1])
-    WarningPlayer("res/warn.mp3", "res/captcha_warn_long.wav").play_captcha()
+
+
+def test_player():
+    player = WarningPlayer("res/captcha_warn_short.wav",
+                           os.path.join(env_path, "res", "captcha_warn_long.wav"))
+    player.play_captcha()
+    time.sleep(2)
 
 
 def test_loop():
@@ -88,17 +93,19 @@ def test_captcha_parser():
 
 if __name__ == "__main__":
     # test_dialog_warn()
-    test_loop()
+    # test_loop()
     # test_captcha_parser()
     # test_tesseract()
+    # test_player()
+    #
+    #
+    warn_template = cv2.imread("res/template/warning_template.png")
+    dialog_parser = WarnDialogParser(env_path, warn_template)
+    captcha_parser = CaptchaParser(env_path)
+    captcha_solver = CaptchaSolver()
+    captcha_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
 
-    # warn_template = cv2.imread("res/template/warning_template.png")
-    # dialog_parser = WarnDialogParser(env_path, warn_template)
-    # captcha_parser = CaptchaParser(env_path)
-    # captcha_solver = CaptchaSolver()
-    # captcha_player = WarningPlayer("res/warn.mp3", "res/captcha_warn_long.wav")
-    #
-    # icon_path = os.path.join(env_path, "res/app_ico.png")
-    #
-    # app = Ui("Captcha", icon_path, captcha_player, Logic(dialog_parser, captcha_parser, captcha_solver))
-    # app.start_ui()
+    icon_path = os.path.join(env_path, "res/app_ico.png")
+
+    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, captcha_solver, captcha_player))
+    app.start_ui()

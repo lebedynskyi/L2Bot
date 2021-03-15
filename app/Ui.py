@@ -2,31 +2,32 @@ import sys
 import time
 from threading import Thread
 
+
 from infi.systray import SysTrayIcon
 
 from win32gui import GetWindowText, GetForegroundWindow
 
 
 class Ui:
-    is_stop = True
+    is_stop = False
     app_name = None
     app_icon = None
     app_menu_options = None
     captcha_parser = None
 
-    def __init__(self, app_name, app_icon, app_player, logic):
+    def __init__(self, app_name, app_icon, logic):
         self.app_name = app_name
         self.icon = app_icon
         self.logic = logic
         self.app_menu_options = (("Start/Stop", None, app_pause),
-                                 ("Test audio", None, app_test_audio),
+                                 ("Play audio", None, app_test_audio),
                                  ("Stop audio", None, app_stop_audio))
-        self.app_player = app_player
         global app
         app = self
 
     def start_ui(self):
         SysTrayIcon(self.app_icon, "%s - On Pause" % self.app_name, self.app_menu_options, on_quit=app_destroy).start()
+        self.start_captcha()
         pass
 
     def start_captcha(self):
@@ -42,12 +43,12 @@ class Ui:
             else:
                 captcha_button = self.logic.check_captcha()
                 if captcha_button is not None:
-                    self.app_player.play_captcha()
                     self.logic.apply_click(captcha_button)
                 else:
-                    print("Loop: Captcha answer is %s" % captcha_button)
+                    print("Loop: No captcha found")
 
             time.sleep(2)
+
         print("Loop stopped")
 
 
@@ -60,16 +61,16 @@ def app_pause(systray):
         print("Paused")
     else:
         systray.update(hover_text=app.app_name)
-        app.stop_captcha()
+        app.start_captcha()
         print("Resumed")
 
 
 def app_stop_audio(systray):
-    app.app_player.stop_all()
+    app.logic.player.stop_all()
 
 
 def app_test_audio(systray):
-    app.app_player.play_captcha()
+    app.logic.player.play_warning()
 
 
 def app_destroy(systray):
