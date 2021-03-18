@@ -10,7 +10,7 @@ from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.BotCaptcha import BotCaptchaParser
 from app.solver.CaptchaSolver import CaptchaSolver
-from app.parsers.manor.Manor import ManorParser
+from app.parsers.manor.Manor import ManorParser, CHOOSER_COLLAPSED
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -71,17 +71,21 @@ def test_manor_loop():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = ManorParser(env_path, "Aden", manor_templ, crop_sales_templ, chooser_templ, True)
+    manor_parser = ManorParser(env_path, "Aden", manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
 
     counter = 0
 
+    time.sleep(5)
     while True:
         btn = logic.check_manor()
         if btn is not None:
             logic.apply_move(btn)
             logic.apply_click(btn)
-        time.sleep(0.1)
+            if logic.manor_parser.current_stadia == CHOOSER_COLLAPSED:
+                logic.apply_click(btn)
+
+        time.sleep(0.25)
 
         counter = counter + 1
         if counter >= 1000:
