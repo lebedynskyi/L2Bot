@@ -30,7 +30,7 @@ class WarnDialogParser(BaseParser):
             if self.debug:
                 debug_img = image_rgb.copy()
 
-                self.draw_square(debug_img, warning_points, ww, hh)
+                self.draw_match_squares(debug_img, warning_points, ww, hh)
                 cv2.rectangle(debug_img, ok_square[0], ok_square[1], (0, 0, 255), 1)
                 cv2.rectangle(debug_img, cancel_square[0], cancel_square[1], (0, 0, 255), 1)
 

@@ -21,13 +21,13 @@ class GroupDialogParser(BaseParser):
 
         # draw matches
         hh, ww = self.template.shape[:2]
-        warning_points = list(zip(*header_loc[::-1]))
-        if not warning_points:
+        group_points = list(zip(*header_loc[::-1]))
+        if not group_points:
             return None
 
         print("WarnDialog: Group found")
 
-        dialog_header_pt = warning_points[0]
+        dialog_header_pt = group_points[0]
 
         captcha_image_pt = ((dialog_header_pt[0] + 225, dialog_header_pt[1] + 80),
                             (dialog_header_pt[0] + 256, dialog_header_pt[1] + 112))
@@ -43,7 +43,7 @@ class GroupDialogParser(BaseParser):
         if self.debug:
             debug_img = image_rgb.copy()
 
-            self.draw_square(debug_img, warning_points, ww, hh)
+            self.draw_match_squares(debug_img, group_points, ww, hh)
             cv2.rectangle(debug_img, captcha_image_pt[0], captcha_image_pt[1], (0, 0, 255), 1)
             cv2.rectangle(debug_img, look_zone_pt[0], look_zone_pt[1], (0, 0, 255), 1)
 
@@ -61,7 +61,7 @@ class GroupDialogParser(BaseParser):
         ch, cw = captcha_img.shape[:2]
         if self.debug:
             debug_look_zone_img = look_zone_img.copy()
-            self.draw_square(debug_look_zone_img, target_points, cw, ch)
+            self.draw_match_squares(debug_look_zone_img, target_points, cw, ch)
             self.debug_show_im(debug_look_zone_img, "Target letter")
 
         target_y = int(header_loc[0][0] + 125 + target_loc[0])

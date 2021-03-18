@@ -5,12 +5,12 @@ import cv2
 import pyautogui
 
 from app.BotCaptchaLoigic import Logic
-from app.Ui import Ui
-from app.WarningPlayer import WarningPlayer
+from app.ManorLogic import ManorLogic
 from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.BotCaptcha import BotCaptchaParser
 from app.solver.CaptchaSolver import CaptchaSolver
+from app.parsers.manor.Manor import ManorParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -25,6 +25,8 @@ def test_dialog_warn():
 
 
 def test_player():
+    from app.WarningPlayer import WarningPlayer
+
     player = WarningPlayer("res/captcha_warn_short.wav",
                            os.path.join(env_path, "res", "captcha_warn_long.wav"))
     player.play_captcha()
@@ -65,6 +67,46 @@ def test_dualbox():
     result = dualbox_handler.parse_image(screen)
 
 
+def test_manor_loop():
+    manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
+    crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
+    chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
+    manor_parser = ManorParser(env_path, "Aden", manor_templ, crop_sales_templ, chooser_templ, True)
+    logic = ManorLogic(manor_parser)
+
+    counter = 0
+
+    while True:
+        btn = logic.check_manor()
+        if btn is not None:
+            logic.apply_move(btn)
+            logic.apply_click(btn)
+        time.sleep(0.1)
+
+        counter = counter + 1
+        if counter >= 1000:
+            break
+
+
+def test_manor():
+    manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
+    crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
+    chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
+    manor_parser = ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, True)
+
+    manor_screen = cv2.imread("input/manor/Shot00024.bmp")
+    crop_sales_screen = cv2.imread("input/manor/Shot00024.bmp")
+    chooser_screen = cv2.imread("input/manor/Shot00021.bmp")
+    chooser_exp_screen = cv2.imread("input/manor/Shot00022.bmp")
+
+    manor_parser.parse_image(manor_screen)
+    manor_parser.parse_image(crop_sales_screen)
+    manor_parser.parse_image(chooser_screen)
+    manor_parser.parse_image(chooser_exp_screen)
+    manor_parser.parse_image(chooser_screen)
+    manor_parser.parse_image(chooser_screen)
+
+
 def test_captcha_parser():
     import cv2
 
@@ -103,15 +145,10 @@ def test_captcha_parser():
             print("Captcha: No found")
 
 
-if __name__ == "__main__":
-    # test_dialog_warn()
-    # test_loop()
-    # test_captcha_parser()
-    # test_tesseract()
-    # test_player()
-
-    # test_dualbox()
-
+# Works in Windows only
+def run_ui_app():
+    from app.Ui import Ui
+    from app.WarningPlayer import WarningPlayer
     warn_template = cv2.imread("res/template/warning_template.png")
     group_template = cv2.imread("res/template/dualbox_template.png")
 
@@ -124,5 +161,19 @@ if __name__ == "__main__":
 
     icon_path = os.path.join(env_path, "res/app_ico.png")
 
-    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, captcha_solver, group_parser, captcha_player))
+    app = Ui("Antlbt", icon_path,
+             Logic(dialog_parser, captcha_parser, captcha_solver, group_parser, captcha_player))
     app.start_ui()
+
+
+if __name__ == "__main__":
+    # test_dialog_warn()
+    # test_loop()
+    # test_captcha_parser()
+    # test_tesseract()
+    # test_player()
+    # test_dualbox()
+    # run_ui_app()
+
+    # test_manor()
+    test_manor_loop()

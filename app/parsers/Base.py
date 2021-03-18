@@ -15,7 +15,7 @@ class BaseParser(ABC):
     def parse_image(self, image_rgb):
         raise NotImplementedError("Handler is not implemented")
 
-    def draw_square(self, image, points, width, height):
+    def draw_match_squares(self, image, points, width, height):
         for pt in points:
             cv2.rectangle(image, pt, (pt[0] + width, pt[1] + height), (0, 0, 255), 1)
 
