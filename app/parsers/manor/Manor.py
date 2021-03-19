@@ -43,6 +43,8 @@ class ManorParser(BaseParser):
             return self.handle_max_price()
         elif self.current_stadia == MAX_PRICE_OK:
             return self.handle_max_price_ok()
+        elif self.current_stadia == SELL:
+            return self.handle_sell()
         return None
 
     def handle_manor_dialog(self, screen_rgb):
@@ -182,6 +184,12 @@ class ManorParser(BaseParser):
     def handle_max_price_ok(self):
         x = (self.cached_max_price_ok[0][0] + self.cached_max_price_ok[1][0]) / 2
         y = (self.cached_max_price_ok[1][1] + self.cached_max_price_ok[0][1]) / 2
+        self.current_stadia = self.current_stadia + 1
+        return x, y
+
+    def handle_sell(self):
+        x = (self.cached_crop_sale[0][0] + self.cached_crop_sale[1][0]) / 2
+        y = (self.cached_crop_sale[1][1] + self.cached_crop_sale[0][1]) / 2
         self.current_stadia = self.current_stadia + 1
         return x, y
 
