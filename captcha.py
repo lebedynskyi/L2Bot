@@ -4,13 +4,13 @@ import time
 import cv2
 import pyautogui
 
+from app.parsers.manor import Manor
 from app.BotCaptchaLoigic import Logic
 from app.ManorLogic import ManorLogic
 from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.BotCaptcha import BotCaptchaParser
 from app.solver.CaptchaSolver import CaptchaSolver
-from app.parsers.manor.Manor import ManorParser, CHOOSER_COLLAPSED
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -71,7 +71,7 @@ def test_manor_loop():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = Manor.ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
 
     time.sleep(4)
@@ -80,15 +80,19 @@ def test_manor_loop():
         if btn is not None:
             logic.apply_move(btn)
             logic.apply_click(btn)
-            if logic.manor_parser.current_stadia == CHOOSER_COLLAPSED:
+            if logic.manor_parser.current_stadia == Manor.CHOOSER_COLLAPSED:
                 logic.apply_click(btn)
+        elif logic.manor_parser.current_stadia == Manor.CROP_SALES:
+            # Manor in maintenance mode
+            time.sleep(0.1)
+            logic.apply_click()
 
 
 def test_manor():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, True)
+    manor_parser = Manor.ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, True)
 
     manor_screen = cv2.imread("input/manor/Shot00024.bmp")
     crop_sales_screen = cv2.imread("input/manor/Shot00024.bmp")
