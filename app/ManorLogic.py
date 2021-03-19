@@ -19,5 +19,5 @@ class ManorLogic:
 
     def apply_click(self, button):
         pyautogui.mouseDown(int(button[0]), int(button[1]))
-        time.sleep(0.05)
+        time.sleep(0.01)
         pyautogui.mouseUp(int(button[0]), int(button[1]))

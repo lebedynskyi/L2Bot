@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import cv2
 import numpy as np
 from pytesseract import pytesseract
@@ -54,7 +56,7 @@ class ManorParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
-            print("Manor: Found Manor dialog")
+            print("Manor: %s Found Manor dialog" % datetime.now())
             first_points = match_points[0]
             sale_btn = ((first_points[0] + 535, first_points[1] + 275), (first_points[0] + 550, first_points[1] + 290))
 
@@ -82,7 +84,7 @@ class ManorParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
-            print("Manor: Found crops dialog")
+            print("Manor: %s Found crops dialog" % datetime.now())
             first_match = match_points[0]
             self.cached_crop_sale = ((first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
             seed_row = ((first_match[0] + 50, first_match[1] - 187), (first_match[0] + 65, first_match[1] - 202))
@@ -112,7 +114,7 @@ class ManorParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
-            print("Manor: Found chooser dialog")
+            print("Manor: %s Found chooser dialog" % datetime.now())
             first_match = match_points[0]
             select_btn = ((first_match[0] + 150, first_match[1] + 122), (first_match[0] + 165, first_match[1] + 137))
             self.cached_max_price_ok = ((first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
@@ -144,7 +146,7 @@ class ManorParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
-            print("Manor: Found castles dialog")
+            print("Manor: %s Found castles dialog" % datetime.now())
             first_match = match_points[0]
 
             if self.debug:
@@ -152,7 +154,7 @@ class ManorParser(BaseParser):
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 self.debug_show_im(debug_img)
 
-            for i in range(0, 10):
+            for i in range(2, 10):
                 castle = (
                     # 17 pixels height per 1 castle
                     (first_match[0] + 116, first_match[1] + 122 + i * 17),
@@ -160,9 +162,9 @@ class ManorParser(BaseParser):
                 )
 
                 castle_name = self._parse_castle(screen_rgb, castle)
-                print("Manor: Castle %s" % castle_name)
+                print("Manor: %s Castle %s" % (datetime.now(), castle_name))
                 if self.interested_castle in castle_name:
-                    print("Manor: Found interested castle -> %s" % castle_name)
+                    print("Manor: %s Found interested castle -> %s" % (datetime.now(), castle_name))
                     self.current_stadia = self.current_stadia + 1
                     castle_x = (castle[0][0] + castle[1][0]) / 2
                     castle_y = (castle[1][1] + castle[0][1]) / 2

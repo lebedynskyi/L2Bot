@@ -85,7 +85,7 @@ def test_manor_loop():
             if logic.manor_parser.current_stadia == CHOOSER_COLLAPSED:
                 logic.apply_click(btn)
 
-        time.sleep(0.25)
+        # time.sleep(0.02)
 
         counter = counter + 1
         if counter >= 1000:
