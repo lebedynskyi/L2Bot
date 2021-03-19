@@ -10,6 +10,7 @@ class ManorLogic:
         self.manor_parser = manor_parser
 
     def check_manor(self):
+        # screenshot = pyautogui.screenshot
         screenshot = ImageGrab.grab()
         screenshot_image = np.array(screenshot)
         return self.manor_parser.parse_image(screenshot_image)
@@ -19,5 +20,4 @@ class ManorLogic:
 
     def apply_click(self, button):
         pyautogui.mouseDown(int(button[0]), int(button[1]))
-        time.sleep(0.01)
         pyautogui.mouseUp(int(button[0]), int(button[1]))

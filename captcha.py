@@ -71,12 +71,10 @@ def test_manor_loop():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = ManorParser(env_path, "Aden", manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
 
-    counter = 0
-
-    time.sleep(5)
+    time.sleep(4)
     while True:
         btn = logic.check_manor()
         if btn is not None:
@@ -84,12 +82,6 @@ def test_manor_loop():
             logic.apply_click(btn)
             if logic.manor_parser.current_stadia == CHOOSER_COLLAPSED:
                 logic.apply_click(btn)
-
-        # time.sleep(0.02)
-
-        counter = counter + 1
-        if counter >= 1000:
-            break
 
 
 def test_manor():
