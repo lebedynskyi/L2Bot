@@ -21,6 +21,7 @@ class ManorParser(BaseParser):
     cached_max_price = None
     cached_max_price_ok = None
     cached_crop_sale = None
+    cached_chooser_dialog = None
 
     def __init__(self, output_path, interested_castle, manor_template, crop_sales_template, chooser_template,
                  debug=False):
@@ -120,6 +121,7 @@ class ManorParser(BaseParser):
         match_points = list(zip(*loc[::-1]))
         if match_points:
             first_match = match_points[0]
+            self.cached_chooser_dialog = first_match
             select_btn = ((first_match[0] + 150, first_match[1] + 122), (first_match[0] + 165, first_match[1] + 137))
             self.cached_max_price_ok = ((first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
             self.cached_max_price = ((first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
@@ -142,26 +144,23 @@ class ManorParser(BaseParser):
 
     def handle_chooser_expanded(self, screen_rgb):
         print("Manor: %s Look for castles dialog" % datetime.now())
-        image_rgb = screen_rgb.copy()
-        image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
-        match = cv2.matchTemplate(image, self.chooser_template, cv2.TM_CCORR_NORMED)
-        thresh_hold = 0.89
-        loc = np.where(match >= thresh_hold)
-        hh, ww = self.chooser_template.shape[:2]
-        # Match could have more than 1 item
+        # image_rgb = screen_rgb.copy()
+        # image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
+        # match = cv2.matchTemplate(image, self.chooser_template, cv2.TM_CCORR_NORMED)
+        # thresh_hold = 0.89
+        # loc = np.where(match >= thresh_hold)
+        # hh, ww = self.chooser_template.shape[:2]
+        # # Match could have more than 1 item
+        #
+        # match_points = list(zip(*loc[::-1]))
 
-        match_points = list(zip(*loc[::-1]))
+        if self.cached_chooser_dialog:
+            first_match = self.cached_chooser_dialog
 
-        if match_points:
-            first_match = match_points[0]
-            self.cached_max_price_ok = (
-            (first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
-            self.cached_max_price = (
-            (first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
-            if self.debug:
-                debug_img = screen_rgb.copy()
-                self.draw_match_squares(debug_img, match_points, ww, hh)
-                self.debug_show_im(debug_img)
+            # if self.debug:
+            #     debug_img = screen_rgb.copy()
+            #     self.draw_match_squares(debug_img, match_points, ww, hh)
+            #     self.debug_show_im(debug_img)
 
             for i in reversed(range(2, 8)):
                 print("Manor: %s Look for castles name" % datetime.now())
