@@ -162,7 +162,7 @@ class ManorParser(BaseParser):
             #     self.draw_match_squares(debug_img, match_points, ww, hh)
             #     self.debug_show_im(debug_img)
 
-            for i in reversed(range(2, 8)):
+            for i in range(2, 7):
                 print("Manor: %s Look for castles name" % datetime.now())
                 castle = (
                     # 17 pixels height per 1 castle

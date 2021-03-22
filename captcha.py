@@ -68,14 +68,15 @@ def test_dualbox():
     result = dualbox_handler.parse_image(screen)
 
 
-def test_manor_loop():
+def run_manor_app():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = Manor.ManorParser(env_path, "Innadril", manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = Manor.ManorParser(env_path, "Schuttgart", manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
-
+    pyautogui.PAUSE = 0.01
     time.sleep(4)
+
     while True:
 
         current_time = datetime.datetime.now()
@@ -92,7 +93,7 @@ def test_manor_loop():
                 logic.apply_click(btn)
         elif logic.manor_parser.current_stadia == Manor.CROP_SALES:
             # Manor in maintenance mode
-            time.sleep(0.1)
+            time.sleep(0.4)
             logic.apply_click()
 
 
@@ -154,7 +155,7 @@ def test_captcha_parser():
 
 
 # Works in Windows only
-def run_ui_app():
+def run_captcha_app():
     from app.Ui import Ui
     from app.WarningPlayer import WarningPlayer
     warn_template = cv2.imread("res/template/warning_template.png")
@@ -180,7 +181,7 @@ if __name__ == "__main__":
     # test_tesseract()
     # test_player()
     # test_dualbox()
-    # run_ui_app()
 
     # test_manor()
-    test_manor_loop()
+    # run_manor_app()
+    run_captcha_app()
