@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 
@@ -76,6 +77,13 @@ def test_manor_loop():
 
     time.sleep(4)
     while True:
+
+        current_time = datetime.datetime.now()
+        if current_time.hour != 20 or current_time.minute < 5 or current_time.second < 50:
+            print("Manor Loop: wait for 20 hours 5 min 45 sec")
+            time.sleep(5)
+            continue
+
         btn = logic.check_manor()
         if btn is not None:
             logic.apply_move(btn)
