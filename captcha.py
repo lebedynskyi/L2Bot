@@ -81,7 +81,7 @@ def test_manor_loop():
         current_time = datetime.datetime.now()
         if current_time.hour != 20 or current_time.minute < 5 or current_time.second < 50:
             print("Manor Loop: wait for 20 hours 5 min 45 sec")
-            time.sleep(5)
+            time.sleep(4)
             continue
 
         btn = logic.check_manor()
