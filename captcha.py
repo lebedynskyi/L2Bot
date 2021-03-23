@@ -72,18 +72,18 @@ def run_manor_app():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = Manor.ManorParser(env_path, "Schuttgart", manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = Manor.ManorParser(env_path, "Aden", manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
     pyautogui.PAUSE = 0.01
     time.sleep(4)
 
     while True:
 
-        current_time = datetime.datetime.now()
-        if current_time.hour != 20 or current_time.minute < 5 or current_time.second < 50:
-            print("Manor Loop: wait for 20 hours 5 min 45 sec")
-            time.sleep(4)
-            continue
+        # current_time = datetime.datetime.now()
+        # if current_time.hour != 22 or current_time.minute < 5 or current_time.second < 50:
+        #     print("Manor Loop: wait for 20 hours 5 min 45 sec")
+        #     time.sleep(4)
+        #     continue
 
         btn = logic.check_manor()
         if btn is not None:
