@@ -13,6 +13,7 @@ CHOOSER_EXPANDED = 3
 MAX_PRICE = 4
 MAX_PRICE_OK = 5
 SELL = 6
+FINISH = 7
 
 
 class ManorParser(BaseParser):
@@ -22,11 +23,14 @@ class ManorParser(BaseParser):
     cached_max_price_ok = None
     cached_crop_sale = None
     cached_chooser_dialog = None
+    next_castle = None
+    current_castle_index = 0
 
-    def __init__(self, output_path, interested_castle, manor_template, crop_sales_template, chooser_template,
+    def __init__(self, output_path, interested_castles, manor_template, crop_sales_template, chooser_template,
                  debug=False):
         super().__init__(output_path, debug)
-        self.interested_castle = interested_castle
+        self.interested_castles = interested_castles
+        self.next_castle = interested_castles[self.current_castle_index]
         self.crop_sales_template = cv2.cvtColor(crop_sales_template, cv2.COLOR_RGB2GRAY)
         self.manor_template = cv2.cvtColor(manor_template, cv2.COLOR_RGB2GRAY)
         self.chooser_template = cv2.cvtColor(chooser_template, cv2.COLOR_RGB2GRAY)
@@ -46,6 +50,8 @@ class ManorParser(BaseParser):
             return self.handle_max_price_ok()
         elif self.current_stadia == SELL:
             return self.handle_sell()
+        elif self.current_stadia == FINISH:
+            raise KeyboardInterrupt()
         return None
 
     def handle_manor_dialog(self, screen_rgb):
@@ -62,6 +68,7 @@ class ManorParser(BaseParser):
         if match_points:
             first_points = match_points[0]
             sale_btn = ((first_points[0] + 535, first_points[1] + 275), (first_points[0] + 550, first_points[1] + 290))
+            print("Manor: %s Found Manor dialog" % datetime.now())
 
             if self.debug:
                 debug_img = screen_rgb.copy()
@@ -72,7 +79,6 @@ class ManorParser(BaseParser):
             sell_x = (sale_btn[0][0] + sale_btn[1][0]) / 2
             sell_y = (sale_btn[1][1] + sale_btn[0][1]) / 2
             self.current_stadia = self.current_stadia + 1
-            print("Manor: %s Found Manor dialog" % datetime.now())
             return sell_x, sell_y
         print("Manor: Manor not found")
         return None
@@ -90,8 +96,11 @@ class ManorParser(BaseParser):
         match_points = list(zip(*loc[::-1]))
         if match_points:
             first_match = match_points[0]
-            self.cached_crop_sale = ((first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
+            self.cached_crop_sale = (
+            (first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
             seed_row = ((first_match[0] + 50, first_match[1] - 187), (first_match[0] + 65, first_match[1] - 202))
+            print("Manor: %s Found crops dialog" % datetime.now())
+
             if self.debug:
                 debug_img = screen_rgb.copy()
                 self.draw_match_squares(debug_img, match_points, ww, hh)
@@ -103,7 +112,6 @@ class ManorParser(BaseParser):
             seed_x = (seed_row[0][0] + seed_row[1][0]) / 2
             seed_y = (seed_row[1][1] + seed_row[0][1]) / 2
             self.current_stadia = self.current_stadia + 1
-            print("Manor: %s Found crops dialog" % datetime.now())
             return seed_x, seed_y
         print("Manor: Crops not found")
         return None
@@ -123,9 +131,12 @@ class ManorParser(BaseParser):
             first_match = match_points[0]
             self.cached_chooser_dialog = first_match
             select_btn = ((first_match[0] + 150, first_match[1] + 122), (first_match[0] + 165, first_match[1] + 137))
-            self.cached_max_price_ok = ((first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
-            self.cached_max_price = ((first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
+            self.cached_max_price_ok = (
+            (first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
+            self.cached_max_price = (
+            (first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
 
+            print("Manor: %s Found chooser dialog" % datetime.now())
             if self.debug:
                 debug_img = screen_rgb.copy()
                 self.draw_match_squares(debug_img, match_points, ww, hh)
@@ -137,32 +148,17 @@ class ManorParser(BaseParser):
             select_x = (select_btn[0][0] + select_btn[1][0]) / 2
             select_y = (select_btn[1][1] + select_btn[0][1]) / 2
             self.current_stadia = self.current_stadia + 1
-            print("Manor: %s Found chooser dialog" % datetime.now())
             return select_x, select_y
         print("Manor: Chooser not found")
         return None
 
     def handle_chooser_expanded(self, screen_rgb):
         print("Manor: %s Look for castles dialog" % datetime.now())
-        # image_rgb = screen_rgb.copy()
-        # image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
-        # match = cv2.matchTemplate(image, self.chooser_template, cv2.TM_CCORR_NORMED)
-        # thresh_hold = 0.89
-        # loc = np.where(match >= thresh_hold)
-        # hh, ww = self.chooser_template.shape[:2]
-        # # Match could have more than 1 item
-        #
-        # match_points = list(zip(*loc[::-1]))
 
         if self.cached_chooser_dialog:
             first_match = self.cached_chooser_dialog
 
-            # if self.debug:
-            #     debug_img = screen_rgb.copy()
-            #     self.draw_match_squares(debug_img, match_points, ww, hh)
-            #     self.debug_show_im(debug_img)
-
-            for i in range(2, 7):
+            for i in range(2, 8):
                 print("Manor: %s Look for castles name" % datetime.now())
                 castle = (
                     # 17 pixels height per 1 castle
@@ -172,7 +168,7 @@ class ManorParser(BaseParser):
 
                 castle_name = self._parse_castle(screen_rgb, castle)
                 print("Manor: %s Castle name %s" % (datetime.now(), castle_name))
-                if self.interested_castle in castle_name:
+                if self.next_castle in castle_name:
                     self.current_stadia = self.current_stadia + 1
                     castle_x = (castle[0][0] + castle[1][0]) / 2
                     castle_y = (castle[1][1] + castle[0][1]) / 2
@@ -197,8 +193,15 @@ class ManorParser(BaseParser):
     def handle_sell(self):
         x = (self.cached_crop_sale[0][0] + self.cached_crop_sale[1][0]) / 2
         y = (self.cached_crop_sale[1][1] + self.cached_crop_sale[0][1]) / 2
-        self.current_stadia = self.current_stadia + 1
         print("Manor: %s Sold" % datetime.now())
+
+        next_index = self.current_castle_index + 1
+        if next_index < len(self.interested_castles):
+            self.current_castle_index = next_index
+            self.current_stadia = MANOR_DIALOG
+            self.next_castle = self.interested_castles[self.current_castle_index]
+        else:
+            self.current_stadia = FINISH
         return x, y
 
     def _parse_castle(self, screen_rgb, castle_area):
