@@ -15,6 +15,9 @@ MAX_PRICE_OK = 5
 SELL = 6
 FINISH = 7
 
+class CastleLookArea:
+    pass
+
 
 class ManorParser(BaseParser):
     current_stadia = MANOR_DIALOG
@@ -27,13 +30,14 @@ class ManorParser(BaseParser):
     current_castle_index = 0
 
     def __init__(self, output_path, interested_castles, manor_template, crop_sales_template, chooser_template,
-                 debug=False):
+                 chooser_template_expanded, debug=False):
         super().__init__(output_path, debug)
         self.interested_castles = interested_castles
         self.next_castle = interested_castles[self.current_castle_index]
         self.crop_sales_template = cv2.cvtColor(crop_sales_template, cv2.COLOR_RGB2GRAY)
         self.manor_template = cv2.cvtColor(manor_template, cv2.COLOR_RGB2GRAY)
         self.chooser_template = cv2.cvtColor(chooser_template, cv2.COLOR_RGB2GRAY)
+        self.chooser_expanded_template = cv2.cvtColor(chooser_template_expanded, cv2.COLOR_RGB2GRAY)
 
     def parse_image(self, screen_rgb):
         if self.current_stadia == MANOR_DIALOG:
@@ -97,7 +101,7 @@ class ManorParser(BaseParser):
         if match_points:
             first_match = match_points[0]
             self.cached_crop_sale = (
-            (first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
+                (first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
             seed_row = ((first_match[0] + 50, first_match[1] - 187), (first_match[0] + 65, first_match[1] - 202))
             print("Manor: %s Found crops dialog" % datetime.now())
 
@@ -132,9 +136,9 @@ class ManorParser(BaseParser):
             self.cached_chooser_dialog = first_match
             select_btn = ((first_match[0] + 150, first_match[1] + 122), (first_match[0] + 165, first_match[1] + 137))
             self.cached_max_price_ok = (
-            (first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
+                (first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
             self.cached_max_price = (
-            (first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
+                (first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
 
             print("Manor: %s Found chooser dialog" % datetime.now())
             if self.debug:
@@ -155,15 +159,31 @@ class ManorParser(BaseParser):
     def handle_chooser_expanded(self, screen_rgb):
         print("Manor: %s Look for castles dialog" % datetime.now())
 
-        if self.cached_chooser_dialog:
-            first_match = self.cached_chooser_dialog
+        image_rgb = screen_rgb.copy()
+        image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
+        match = cv2.matchTemplate(image, self.chooser_expanded_template, cv2.TM_CCORR_NORMED)
+        thresh_hold = 0.89
+        loc = np.where(match >= thresh_hold)
+        hh, ww = self.chooser_expanded_template.shape[:2]
+        # Match could have more than 1 item
+        match_points = list(zip(*loc[::-1]))
+        print("Manor: %s Found castles dialog" % datetime.now())
+        if match_points:
+            first_match = match_points[0]
+
+            if self.debug:
+                debug_img = screen_rgb.copy()
+                self.draw_match_squares(debug_img, match_points, ww, hh)
+                self.debug_show_im(debug_img, "Castle chooser")
 
             for i in range(2, 8):
                 print("Manor: %s Look for castles name" % datetime.now())
                 castle = (
                     # 17 pixels height per 1 castle
-                    (first_match[0] + 116, first_match[1] + 122 + i * 17),
-                    (first_match[0] + 255, first_match[1] + 122 + i * 17 + 17)
+                    # (first_match[0] + 116, first_match[1] + 122 + i * 17),
+                    # (first_match[0] + 255, first_match[1] + 122 + i * 17 + 17)
+                    (first_match[0], first_match[1] + i * 17),
+                    (first_match[0] + 140, first_match[1] + i * 17 + 17)
                 )
 
                 castle_name = self._parse_castle(screen_rgb, castle)

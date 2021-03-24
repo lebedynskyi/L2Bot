@@ -103,8 +103,9 @@ def test_manor():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
+    chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
     manor_parser = Manor.ManorParser(env_path, ["Innadril", "Aden"], manor_templ, crop_sales_templ, chooser_templ,
-                                     False)
+                                     chooser_expanded_templ,  True)
 
     manor_screen = cv2.imread("input/manor/Shot00023.bmp")
     crop_sales_screen = cv2.imread("input/manor/Shot00024.bmp")
@@ -112,9 +113,6 @@ def test_manor():
     chooser_exp_screen = cv2.imread("input/manor/Shot00022.bmp")
 
     manor_parser.parse_image(manor_screen)
-    manor_parser.parse_image(manor_screen)
-    manor_parser.parse_image(manor_screen)
-
     manor_parser.parse_image(crop_sales_screen)
     manor_parser.parse_image(chooser_screen)
     manor_parser.parse_image(chooser_exp_screen)
@@ -189,6 +187,6 @@ if __name__ == "__main__":
     # test_player()
     # test_dualbox()
 
-    # test_manor()
+    test_manor()
     # run_manor_app()
-    run_captcha_app()
+    # run_captcha_app()
