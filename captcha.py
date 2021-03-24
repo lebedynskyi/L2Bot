@@ -72,18 +72,13 @@ def run_manor_app():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = Manor.ManorParser(env_path, ["Aden"], manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = Manor.ManorParser(env_path, ["Innadril"], manor_templ, crop_sales_templ, chooser_templ, False)
     logic = ManorLogic(manor_parser)
-    pyautogui.PAUSE = 0.01
+    pyautogui.PAUSE = 0.02
     time.sleep(4)
 
     while True:
-
-        # current_time = datetime.datetime.now()
-        # if current_time.hour != 22 or current_time.minute < 5 or current_time.second < 50:
-        #     print("Manor Loop: wait for 20 hours 5 min 45 sec")
-        #     time.sleep(4)
-        #     continue
+        # check_time()
 
         btn = logic.check_manor()
         if btn is not None:
@@ -93,15 +88,23 @@ def run_manor_app():
                 logic.apply_click(btn)
         elif logic.manor_parser.current_stadia == Manor.CROP_SALES:
             # Manor in maintenance mode
-            time.sleep(0.4)
+            time.sleep(0.1)
             logic.apply_click()
+
+
+def check_time():
+    current_time = datetime.datetime.now()
+    if current_time.hour != 22 or current_time.minute < 5 or current_time.second < 50:
+        print("Manor Loop: wait for 20 hours 5 min 45 sec")
+        time.sleep(4)
 
 
 def test_manor():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = Manor.ManorParser(env_path, ["Innadril", "Aden"], manor_templ, crop_sales_templ, chooser_templ, False)
+    manor_parser = Manor.ManorParser(env_path, ["Innadril", "Aden"], manor_templ, crop_sales_templ, chooser_templ,
+                                     False)
 
     manor_screen = cv2.imread("input/manor/Shot00023.bmp")
     crop_sales_screen = cv2.imread("input/manor/Shot00024.bmp")
@@ -186,6 +189,6 @@ if __name__ == "__main__":
     # test_player()
     # test_dualbox()
 
-    test_manor()
+    # test_manor()
     # run_manor_app()
-    # run_captcha_app()
+    run_captcha_app()
