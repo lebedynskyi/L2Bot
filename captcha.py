@@ -104,13 +104,28 @@ def test_manor():
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
-    manor_parser = Manor.ManorParser(env_path, ["Innadril", "Aden"], manor_templ, crop_sales_templ, chooser_templ,
-                                     chooser_expanded_templ,  True)
+    manor_parser = Manor.ManorParser(env_path,
+                                     [
+                                         Manor.CastleLookArea("Innadril"),
+                                         Manor.CastleLookArea("Dion")
+                                     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, True)
 
     manor_screen = cv2.imread("input/manor/Shot00023.bmp")
     crop_sales_screen = cv2.imread("input/manor/Shot00024.bmp")
     chooser_screen = cv2.imread("input/manor/Shot00021.bmp")
     chooser_exp_screen = cv2.imread("input/manor/Shot00022.bmp")
+
+    # First
+    manor_parser.parse_image(manor_screen)
+    manor_parser.parse_image(crop_sales_screen)
+    manor_parser.parse_image(chooser_screen)
+    manor_parser.parse_image(chooser_exp_screen)
+    manor_parser.parse_image(chooser_screen)
+    manor_parser.parse_image(chooser_screen)
+    manor_parser.parse_image(crop_sales_screen)
+
+
+    # Second
 
     manor_parser.parse_image(manor_screen)
     manor_parser.parse_image(crop_sales_screen)

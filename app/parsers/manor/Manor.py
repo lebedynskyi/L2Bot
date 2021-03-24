@@ -15,8 +15,12 @@ MAX_PRICE_OK = 5
 SELL = 6
 FINISH = 7
 
+
 class CastleLookArea:
-    pass
+    def __init__(self, castle_name, start_index=2, finish_index=8):
+        self.castle_name = castle_name
+        self.start_index = start_index
+        self.finish_index = finish_index
 
 
 class ManorParser(BaseParser):
@@ -176,7 +180,7 @@ class ManorParser(BaseParser):
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 self.debug_show_im(debug_img, "Castle chooser")
 
-            for i in range(2, 8):
+            for i in range(self.next_castle.start_index, self.next_castle.finish_index):
                 print("Manor: %s Look for castles name" % datetime.now())
                 castle = (
                     # 17 pixels height per 1 castle
@@ -186,13 +190,13 @@ class ManorParser(BaseParser):
                     (first_match[0] + 140, first_match[1] + i * 17 + 17)
                 )
 
-                castle_name = self._parse_castle(screen_rgb, castle)
-                print("Manor: %s Castle name %s" % (datetime.now(), castle_name))
-                if self.next_castle in castle_name:
+                castle_name_string = self._parse_castle(screen_rgb, castle)
+                print("Manor: %s Castle name %s" % (datetime.now(), castle_name_string))
+                if self.next_castle.castle_name in castle_name_string:
                     self.current_stadia = self.current_stadia + 1
                     castle_x = (castle[0][0] + castle[1][0]) / 2
                     castle_y = (castle[1][1] + castle[0][1]) / 2
-                    print("Manor: %s Found interested castle -> %s" % (datetime.now(), castle_name))
+                    print("Manor: %s Found interested castle -> %s" % (datetime.now(), castle_name_string))
                     return castle_x, castle_y
 
         print("Manor: Castles not found")
