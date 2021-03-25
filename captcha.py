@@ -72,7 +72,15 @@ def run_manor_app():
     manor_templ = cv2.imread("res/template/manor/manor_template_1.png")
     crop_sales_templ = cv2.imread("res/template/manor/crop_sales_dialog.png")
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
-    manor_parser = Manor.ManorParser(env_path, ["Innadril"], manor_templ, crop_sales_templ, chooser_templ, False)
+    chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
+
+    manor_parser = Manor.ManorParser(env_path, [
+        Manor.CastleLookArea("Aden", "Innadril", 3, 7),
+        Manor.CastleLookArea("Innadril", "Giran", 2, 7),
+        Manor.CastleLookArea("Giran", "Dion", 2, 7),
+        Manor.CastleLookArea("Dion", "Giran", 2, 7),
+        Manor.CastleLookArea("Giran", "Aden", 2, 7),
+    ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
     pyautogui.PAUSE = 0.02
     time.sleep(4)
@@ -123,7 +131,6 @@ def test_manor():
     manor_parser.parse_image(chooser_screen)
     manor_parser.parse_image(chooser_screen)
     manor_parser.parse_image(crop_sales_screen)
-
 
     # Second
 
@@ -202,6 +209,6 @@ if __name__ == "__main__":
     # test_player()
     # test_dualbox()
 
-    test_manor()
+    # test_manor()
     # run_manor_app()
-    # run_captcha_app()
+    run_captcha_app()
