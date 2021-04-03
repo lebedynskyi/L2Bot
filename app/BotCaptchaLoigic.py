@@ -32,23 +32,23 @@ class Logic:
 
         self.player.play_captcha()
 
-        try:
-            captcha_text = self.captcha_parser.parse_image(dialog)
-            if self.captcha_solver.is_ariphmetic(captcha_text):
-                result = self.captcha_solver.solve_math(captcha_text)
-            else:
-                result = self.captcha_solver.solve_logic(captcha_text)
-            cv2.imwrite("output/last_solved_captcha.png", screenshot_image)
-            if result:
-                return ok_position
-            else:
-                return cancel_position
-        except BaseException as e:
-            self.player.play_warning()
-            print("Cannot solve captcha")
-            print(e)
-            print("%s Loop: no warning found" % datetime.now())
-            cv2.imwrite("output/last_error.png", screenshot_image)
+        for scale in range(500, 800, step=100):
+            try:
+                captcha_text = self.captcha_parser.parse_image(dialog)
+                if self.captcha_solver.is_ariphmetic(captcha_text):
+                    result = self.captcha_solver.solve_math(captcha_text)
+                else:
+                    result = self.captcha_solver.solve_logic(captcha_text)
+                cv2.imwrite("output/last_solved_captcha.png", screenshot_image)
+                if result:
+                    return ok_position
+                else:
+                    return cancel_position
+            except BaseException as e:
+                print("Cannot solve captcha, it was scale  %s " % scale)
+                print(e)
+                cv2.imwrite("output/last_error.png", screenshot_image)
+        self.player.play_warning()
 
     def _check_group_captcha(self, screenshot_image):
         result = self.group_parser.parse_image(screenshot_image)

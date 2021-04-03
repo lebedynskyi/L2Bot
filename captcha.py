@@ -160,25 +160,30 @@ def test_captcha_parser():
             print("No dialog found")
             continue
 
-        captcha_text = captcha_handler.parse_image(touple[0])
-        if captcha_text:
-            is_math = solver.is_ariphmetic(captcha_text)
-            if is_math:
-                print("Captcha: Math captcha")
-                math_answer = solver.solve_math(captcha_text)
-                if math_answer:
-                    print("Captcha: Result is OK")
+        for scale in range(500, 800, 100):
+            captcha_text = captcha_handler.parse_image(touple[0], scale)
+            try:
+                if captcha_text:
+                    is_math = solver.is_ariphmetic(captcha_text)
+                    if is_math:
+                        print("Captcha: Math captcha")
+                        math_answer = solver.solve_math(captcha_text)
+                        if math_answer:
+                            print("Captcha: Result is OK")
+                        else:
+                            print("Captcha: Result is Cancel")
+                    else:
+                        print("Captcha: Logic captcha")
+                        logic_answer = solver.solve_logic(captcha_text)
+                        if logic_answer:
+                            print("Captcha: Result is OK")
+                        else:
+                            print("Captcha: Result is Cancel")
                 else:
-                    print("Captcha: Result is Cancel")
-            else:
-                print("Captcha: Logic captcha")
-                logic_answer = solver.solve_logic(captcha_text)
-                if logic_answer:
-                    print("Captcha: Result is OK")
-                else:
-                    print("Captcha: Result is Cancel")
-        else:
-            print("Captcha: No found")
+                    print("Captcha: No found")
+                break
+            except:
+                print("Cannot solve captcha at all, text %s, scale %s" % (captcha_text, scale))
 
 
 # Works in Windows only
@@ -203,7 +208,7 @@ def run_captcha_app():
 
 if __name__ == "__main__":
     # test_dialog_warn()
-    # test_loop()
+    test_loop()
     # test_captcha_parser()
     # test_tesseract()
     # test_player()
@@ -211,4 +216,4 @@ if __name__ == "__main__":
 
     # test_manor()
     # run_manor_app()
-    run_captcha_app()
+    # run_captcha_app()
