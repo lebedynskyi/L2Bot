@@ -38,15 +38,14 @@ class Ui:
 
     def _lop(self):
         while not self.is_stop:
-            if GetWindowText(GetForegroundWindow()) != "Lineage II":
-                print("No game found, waiting for it, %s" % GetWindowText(GetForegroundWindow()))
-            else:
+            try:
                 captcha_button = self.logic.check_captcha()
                 if captcha_button is not None:
                     self.logic.apply_click(captcha_button)
                 else:
                     print("Loop: No Bot captcha found")
-
+            except:
+                print("Error during making screenshot")
             time.sleep(2)
 
         print("Loop stopped")

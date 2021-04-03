@@ -15,6 +15,9 @@ from app.solver.CaptchaSolver import CaptchaSolver
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
+pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.02
+
 
 def test_dialog_warn():
     warn_template = cv2.imread("res/template/warning_template.png")
@@ -75,14 +78,11 @@ def run_manor_app():
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
 
     manor_parser = Manor.ManorParser(env_path, [
-        Manor.CastleLookArea("Aden", "Innadril", 3, 7),
-        Manor.CastleLookArea("Innadril", "Giran", 2, 7),
-        Manor.CastleLookArea("Giran", "Dion", 2, 7),
-        Manor.CastleLookArea("Dion", "Giran", 2, 7),
-        Manor.CastleLookArea("Giran", "Aden", 2, 7),
+        Manor.CastleLookArea("Aden", "Innadril", 4, 7),
+        Manor.CastleLookArea("Innadril", "Oren", 2, 7)
     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
-    pyautogui.PAUSE = 0.02
+
     time.sleep(4)
 
     while True:
