@@ -44,8 +44,9 @@ class Ui:
                     self.logic.apply_click(captcha_button)
                 else:
                     print("Loop: No Bot captcha found")
-            except:
+            except BaseException as e:
                 print("Error during making screenshot")
+                print(e)
             time.sleep(2)
 
         print("Loop stopped")

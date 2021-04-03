@@ -208,7 +208,7 @@ def run_captcha_app():
 
 if __name__ == "__main__":
     # test_dialog_warn()
-    test_loop()
+    # test_loop()
     # test_captcha_parser()
     # test_tesseract()
     # test_player()
@@ -216,4 +216,4 @@ if __name__ == "__main__":
 
     # test_manor()
     # run_manor_app()
-    # run_captcha_app()
+    run_captcha_app()

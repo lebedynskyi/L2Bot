@@ -32,9 +32,9 @@ class Logic:
 
         self.player.play_captcha()
 
-        for scale in range(500, 800, step=100):
+        for scale in range(500, 800, 100):
             try:
-                captcha_text = self.captcha_parser.parse_image(dialog)
+                captcha_text = self.captcha_parser.parse_image(dialog, scale)
                 if self.captcha_solver.is_ariphmetic(captcha_text):
                     result = self.captcha_solver.solve_math(captcha_text)
                 else:
