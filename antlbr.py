@@ -86,9 +86,11 @@ def run_manor_app():
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
 
+    #Great codran Giran - Gludio - Aden.  Start from 4 even 5. need check logic
     manor_parser = Manor.ManorParser(env_path, [
-        Manor.CastleLookArea("Aden", "Innadril", 4, 7),
-        Manor.CastleLookArea("Innadril", "Oren", 2, 7)
+        Manor.CastleLookArea("Aden", "Rune", 4, 7)
+        # Manor.CastleLookArea("Aden", "Fake", 2, 7)
+        # Manor.CastleLookArea("Aden", "Fa", 2, 7)
     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
 
@@ -223,7 +225,7 @@ if __name__ == "__main__":
     # test_tesseract()
     # test_player()
     # test_dualbox()
-
+    #
     # test_manor()
     # run_manor_app()
     run_captcha_app()
