@@ -2,7 +2,6 @@ import sys
 import time
 from threading import Thread
 
-
 from infi.systray import SysTrayIcon
 
 from win32gui import GetWindowText, GetForegroundWindow
@@ -15,10 +14,11 @@ class Ui:
     app_menu_options = None
     captcha_parser = None
 
-    def __init__(self, app_name, app_icon, logic):
+    def __init__(self, app_name, app_icon, captcha_logic, user_logic):
         self.app_name = app_name
         self.icon = app_icon
-        self.logic = logic
+        self.captcha_logic = captcha_logic
+        self.user_logic = user_logic
         self.app_menu_options = (("Start/Stop", None, app_pause),
                                  ("Play audio", None, app_test_audio),
                                  ("Stop audio", None, app_stop_audio))
@@ -39,11 +39,14 @@ class Ui:
     def _lop(self):
         while not self.is_stop:
             try:
-                captcha_button = self.logic.check_captcha()
+                captcha_button = self.captcha_logic.check_captcha()
                 if captcha_button is not None:
-                    self.logic.apply_click(captcha_button)
+                    self.captcha_logic.apply_click(captcha_button)
                 else:
                     print("Loop: No Bot captcha found")
+
+                hp_coef = self.user_logic.check_user_status()
+                print("HP Coeff -> %s " % hp_coef)
             except BaseException as e:
                 print("Error during making screenshot")
                 print(e)
@@ -66,11 +69,11 @@ def app_pause(systray):
 
 
 def app_stop_audio(systray):
-    app.logic.player.stop_all()
+    app.captcha_logic.player.stop_all()
 
 
 def app_test_audio(systray):
-    app.logic.player.play_warning()
+    app.captcha_logic.player.play_warning()
 
 
 def app_destroy(systray):

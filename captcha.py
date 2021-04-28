@@ -5,9 +5,10 @@ import time
 import cv2
 import pyautogui
 
+from app.parsers.UserStatusParser import UserStatusParser
 from app.parsers.manor import Manor
-from app.BotCaptchaLoigic import Logic
-from app.ManorLogic import ManorLogic
+from app.logic.BotCaptchaLoigic import Logic
+from app.logic.ManorLogic import ManorLogic
 from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
 from app.parsers.BotCaptcha import BotCaptchaParser
@@ -35,6 +36,14 @@ def test_player():
                            os.path.join(env_path, "res", "captcha_warn_long.wav"))
     player.play_captcha()
     time.sleep(2)
+
+
+def test_status_parser():
+    status_template = cv2.imread("res/template/status/user_status_template.png")
+    status_parser = UserStatusParser(env_path, status_template, True)
+
+    screen = cv2.imread("input/screens/Shot00008.bmp")
+    status_parser.parse_image(screen)
 
 
 def test_loop():
@@ -147,8 +156,8 @@ def test_captcha_parser():
     import cv2
 
     warn_template = cv2.imread("res/template/warning_template.png")
-    dialog_handler = WarnDialogParser(env_path, warn_template, False)
-    captcha_handler = BotCaptchaParser(env_path, False)
+    dialog_handler = WarnDialogParser(env_path, warn_template, True)
+    captcha_handler = BotCaptchaParser(env_path, True)
 
     solver = CaptchaSolver()
     for f in os.listdir("input/screens"):
@@ -209,6 +218,7 @@ def run_captcha_app():
 if __name__ == "__main__":
     # test_dialog_warn()
     # test_loop()
+    # test_status_parser()
     # test_captcha_parser()
     # test_tesseract()
     # test_player()
