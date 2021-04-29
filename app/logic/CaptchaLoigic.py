@@ -1,10 +1,7 @@
 import time
 from datetime import datetime
 import cv2
-import numpy as np
 import pyautogui
-
-from PIL import ImageGrab
 
 
 class CaptchaLogic:
@@ -15,9 +12,7 @@ class CaptchaLogic:
         self.group_parser = group_parser
         self.player = player
 
-    def check_captcha(self):
-        screenshot = ImageGrab.grab()
-        screenshot_image = np.array(screenshot)
+    def check_captcha(self, screenshot_image):
         solo_answer = self._check_antibot_captcha(screenshot_image)
         if not solo_answer:
             return self._check_group_captcha(screenshot_image)

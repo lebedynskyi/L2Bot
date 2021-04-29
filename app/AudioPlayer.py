@@ -1,7 +1,7 @@
 import winsound
 
 
-class WarningPlayer:
+class AudioPlayer:
     def __init__(self, captcha_file, warning_file):
         self.captcha_audio = captcha_file
         self.warning_audio = warning_file

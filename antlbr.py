@@ -8,13 +8,13 @@ import pyautogui
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.UserDeathLogic import UserDeathLogic
 from app.logic.UserStatusLogic import UserStatusLogic
-from app.parsers.UserDeathStatusParser import UserDeathStatusParser
-from app.parsers.UserStatusParser import UserStatusParser
+from app.parsers.status.UserDeathStatusParser import UserDeathStatusParser
+from app.parsers.status.UserStatusParser import UserStatusParser
 from app.parsers.manor import Manor
 from app.logic.ManorLogic import ManorLogic
-from app.parsers.GroupDialogParser import GroupDialogParser
-from app.parsers.WarnDialog import WarnDialogParser
-from app.parsers.BotCaptcha import BotCaptchaParser
+from app.parsers.captcha.GroupDialogParser import GroupDialogParser
+from app.parsers.captcha.WarnDialog import WarnDialogParser
+from app.parsers.captcha.BotCaptcha import BotCaptchaParser
 from app.solver.CaptchaSolver import CaptchaSolver
 
 env_path = os.path.dirname(os.path.realpath(__file__))
@@ -33,12 +33,13 @@ def test_dialog_warn():
 
 
 def test_player():
-    from app.WarningPlayer import WarningPlayer
+    from app.AudioPlayer import AudioPlayer
 
-    player = WarningPlayer("res/captcha_warn_short.wav",
-                           os.path.join(env_path, "res", "captcha_warn_long.wav"))
+    player = AudioPlayer("res/captcha_warn_short.wav",
+                         os.path.join(env_path, "res", "captcha_warn_long.wav"))
     player.play_captcha()
     time.sleep(2)
+    player.play_warning()
 
 
 def test_status_parser():
@@ -203,14 +204,14 @@ def test_captcha_parser():
 # Works in Windows only
 def run_captcha_app():
     from app.Ui import Ui
-    from app.WarningPlayer import WarningPlayer
+    from app.AudioPlayer import AudioPlayer
 
     warn_template = cv2.imread("res/template/warning_template.png")
     group_template = cv2.imread("res/template/dualbox_template.png")
     status_template = cv2.imread("res/template/status/user_status_template.png")
     death_template = cv2.imread("res/template/status/user_death_template.png")
 
-    audio_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
+    audio_player = AudioPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
 
     dialog_parser = WarnDialogParser(env_path, warn_template)
     captcha_parser = BotCaptchaParser(env_path)

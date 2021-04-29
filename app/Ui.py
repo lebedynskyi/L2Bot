@@ -2,10 +2,11 @@ import sys
 import time
 from threading import Thread
 
+import numpy as np
+from PIL import ImageGrab
 from infi.systray import SysTrayIcon
 
 from win32gui import GetWindowText, GetForegroundWindow
-
 
 class Ui:
     is_stop = False
@@ -40,16 +41,18 @@ class Ui:
     def _lop(self):
         while not self.is_stop:
             try:
+                screenshot = ImageGrab.grab()
+                screenshot_image = np.array(screenshot)
+
                 # TODO move click actions into logic
-                # Screenshot should be here to optimize it
-                captcha_button = self.captcha_logic.check_captcha()
+                captcha_button = self.captcha_logic.check_captcha(screenshot_image)
                 if captcha_button is not None:
                     self.captcha_logic.apply_click(captcha_button)
                 else:
                     print("Loop: No Bot captcha found")
 
-                # self.user_logic.check_user_status()
-                self.death_logic.check_is_dead()
+                # self.user_logic.check_user_status(screenshot_image)
+                self.death_logic.check_is_dead(screenshot_image)
             except BaseException as e:
                 print("Loop: Error in loop")
                 print(e)

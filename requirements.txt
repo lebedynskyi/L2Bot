@@ -9,3 +9,4 @@ imutils~=0.5.4
 playsound~=1.2.2
 Pillow~=8.1.0
 pydirectinput
+wmi
