@@ -7,7 +7,7 @@ import pyautogui
 from PIL import ImageGrab
 
 
-class Logic:
+class CaptchaLogic:
     def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver, player):
         self.dialog_parser = dialog_parser
         self.captcha_parser = captcha_parser

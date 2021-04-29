@@ -12,8 +12,8 @@ class UserStatusLogic:
         screenshot_image = np.array(screenshot)
         hp_coef = self.status_parser.parse_image(screenshot_image)
 
-        if hp_coef <= 0.2:
+        if hp_coef <= 0.4:
             print("StatusParser: player HP coef -> " % hp_coef)
             self.player.play_warning()
 
-        return hp_coef
+        return 1

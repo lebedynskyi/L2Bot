@@ -5,12 +5,12 @@ import time
 import cv2
 import pyautogui
 
+from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.UserDeathLogic import UserDeathLogic
 from app.logic.UserStatusLogic import UserStatusLogic
 from app.parsers.UserDeathStatusParser import UserDeathStatusParser
 from app.parsers.UserStatusParser import UserStatusParser
 from app.parsers.manor import Manor
-from app.logic.BotCaptchaLoigic import Logic
 from app.logic.ManorLogic import ManorLogic
 from app.parsers.GroupDialogParser import GroupDialogParser
 from app.parsers.WarnDialog import WarnDialogParser
@@ -57,7 +57,7 @@ def test_loop():
     captcha_parser = BotCaptchaParser(env_path)
     group_parser = GroupDialogParser(env_path, group_template)
     captcha_solver = CaptchaSolver()
-    logic = Logic(dialog_parser, captcha_parser, group_parser, captcha_solver, None)
+    logic = CaptchaLogic(dialog_parser, captcha_parser, group_parser, captcha_solver, None)
 
     while True:
         btn = logic.check_captcha()
@@ -223,7 +223,7 @@ def run_captcha_app():
     icon_path = os.path.join(env_path, "res/app_ico.png")
 
     app = Ui("Antlbt", icon_path,
-             Logic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player),
+             CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player),
              UserStatusLogic(user_status_parser, audio_player),
              UserDeathLogic(user_death_parser, audio_player))
     app.start_ui()
