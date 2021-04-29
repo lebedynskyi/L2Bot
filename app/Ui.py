@@ -14,11 +14,12 @@ class Ui:
     app_menu_options = None
     captcha_parser = None
 
-    def __init__(self, app_name, app_icon, captcha_logic, user_logic):
+    def __init__(self, app_name, app_icon, captcha_logic, user_logic, death_logic):
         self.app_name = app_name
         self.icon = app_icon
         self.captcha_logic = captcha_logic
         self.user_logic = user_logic
+        self.death_logic = death_logic
         self.app_menu_options = (("Start/Stop", None, app_pause),
                                  ("Play audio", None, app_test_audio),
                                  ("Stop audio", None, app_stop_audio))
@@ -39,20 +40,22 @@ class Ui:
     def _lop(self):
         while not self.is_stop:
             try:
+                # TODO move click actions into logic
+                # Screenshot should be here to optimize it
                 captcha_button = self.captcha_logic.check_captcha()
                 if captcha_button is not None:
                     self.captcha_logic.apply_click(captcha_button)
                 else:
                     print("Loop: No Bot captcha found")
 
-                hp_coef = self.user_logic.check_user_status()
-                print("HP Coeff -> %s " % hp_coef)
+                # self.user_logic.check_user_status()
+                self.death_logic.check_is_dead()
             except BaseException as e:
-                print("Error during making screenshot")
+                print("Loop: Error in loop")
                 print(e)
             time.sleep(2)
 
-        print("Loop stopped")
+        print("Loop: Stopped")
 
 
 def app_pause(systray):
@@ -61,11 +64,11 @@ def app_pause(systray):
     if app.is_stop is True:
         systray.update(hover_text="%s - On Pause" % app.app_name)
         app.stop_captcha()
-        print("Paused")
+        print("Loop: Paused")
     else:
         systray.update(hover_text=app.app_name)
         app.start_captcha()
-        print("Resumed")
+        print("Lopp: Resumed")
 
 
 def app_stop_audio(systray):

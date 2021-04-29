@@ -1,5 +1,3 @@
-import time
-
 import numpy as np
 import pyautogui
 from PIL import ImageGrab
@@ -10,7 +8,6 @@ class ManorLogic:
         self.manor_parser = manor_parser
 
     def check_manor(self):
-        # screenshot = pyautogui.screenshot
         screenshot = ImageGrab.grab()
         screenshot_image = np.array(screenshot)
         return self.manor_parser.parse_image(screenshot_image)

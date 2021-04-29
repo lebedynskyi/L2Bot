@@ -8,9 +8,9 @@ from app.parsers.Base import BaseParser
 
 
 class UserStatusParser(BaseParser):
-    def __init__(self, env_path, warning_template, debug=False):
+    def __init__(self, env_path, status_template, debug=False):
         super().__init__(env_path, debug)
-        self.template = cv2.cvtColor(warning_template, cv2.COLOR_RGB2GRAY)
+        self.template = cv2.cvtColor(status_template, cv2.COLOR_RGB2GRAY)
 
     def parse_image(self, screen_rgb):
         hp_rgb = self.crop_hp(screen_rgb)

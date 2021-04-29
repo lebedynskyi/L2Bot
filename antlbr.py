@@ -5,6 +5,9 @@ import time
 import cv2
 import pyautogui
 
+from app.logic.UserDeathLogic import UserDeathLogic
+from app.logic.UserStatusLogic import UserStatusLogic
+from app.parsers.UserDeathStatusParser import UserDeathStatusParser
 from app.parsers.UserStatusParser import UserStatusParser
 from app.parsers.manor import Manor
 from app.logic.BotCaptchaLoigic import Logic
@@ -86,7 +89,7 @@ def run_manor_app():
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
 
-    #Great codran Giran - Gludio - Aden.  Start from 4 even 5. need check logic
+    # Great codran Giran - Gludio - Aden.  Start from 4 even 5. need check logic
     manor_parser = Manor.ManorParser(env_path, [
         Manor.CastleLookArea("Aden", "Rune", 4, 7)
         # Manor.CastleLookArea("Aden", "Fake", 2, 7)
@@ -201,20 +204,37 @@ def test_captcha_parser():
 def run_captcha_app():
     from app.Ui import Ui
     from app.WarningPlayer import WarningPlayer
+
     warn_template = cv2.imread("res/template/warning_template.png")
     group_template = cv2.imread("res/template/dualbox_template.png")
+    status_template = cv2.imread("res/template/status/user_status_template.png")
+    death_template = cv2.imread("res/template/status/user_death_template.png")
+
+    audio_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
 
     dialog_parser = WarnDialogParser(env_path, warn_template)
     captcha_parser = BotCaptchaParser(env_path)
-    captcha_solver = CaptchaSolver()
-    group_parser = GroupDialogParser(env_path, group_template)
+    group_captcha_parser = GroupDialogParser(env_path, group_template)
+    user_status_parser = UserStatusParser(env_path, status_template)
+    user_death_parser = UserDeathStatusParser(env_path, death_template)
 
-    captcha_player = WarningPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
+    captcha_solver = CaptchaSolver()
 
     icon_path = os.path.join(env_path, "res/app_ico.png")
 
-    app = Ui("Antlbt", icon_path, Logic(dialog_parser, captcha_parser, group_parser, captcha_solver, captcha_player))
+    app = Ui("Antlbt", icon_path,
+             Logic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player),
+             UserStatusLogic(user_status_parser, audio_player),
+             UserDeathLogic(user_death_parser, audio_player))
     app.start_ui()
+
+
+def test_death_parser():
+    status_template = cv2.imread("res/template/status/user_death_template.png")
+    status_parser = UserDeathStatusParser(env_path, status_template, True)
+
+    screen = cv2.imread("input/screens/Shot00037.bmp")
+    status_parser.parse_image(screen)
 
 
 if __name__ == "__main__":
@@ -225,6 +245,7 @@ if __name__ == "__main__":
     # test_tesseract()
     # test_player()
     # test_dualbox()
+    # test_death_parser()
     #
     # test_manor()
     # run_manor_app()
