@@ -16,9 +16,10 @@ class UserDeathLogic:
     def kill_game(self):
         f = wmi.WMI()
         for process in f.Win32_Process():
-            if process.name == "Lineage II":
+            name = process.name
+            print(name)
+            if name == "l2.exe":
                 process.Terminate()
                 print("DeadParser: Game killed")
-                return
 
         print("DeadParser: Game not found")
