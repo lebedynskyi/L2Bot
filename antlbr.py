@@ -92,9 +92,9 @@ def run_manor_app():
 
     # Great codran Giran - Gludio - Aden.  Start from 4 even 5. need check logic
     manor_parser = Manor.ManorParser(env_path, [
-        Manor.CastleLookArea("Aden", "Rune", 4, 7)
+        Manor.CastleLookArea("Aden", "Fake", 3, 7),
+        Manor.CastleLookArea("Aden", "Fake", 2, 7),
         # Manor.CastleLookArea("Aden", "Fake", 2, 7)
-        # Manor.CastleLookArea("Aden", "Fa", 2, 7)
     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
 
@@ -249,5 +249,7 @@ if __name__ == "__main__":
     # test_death_parser()
     #
     # test_manor()
+
+
     # run_manor_app()
     run_captcha_app()
