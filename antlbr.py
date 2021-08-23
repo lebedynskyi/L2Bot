@@ -6,7 +6,7 @@ import cv2
 import pyautogui
 
 from app.logic.CaptchaLoigic import CaptchaLogic
-from app.logic.UserDeathLogic import UserDeathLogic
+# from app.logic.UserDeathLogic import UserDeathLogic
 from app.logic.UserStatusLogic import UserStatusLogic
 from app.parsers.status.UserDeathStatusParser import UserDeathStatusParser
 from app.parsers.status.UserStatusParser import UserStatusParser
@@ -129,8 +129,8 @@ def test_manor():
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
     manor_parser = Manor.ManorParser(env_path,
                                      [
-                                         Manor.CastleLookArea("Innadril"),
-                                         Manor.CastleLookArea("Dion")
+                                         Manor.CastleLookArea("Aden", start_index=2)
+                                         # Manor.CastleLookArea("Dion", start_index=4)
                                      ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, True)
 
     manor_screen = cv2.imread("input/manor/Shot00023.bmp")
@@ -248,8 +248,8 @@ if __name__ == "__main__":
     # test_dualbox()
     # test_death_parser()
     #
-    # test_manor()
+    test_manor()
 
 
-    # run_manor_app()
-    run_captcha_app()
+    run_manor_app()
+    # run_captcha_app()

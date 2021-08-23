@@ -60,7 +60,7 @@ class ManorParser(BaseParser):
         elif self.current_stadia == SELL:
             return self.handle_sell()
         elif self.current_stadia == FINISH:
-            raise KeyboardInterrupt()
+            exit(0)
         return None
 
     def handle_manor_dialog(self, screen_rgb):
