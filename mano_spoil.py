@@ -12,6 +12,7 @@ SWEEPER = "f6"
 def boto_spoil():
     time.sleep(2)
     while True:
+        print("Loop Spoil - Manor")
         pyautogui.press(TARGET)
         time.sleep(0.1)
 
