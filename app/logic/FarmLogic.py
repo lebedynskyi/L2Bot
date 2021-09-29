@@ -1,5 +1,5 @@
 import pyautogui
-
+from datetime import datetime
 from app.logic.BaseLogic import BaseLogic
 
 KEY_NEXT_TARGET = "F1"
@@ -27,15 +27,17 @@ class FarmLogic(BaseLogic):
         has_target = self.target_parser.parse_image(screen_rgb)
         last_action_delta = current_time - self.last_action_time
         if has_target:
+            print("Target: %s Target exist" % datetime.now())
             action_performed = self.handle_has_target(last_action_delta)
         else:
+            print("Target: %s Target not exist" % datetime.now())
             action_performed = self.handle_no_target(last_action_delta)
 
         if action_performed:
             self.last_action_time = current_time
 
     def handle_no_target(self, last_action_delta):
-        if last_action_delta >= 500:
+        if last_action_delta >= 0.5:
             self.current_state = STATE_SPOIL
             pyautogui.press(KEY_NEXT_TARGET)
             return True
@@ -43,7 +45,7 @@ class FarmLogic(BaseLogic):
         return False
 
     def handle_has_target(self, last_action_delta):
-        if STATE_SPOIL == self.current_state and last_action_delta >= 500:
+        if STATE_SPOIL == self.current_state and last_action_delta >= 0.5:
             pyautogui.press(KEY_SPOIL)
 
             if self.use_manor:
@@ -52,22 +54,22 @@ class FarmLogic(BaseLogic):
                 self.current_state = STATE_SWEEP
             return True
 
-        if STATE_SEED == self.current_state and last_action_delta >= 750:
+        if STATE_SEED == self.current_state and last_action_delta >= 0.75:
             pyautogui.press(KEY_SEED)
             self.current_state = STATE_HARVEST
             return True
 
-        if STATE_HARVEST == self.current_state and last_action_delta >= 500:
+        if STATE_HARVEST == self.current_state and last_action_delta >= 0.5:
             pyautogui.press(KEY_HARVEST)
             self.current_state = STATE_SWEEP
             return True
 
-        if STATE_SWEEP == self.current_state and last_action_delta >= 300:
+        if STATE_SWEEP == self.current_state and last_action_delta >= 0.3:
             pyautogui.press(KEY_SWEEP)
             self.current_state = STATE_PICK
             return True
 
-        if STATE_PICK == self.current_state and last_action_delta >= 300:
+        if STATE_PICK == self.current_state and last_action_delta >= 0.3:
             pyautogui.press(KEY_PICK, presses=2, interval=0.3)
             self.current_state = STATE_SPOIL
             return True

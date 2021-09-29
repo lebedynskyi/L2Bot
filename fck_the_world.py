@@ -34,11 +34,11 @@ def loop_spoil_farm():
 
     audio_player = AudioPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
 
-    captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player),
+    captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player)
     death = UserDeathLogic(death_parser, audio_player)
     farm = FarmLogic(target_parser)
 
-    looper = AppLooper(handlers=[captcha, death, farm])
+    looper = AppLooper([captcha, death, farm])
     looper.loop()
 
 

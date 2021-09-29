@@ -12,7 +12,7 @@ class CaptchaLogic:
         self.group_parser = group_parser
         self.player = player
 
-    def check_captcha(self, screenshot_image):
+    def on_tick(self, screenshot_image, current_time):
         solo_answer = self._check_antibot_captcha(screenshot_image)
         if not solo_answer:
             return self._check_group_captcha(screenshot_image)

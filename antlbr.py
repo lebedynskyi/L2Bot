@@ -90,19 +90,18 @@ def run_manor_app():
     chooser_templ = cv2.imread("res/template/manor/chooser_template.png")
     chooser_expanded_templ = cv2.imread("res/template/manor/chooser_expanded_template.png")
 
-    # Great codran Giran - Gludio - Aden.  Start from 4 even 5. need check logic
+    # Parse start from 0. Position 2 means first castle.
+    # Desert Codran - Goddard
     manor_parser = Manor.ManorParser(env_path, [
-        Manor.CastleLookArea("Aden", "Fake", 3, 7),
-        Manor.CastleLookArea("Aden", "Fake", 2, 7),
-        # Manor.CastleLookArea("Aden", "Fake", 2, 7)
+        Manor.CastleLookArea("Aden", "fake", 4, 7),
+        Manor.CastleLookArea("Goddard", "fake", 4, 7)
     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
 
     time.sleep(4)
 
+    # check_time()
     while True:
-        # check_time()
-
         btn = logic.check_manor()
         if btn is not None:
             logic.apply_move(btn)
@@ -117,8 +116,8 @@ def run_manor_app():
 
 def check_time():
     current_time = datetime.datetime.now()
-    if current_time.hour != 22 or current_time.minute < 5 or current_time.second < 50:
-        print("Manor Loop: wait for 20 hours 5 min 45 sec")
+    if current_time.hour < 23 or current_time.minute < 5 or current_time.second < 45:
+        print("Manor Loop: wait for 23 hours 5 min 45 sec")
         time.sleep(4)
 
 
