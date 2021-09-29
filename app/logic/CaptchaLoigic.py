@@ -13,11 +13,14 @@ class CaptchaLogic:
         self.player = player
 
     def on_tick(self, screenshot_image, current_time):
-        solo_answer = self._check_antibot_captcha(screenshot_image)
-        if not solo_answer:
-            return self._check_group_captcha(screenshot_image)
-        else:
-            return solo_answer
+        answer = self._check_antibot_captcha(screenshot_image)
+        if not answer:
+            answer = self._check_group_captcha(screenshot_image)
+
+        if answer:
+            self.apply_click(answer)
+
+        return answer
 
     def _check_antibot_captcha(self, screenshot_image):
         dialog, ok_position, cancel_position = self.dialog_parser.parse_image(screenshot_image)
