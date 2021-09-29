@@ -19,15 +19,16 @@ STATE_PICK = 5
 
 class FarmLogic(BaseLogic):
     current_state = STATE_SPOIL
+    has_target = False
 
     def __init__(self, target_parser, use_manor=True):
         self.target_parser = target_parser
         self.use_manor = use_manor
 
     def on_tick(self, screen_rgb, current_time):
-        has_target = self.target_parser.parse_image(screen_rgb)
+        self.has_target = self.target_parser.parse_image(screen_rgb)
         last_action_delta = current_time - self.last_action_time
-        if has_target:
+        if self.has_target:
             self.write_log("Target", "Target exist")
             action_performed = self.handle_has_target(last_action_delta)
         else:

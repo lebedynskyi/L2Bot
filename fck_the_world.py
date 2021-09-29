@@ -4,6 +4,7 @@ import cv2
 from app.AppLooper import AppLooper
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.FarmLogic import FarmLogic
+from app.logic.PetManaLogic import PetManaLogic
 from app.logic.UserDeathLogic import UserDeathLogic
 from app.logic.UserStatusLogic import UserStatusLogic
 from app.parsers.captcha.BotCaptcha import BotCaptchaParser
@@ -40,8 +41,9 @@ def loop_spoil_farm():
     death = UserDeathLogic(death_parser)
     farm = FarmLogic(target_parser)
     status = UserStatusLogic(status_parser)
+    pet = PetManaLogic(status_parser, farm)
 
-    looper = AppLooper([captcha, death, farm, status])
+    looper = AppLooper([captcha, death, farm, status, pet])
     looper.loop()
 
 
