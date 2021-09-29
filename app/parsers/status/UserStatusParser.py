@@ -1,5 +1,3 @@
-from abc import ABC
-
 import cv2
 import numpy as np
 import pytesseract
@@ -14,9 +12,10 @@ class UserStatusParser(BaseParser):
 
     def parse_image(self, screen_rgb):
         hp_rgb = self.crop_hp(screen_rgb)
-        hp_text = self.extarct_text(hp_rgb)
-        hp_coef = eval(hp_text)
-        return hp_coef
+        if hp_rgb is not None:
+            hp_text = self.extract_text(hp_rgb).replace(" ", "")
+            return hp_text.split("/")
+        return None
 
     def crop_hp(self, screen_rgb):
         image_rgb = screen_rgb.copy()
@@ -43,22 +42,22 @@ class UserStatusParser(BaseParser):
             return hp_area_rgb
         return None
 
-    def extarct_text(self, text_area_rgb):
+    def extract_text(self, text_area_rgb):
         gray = cv2.cvtColor(text_area_rgb, cv2.COLOR_RGB2GRAY)
         thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-        width = int(thresh.shape[1] * 600 / 100)
-        height = int(thresh.shape[0] * 600 / 100)
+        width = int(thresh.shape[1] * 900 / 100)
+        height = int(thresh.shape[0] * 900 / 100)
         dim = (width, height)
 
         # resize image
         resized = cv2.resize(thresh, dim, interpolation=cv2.INTER_AREA)
 
-        blur = cv2.GaussianBlur(resized, (11, 11), 0)
+        blur = cv2.GaussianBlur(resized, (21, 21), 0)
         if self.debug:
             self.debug_show_im(blur, "Debug blurred for text")
 
-        tesseract_config = r"--oem 3 --psm 11 -l eng -c tessedit_char_whitelist= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.+-/='"
-        text = pytesseract.image_to_string(blur, lang="eng", config=tesseract_config)
-        print("Prsed text: text -> %s" % text)
+        tesseract_config = r"--oem 3 --psm 12 -l eng -c tessedit_char_whitelist=0123456789/"
+        text = pytesseract.image_to_string(blur, lang="eng", config=tesseract_config).strip()
+        print("Parsed text: text -> %s" % text)
         return text

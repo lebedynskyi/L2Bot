@@ -1,5 +1,4 @@
 import pyautogui
-from datetime import datetime
 from app.logic.BaseLogic import BaseLogic
 
 KEY_NEXT_TARGET = "F1"
@@ -8,6 +7,8 @@ KEY_SWEEP = "F3"
 KEY_PICK = "F4"
 KEY_SEED = "F5"
 KEY_HARVEST = "F6"
+
+KEY_FAST_HP = "F8"
 
 STATE_SPOIL = 1
 STATE_SEED = 2

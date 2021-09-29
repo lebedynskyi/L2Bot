@@ -1,13 +1,13 @@
-class UserStatusLogic:
-    def __init__(self, status_parser, player):
+from app.logic.BaseLogic import BaseLogic
+
+
+class UserStatusLogic(BaseLogic):
+    def __init__(self, status_parser):
         self.status_parser = status_parser
-        self.player = player
 
-    def check_user_status(self, screenshot_image):
-        hp_coef = self.status_parser.parse_image(screenshot_image)
-
-        if hp_coef <= 0.4:
-            print("StatusParser: player HP coef -> " % hp_coef)
-            self.player.play_warning()
-
-        return 1
+    def on_tick(self, screen_rgb, current_time):
+        last_action_delta = current_time - self.last_action_time
+        if last_action_delta > 10:
+            hp = self.status_parser.parse_image(screen_rgb)
+            if hp:
+                self.write_log("Status", "player HP -> {}/{}".format(hp[0], hp[1]))

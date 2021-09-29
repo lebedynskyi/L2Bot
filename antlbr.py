@@ -234,8 +234,8 @@ if __name__ == "__main__":
     # test_dualbox()
     # test_death_parser()
     #
-    test_manor()
+    # test_manor()
 
 
-    # run_manor_app()
-    run_captcha_app()
+    run_manor_app()
+    # run_captcha_app()
