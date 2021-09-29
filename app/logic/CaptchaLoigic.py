@@ -15,17 +15,15 @@ class CaptchaLogic(BaseLogic):
     def on_tick(self, screenshot_image, current_time):
         last_action_delta = current_time - self.last_action_time
         answer = None
-        if last_action_delta >= 3:
-            answer = self._check_anti_bot_captcha(screenshot_image)
-            if answer:
-                self.apply_click(answer)
-
         if last_action_delta >= 1:
-            answer = self._check_group_captcha(screenshot_image)
+            self.last_action_time = current_time
+            answer = self._check_anti_bot_captcha(screenshot_image)
+            if not answer:
+                answer = self._check_group_captcha(screenshot_image)
+
             if answer:
                 self.apply_click(answer)
 
-        self.last_action_time = current_time
         return answer
 
     def _check_anti_bot_captcha(self, screenshot_image):
