@@ -31,17 +31,6 @@ def test_dialog_warn():
     dialog, ok, cancel = dialog_handler.parse_image(screen)
     pyautogui.moveTo(ok[0], ok[1])
 
-
-def test_player():
-    from app.AudioPlayer import AudioPlayer
-
-    player = AudioPlayer("res/captcha_warn_short.wav",
-                         os.path.join(env_path, "res", "captcha_warn_long.wav"))
-    player.play_captcha()
-    time.sleep(2)
-    player.play_warning()
-
-
 def test_status_parser():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template, True)
@@ -203,7 +192,6 @@ def test_captcha_parser():
 # Works in Windows only
 def run_captcha_app():
     from app.Ui import Ui
-    from app.AudioPlayer import AudioPlayer
 
     warn_template = cv2.imread("res/template/warning_template.png")
     group_template = cv2.imread("res/template/dualbox_template.png")
@@ -222,9 +210,9 @@ def run_captcha_app():
     icon_path = os.path.join(env_path, "res/app_ico.png")
 
     app = Ui("Antlbt", icon_path,
-             CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player),
-             UserStatusLogic(user_status_parser, audio_player),
-             UserDeathLogic(user_death_parser, audio_player))
+             CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver),
+             UserStatusLogic(user_status_parser),
+             UserDeathLogic(user_death_parser))
     app.start_ui()
 
 

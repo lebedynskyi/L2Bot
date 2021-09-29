@@ -2,7 +2,6 @@ import os
 import cv2
 
 from app.AppLooper import AppLooper
-from app.AudioPlayer import AudioPlayer
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.FarmLogic import FarmLogic
 from app.logic.UserDeathLogic import UserDeathLogic
@@ -32,10 +31,8 @@ def loop_spoil_farm():
     captcha_parser = BotCaptchaParser(env_path)
     captcha_solver = CaptchaSolver()
 
-    audio_player = AudioPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
-
-    captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver, audio_player)
-    death = UserDeathLogic(death_parser, audio_player)
+    captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
+    death = UserDeathLogic(death_parser)
     farm = FarmLogic(target_parser)
 
     looper = AppLooper([captcha, death, farm])

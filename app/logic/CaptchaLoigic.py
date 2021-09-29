@@ -1,34 +1,38 @@
 import time
-from datetime import datetime
 import cv2
 import pyautogui
 
+from app.logic.BaseLogic import BaseLogic
 
-class CaptchaLogic:
-    def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver, player):
+
+class CaptchaLogic(BaseLogic):
+    def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver):
         self.dialog_parser = dialog_parser
         self.captcha_parser = captcha_parser
         self.captcha_solver = captcha_solver
         self.group_parser = group_parser
-        self.player = player
 
     def on_tick(self, screenshot_image, current_time):
-        answer = self._check_antibot_captcha(screenshot_image)
-        if not answer:
+        last_action_delta = current_time - self.last_action_time
+        answer = None
+        if last_action_delta >= 3:
+            answer = self._check_anti_bot_captcha(screenshot_image)
+            if answer:
+                self.apply_click(answer)
+
+        if last_action_delta >= 1:
             answer = self._check_group_captcha(screenshot_image)
+            if answer:
+                self.apply_click(answer)
 
-        if answer:
-            self.apply_click(answer)
-
+        self.last_action_time = current_time
         return answer
 
-    def _check_antibot_captcha(self, screenshot_image):
+    def _check_anti_bot_captcha(self, screenshot_image):
         dialog, ok_position, cancel_position = self.dialog_parser.parse_image(screenshot_image)
         if dialog is None:
-            print("%s Loop: no warning found" % datetime.now())
+            self.write_log("Captcha", "No Solo captcha")
             return
-
-        self.player.play_captcha()
 
         for scale in range(500, 800, 100):
             try:
@@ -46,12 +50,11 @@ class CaptchaLogic:
                 print("Cannot solve captcha, it was scale  %s " % scale)
                 print(e)
                 cv2.imwrite("output/last_error.png", screenshot_image)
-        self.player.play_warning()
 
     def _check_group_captcha(self, screenshot_image):
         result = self.group_parser.parse_image(screenshot_image)
         if not result:
-            print("%s Loop: no group found" % datetime.now())
+            self.write_log("Captcha", "No Group captcha")
 
         return result
 

@@ -27,10 +27,10 @@ class FarmLogic(BaseLogic):
         has_target = self.target_parser.parse_image(screen_rgb)
         last_action_delta = current_time - self.last_action_time
         if has_target:
-            print("Target: %s Target exist" % datetime.now())
+            self.write_log("Target", "Target exist")
             action_performed = self.handle_has_target(last_action_delta)
         else:
-            print("Target: %s Target not exist" % datetime.now())
+            self.write_log("Target", "Target not exist")
             action_performed = self.handle_no_target(last_action_delta)
 
         if action_performed:

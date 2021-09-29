@@ -22,8 +22,6 @@ class WarnDialogParser(BaseParser):
         hh, ww = self.template.shape[:2]
         warning_points = list(zip(*loc[::-1]))
         if warning_points:
-            print("WarnDialog: match found")
-
             warn_pt = warning_points[0]
             ok_square = ((warn_pt[0] + 92, warn_pt[1] + 92), (warn_pt[0] + 112, warn_pt[1] + 112))
             cancel_square = ((warn_pt[0] + 175, warn_pt[1] + 92), (warn_pt[0] + 195, warn_pt[1] + 112))
@@ -42,8 +40,6 @@ class WarnDialogParser(BaseParser):
             cancel_x = (cancel_square[0][0] + cancel_square[1][0]) / 2
             cancel_y = (cancel_square[1][1] + cancel_square[0][1]) / 2
             return self.crop_dialog(image_rgb, warning_points), (ok_x, ok_y), (cancel_x, cancel_y)
-
-        print("WarnDialog: match not found")
         return None, None, None
 
     def crop_dialog(self, image, warn_points):
