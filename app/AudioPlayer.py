@@ -1,5 +1,4 @@
-import winsound
-
+# import winsound
 
 class AudioPlayer:
     def __init__(self, captcha_file, warning_file):

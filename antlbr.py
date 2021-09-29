@@ -211,7 +211,6 @@ def run_captcha_app():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     death_template = cv2.imread("res/template/status/user_death_template.png")
 
-    audio_player = AudioPlayer("res/captcha_warn_short.wav", "res/captcha_warn_long.wav")
 
     dialog_parser = WarnDialogParser(env_path, warn_template)
     captcha_parser = BotCaptchaParser(env_path)
@@ -251,5 +250,5 @@ if __name__ == "__main__":
     test_manor()
 
 
-    run_manor_app()
-    # run_captcha_app()
+    # run_manor_app()
+    run_captcha_app()

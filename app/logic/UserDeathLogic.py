@@ -21,6 +21,7 @@ class UserDeathLogic:
             if name == "l2.exe":
                 process.Terminate()
                 print("DeadParser: Game killed")
+                exit(1)
                 break
         else:
             print("DeadParser: Game not found")
