@@ -21,7 +21,7 @@ class PetManaLogic(BaseLogic):
         if last_action_delta >= 10 and not self.target_logic.has_target:
             self.last_action_time = current_time
             hp = self.hp_parser.parse_image(screen_rgb)
-            if hp is not None and hp[0] < 2000:
+            if hp is not None and int(hp[0]) < 2500:
                 self.kill_res_pet()
 
     def kill_res_pet(self):
@@ -33,6 +33,6 @@ class PetManaLogic(BaseLogic):
         pyautogui.press(KEY_KILL_PET)
         time.sleep(10)
         pyautogui.press(KEY_RES_PET)
-        time.sleep(6)
+        time.sleep(30)
 
         pyautogui.press(KEY_CLEAR_TARGET, presses=2, interval=0.5)
