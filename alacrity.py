@@ -1,7 +1,7 @@
 import pyautogui
 import time
 
-ALACRITY = "f1"
+ALACRITY = "f10"
 
 
 def alacrity():
