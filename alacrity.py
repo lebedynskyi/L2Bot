@@ -5,6 +5,8 @@ ALACRITY = "f10"
 
 
 def alacrity():
+    time.sleep(3)
+
     while True:
         print("Loop Alacrity")
         pyautogui.press(ALACRITY)

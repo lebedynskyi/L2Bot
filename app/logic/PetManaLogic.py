@@ -25,8 +25,8 @@ class PetManaLogic(BaseLogic):
                 self.kill_res_pet()
 
     def kill_res_pet(self):
-        pyautogui.press(KEY_GREATER_HEAL)
-        time.sleep(1)
+        # pyautogui.press(KEY_GREATER_HEAL)
+        # time.sleep(1)
 
         pyautogui.press(KEY_TARGET_PET)
         time.sleep(1)
