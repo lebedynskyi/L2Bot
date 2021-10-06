@@ -236,6 +236,5 @@ if __name__ == "__main__":
     #
     # test_manor()
 
-
     run_manor_app()
     # run_captcha_app()
