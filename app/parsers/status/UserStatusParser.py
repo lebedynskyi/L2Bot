@@ -58,6 +58,4 @@ class UserStatusParser(BaseParser):
             self.debug_show_im(blur, "Debug blurred for text")
 
         tesseract_config = r"--oem 3 --psm 12 -l eng -c tessedit_char_whitelist=0123456789/"
-        text = pytesseract.image_to_string(blur, lang="eng", config=tesseract_config).strip()
-        print("Parsed text: text -> %s" % text)
-        return text
+        return pytesseract.image_to_string(blur, lang="eng", config=tesseract_config).strip()

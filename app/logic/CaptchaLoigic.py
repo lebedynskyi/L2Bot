@@ -12,7 +12,7 @@ class CaptchaLogic(BaseLogic):
         self.captcha_solver = captcha_solver
         self.group_parser = group_parser
 
-    def on_tick(self, screenshot_image, current_time):
+    def _on_tick(self, screenshot_image, current_time):
         last_action_delta = current_time - self.last_action_time
         answer = None
         if last_action_delta >= 1:

@@ -9,7 +9,7 @@ class UserDeathLogic(BaseLogic):
     def __init__(self, death_parser):
         self.death_parser = death_parser
 
-    def on_tick(self, screenshot_image, current_time):
+    def _on_tick(self, screenshot_image, current_time):
         is_dead = self.death_parser.parse_image(screenshot_image)
         if is_dead:
             self.write_log("Death", "User dead")
