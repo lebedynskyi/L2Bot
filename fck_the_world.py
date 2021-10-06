@@ -40,10 +40,10 @@ def loop_spoil_farm():
     captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathLogic(death_parser)
     farm = FarmLogic(target_parser)
-    status = UserStatusLogic(status_parser)
+    # status = UserStatusLogic(status_parser)
     pet = PetManaLogic(status_parser, farm)
 
-    looper = AppLooper([captcha, death, farm, status, pet])
+    looper = AppLooper([captcha, death, farm, pet])
     looper.loop()
 
 

@@ -19,4 +19,5 @@ class AppLooper:
             for handler in self.handlers:
                 handler.on_tick(array, current_time)
 
-            time.sleep(0.5)
+            time.sleep(1)
+            print("\r")

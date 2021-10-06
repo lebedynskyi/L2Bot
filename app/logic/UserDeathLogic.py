@@ -10,11 +10,16 @@ class UserDeathLogic(BaseLogic):
         self.death_parser = death_parser
 
     def _on_tick(self, screenshot_image, current_time):
-        is_dead = self.death_parser.parse_image(screenshot_image)
-        if is_dead:
-            self.write_log("Death", "User dead")
-            cv2.imwrite("output/last_death.png", screenshot_image)
-            self.kill_game()
+        last_action_delta = current_time - self.last_action_time
+        if last_action_delta >= 15:
+            is_dead = self.death_parser.parse_image(screenshot_image)
+            self.last_action_time = current_time
+            if is_dead:
+                self.write_log("Death", "Player dead")
+                cv2.imwrite("output/last_death.png", screenshot_image)
+                self.kill_game()
+            else:
+                self.write_log("Death", "Player is alive")
 
     def kill_game(self):
         import wmi
