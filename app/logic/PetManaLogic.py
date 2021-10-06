@@ -59,7 +59,7 @@ class PetManaLogic(BaseLogic):
             self.write_log("HPLogic", "Res the pet")
             return True
 
-        if self.current_state == STATE_RESUME_FARM and last_action_delta <= 30:
+        if self.current_state == STATE_RESUME_FARM and last_action_delta >= 25:
             pyautogui.press(KEY_CLEAR_TARGET, presses=2, interval=0.5)
             self.current_state = STATE_IDLE
             self.farm_logic.resume()
