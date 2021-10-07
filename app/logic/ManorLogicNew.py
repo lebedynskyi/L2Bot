@@ -31,7 +31,7 @@ STATE_FINISH -> Just finish state to exit from the app
 
 
 class SellCastle:
-    def __init__(self, castle_name, alternative_castle_name, start_index, finish_index, crop_number):
+    def __init__(self, castle_name, alternative_castle_name, start_index, finish_index=8, crop_number=1):
         self.castle_name = castle_name
         self.alternative_castle_name = alternative_castle_name
         self.start_index = start_index
@@ -119,8 +119,9 @@ class ManorLogicNew(BaseLogic):
 
         if STATE_SELL == self.current_state:
             self.finish_time = datetime.now()
-            if len(self.castles) > 1:
-                self.current_castle_index = self.current_castle_index + 1
+            next_index = self.current_castle_index + 1
+            if next_index < len(self.castles):
+                self.current_castle_index = next_index
                 self.current_state = STATE_MANOR_DIALOG
             else:
                 self.current_state = STATE_FINISH

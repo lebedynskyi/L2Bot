@@ -61,8 +61,8 @@ def run_manor_app():
     # Parse start from 0. Position 2 means first castle.
     # Desert Codran - Goddard
     manor_parser = Manor.ManorParser(env_path, [
-        Manor.CastleLookArea("Aden", "fake", 4, 7)
-        # Manor.CastleLookArea("Goddard", "fake", 4, 7)
+        Manor.CastleLookArea("Aden", "fake", 4, 7),
+        Manor.CastleLookArea("Gludio", "fake", 2, 7)
     ], manor_templ, crop_sales_templ, chooser_templ, chooser_expanded_templ, False)
     logic = ManorLogic(manor_parser)
 

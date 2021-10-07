@@ -30,4 +30,4 @@ class ManorDialogParser(BaseParser):
             sell_x = (sale_btn[0][0] + sale_btn[1][0]) / 2
             sell_y = (sale_btn[1][1] + sale_btn[0][1]) / 2
             return sell_x, sell_y
-        return None, None
+        return None

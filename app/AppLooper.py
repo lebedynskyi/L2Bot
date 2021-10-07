@@ -1,11 +1,7 @@
 import time
 
 import numpy as np
-import pyautogui
 from PIL import ImageGrab
-
-pyautogui.FAILSAFE = False
-pyautogui.PAUSE = 0.02
 
 
 class AppLooper:

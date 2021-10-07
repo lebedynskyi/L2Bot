@@ -4,6 +4,9 @@ from datetime import datetime
 
 import pyautogui
 
+pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.02
+
 
 class BaseLogic(ABC):
     last_action_time = 0
@@ -37,4 +40,4 @@ class BaseLogic(ABC):
             pyautogui.mouseUp(int(button[0]), int(button[1]))
 
     def apply_move(self, button):
-        pyautogui.moveTo(int(button[0]), int(button[1]), duration=0.2)
+        pyautogui.moveTo(int(button[0]), int(button[1]))
