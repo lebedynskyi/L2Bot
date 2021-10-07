@@ -28,10 +28,13 @@ class BaseLogic(ABC):
     def resume(self):
         self.paused = False
 
-    def apply_click(self, button):
-        pyautogui.mouseDown(int(button[0]), int(button[1]))
-        time.sleep(0.2)
-        pyautogui.mouseUp(int(button[0]), int(button[1]))
+    def apply_click(self, button=None):
+        if button is None:
+            pyautogui.mouseDown()
+            pyautogui.mouseUp()
+        else:
+            pyautogui.mouseDown(int(button[0]), int(button[1]))
+            pyautogui.mouseUp(int(button[0]), int(button[1]))
 
     def apply_move(self, button):
         pyautogui.moveTo(int(button[0]), int(button[1]), duration=0.2)

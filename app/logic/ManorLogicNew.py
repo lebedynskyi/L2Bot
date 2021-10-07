@@ -68,8 +68,8 @@ class ManorLogicNew(BaseLogic):
                 # Double click for crop list chooser
                 self.apply_click(move_click_btn)
 
-        elif self.current_state == STATE_MANOR_DIALOG:
-            # Manor is in maintenance mode
+        elif self.current_state == STATE_CROP_CHOOSER:
+            # Manor is in maintenance mode. There is no chosr dialog
             time.sleep(0.1)
             self.apply_click()
 
