@@ -43,4 +43,4 @@ class CastlesListParser(BaseParser):
             max_price_ok_y = (max_price_ok[1][1] + max_price_ok[0][1]) / 2
 
             return (select_x, select_y), (max_price_x, max_price_y), (max_price_ok_x, max_price_ok_y)
-        return None
+        return None, None, None

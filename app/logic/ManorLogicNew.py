@@ -29,6 +29,9 @@ STATE_FINISH -> Just finish state to exit from the app
 
 """
 
+pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.02
+
 
 class SellCastle:
     def __init__(self, castle_name, alternative_castle_name, start_index, finish_index, crop_number):
@@ -60,8 +63,11 @@ class ManorLogicNew(BaseLogic):
         move_click_btn = self.handle_state(screen_rgb)
 
         if move_click_btn is not None:
-            self.apply_move(move_click_btn)
             self.apply_click(move_click_btn)
+            if self.current_state == STATE_CASTLES_LIST:
+                self.apply_click(move_click_btn)
+        elif self.current_state == STATE_MANOR_DIALOG:
+            time.sleep(0.1)
 
     def handle_state(self, screen_rgb):
         if STATE_MANOR_DIALOG == self.current_state:
@@ -81,8 +87,7 @@ class ManorLogicNew(BaseLogic):
             return chosen_crop
 
         if STATE_CASTLES_LIST == self.current_state:
-            castles_drop_down_btn, self.cached_max_price_btn, self.cached_ok_btn = \
-                self.castles_list_parser.parse_image(screen_rgb)
+            castles_drop_down_btn, self.cached_max_price_btn, self.cached_ok_btn = self.castles_list_parser.parse_image(screen_rgb)
             if castles_drop_down_btn:
                 self.current_state = STATE_CASTLES_CHOOSER
             else:
