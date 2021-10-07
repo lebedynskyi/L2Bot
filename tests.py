@@ -5,6 +5,7 @@ import cv2
 from app.logic.ManorLogic import ManorLogic, SellCastle
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
+from app.parsers.farm.TargetParser import TargetParser
 from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
 from app.parsers.manor.CastlesListParser import CastlesListParser
 from app.parsers.manor.CropListParser import CropListParser
@@ -40,6 +41,13 @@ def test_status_parser():
 
     screen = cv2.imread("input/screens/Shot00008.bmp")
     assert status_parser.parse_image(screen)
+
+
+def test_target_parser():
+    target_template = cv2.imread("res/template/farm/target_template.png")
+    parser = TargetParser(env_path, target_template, True)
+    screen = cv2.imread("input/farm/Shot00055.bmp")
+    assert parser.parse_image(screen)
 
 
 def test_tesseract():
@@ -105,5 +113,5 @@ if __name__ == "__main__":
 
     # manor_screens = get_files_from_folder("input/manor")
     # test_manor_logic(manor_screens)
-
+    test_target_parser()
     pass

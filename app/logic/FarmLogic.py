@@ -26,7 +26,7 @@ class FarmLogic(BaseLogic):
         self.use_manor = use_manor
 
     def _on_tick(self, screen_rgb, current_time, last_action_delta):
-        last_action_delta = current_time - self.last_action_time
+        self.has_target = self.target_parser.parse_image(screen_rgb)
         if self.has_target:
             self.write_log("Farm", "Target exist")
             action_performed = self.handle_has_target(last_action_delta)

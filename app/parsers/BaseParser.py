@@ -21,5 +21,5 @@ class BaseParser(ABC):
 
     def debug_show_im(self, img, title="Debug"):
         cv2.imshow(title, img)
-        cv2.setWindowProperty(title, cv2.WND_PROP_TOPMOST, 1)
+        cv2.setWindowProperty(title, cv2.WND_PROP_VISIBLE, 1)
         cv2.waitKey(0)
