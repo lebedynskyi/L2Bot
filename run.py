@@ -6,7 +6,7 @@ import cv2
 from app.AppLooper import AppLooper
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.FarmLogic import FarmLogic
-from app.logic.ManorLogicNew import SellCastle, ManorLogicNew
+from app.logic.ManorLogic import SellCastle, ManorLogic
 from app.logic.PetManaLogic import PetManaLogic
 from app.logic.UserDeathLogic import UserDeathLogic
 from app.parsers.captcha.BotCaptcha import BotCaptchaParser
@@ -25,7 +25,7 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def manor_app():
-    time.sleep(5)
+    time.sleep(4)
     castles = [
         SellCastle("Aden", "Fake", start_index=2),
         SellCastle("Aden", "Fake", start_index=2)
@@ -43,7 +43,7 @@ def manor_app():
     castles_chooser_parser_template = cv2.imread("res/template/manor/chooser_expanded_template.png")
     castles_chooser_parser = CastlesListChooserParser(env_path, castles_chooser_parser_template)
 
-    manor = ManorLogicNew(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+    manor = ManorLogic(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
     looper = AppLooper([manor], tick_delay=-1)
     looper.loop()
 
@@ -77,5 +77,7 @@ def farm_app():
 
 
 if __name__ == "__main__":
-    farm_app()
-    # manor_app()
+    # farm_app()
+    manor_app()
+
+    pass
