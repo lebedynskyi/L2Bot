@@ -4,14 +4,14 @@ import numpy as np
 import pyautogui
 from PIL import ImageGrab
 
+pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.02
+
 
 class AppLooper:
     def __init__(self, handlers, tick_delay=1):
         self.tick_delay = tick_delay
         self.handlers = handlers
-
-        pyautogui.FAILSAFE = False
-        pyautogui.PAUSE = 0.02
 
     def loop(self):
         while True:
