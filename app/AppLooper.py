@@ -10,6 +10,8 @@ class AppLooper:
         self.handlers = handlers
 
     def loop(self):
+        time.sleep(4)
+
         while True:
             screenshot = ImageGrab.grab()
             array = np.array(screenshot)

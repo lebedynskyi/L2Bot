@@ -26,7 +26,6 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def manor_app():
-    time.sleep(4)
     castles = [
         SellCastle("Aden", "Fake", start_index=2),
         SellCastle("Aden", "Fake", start_index=2)
@@ -60,7 +59,7 @@ def farm_app():
     death_parser = UserDeathStatusParser(env_path, death_template)
 
     target_template = cv2.imread("res/template/farm/target_template.png")
-    target_parser = TargetParser(env_path, target_template)
+    target_parser = TargetParser(env_path, target_template, True)
 
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template)
@@ -74,7 +73,7 @@ def farm_app():
     pet = PetManaLogic(status_parser, farm)
     buff = BuffLogic()
 
-    looper = AppLooper(captcha, death, farm, pet, buff)
+    looper = AppLooper(captcha, death, farm, pet)
     looper.loop()
 
 

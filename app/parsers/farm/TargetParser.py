@@ -6,8 +6,8 @@ import cv2
 
 class TargetParser(BaseParser):
 
-    def __init__(self, output_path, target_template):
-        super().__init__(output_path)
+    def __init__(self, output_path, target_template, debug=False):
+        super().__init__(output_path, debug)
         self.target_template = cv2.cvtColor(target_template, cv2.COLOR_RGB2GRAY)
 
     def parse_image(self, image_rgb, *args, **kwargs):
