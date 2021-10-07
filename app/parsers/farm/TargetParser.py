@@ -1,6 +1,6 @@
 import numpy as np
 
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 import cv2
 
 
@@ -10,8 +10,8 @@ class TargetParser(BaseParser):
         super().__init__(output_path)
         self.target_template = cv2.cvtColor(target_template, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, screen_rgb):
-        return self.is_target_exist(screen_rgb)
+    def parse_image(self, image_rgb, *args, **kwargs):
+        return self.is_target_exist(image_rgb)
 
     def is_target_exist(self, screen_rgb):
         image = cv2.cvtColor(screen_rgb, cv2.COLOR_RGB2GRAY)

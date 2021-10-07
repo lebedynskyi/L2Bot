@@ -25,8 +25,7 @@ class FarmLogic(BaseLogic):
         self.target_parser = target_parser
         self.use_manor = use_manor
 
-    def _on_tick(self, screen_rgb, current_time):
-        self.has_target = self.target_parser.parse_image(screen_rgb)
+    def _on_tick(self, screen_rgb, current_time, last_action_delta):
         last_action_delta = current_time - self.last_action_time
         if self.has_target:
             self.write_log("Farm", "Target exist")

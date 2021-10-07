@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 
 
 # Todo decompose for different methods
@@ -10,8 +10,8 @@ class GroupDialogParser(BaseParser):
         super().__init__(output_path, debug)
         self.template = cv2.cvtColor(template, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, screen_rgb):
-        image_rgb = screen_rgb.copy()
+    def parse_image(self, image_rgb, *args, **kwargs):
+        image_rgb = image_rgb.copy()
         image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
 
         header_match = cv2.matchTemplate(image, self.template, cv2.TM_CCORR_NORMED)
@@ -68,7 +68,7 @@ class GroupDialogParser(BaseParser):
         target_x = int(header_loc[1][0] + target_loc[1])
 
         if self.debug:
-            cv2.rectangle(screen_rgb, (target_x, target_y), (target_x + cw, target_y + ch), (0, 0, 255), 1)
-            self.debug_show_im(screen_rgb, "Target letter on screen")
+            cv2.rectangle(image_rgb, (target_x, target_y), (target_x + cw, target_y + ch), (0, 0, 255), 1)
+            self.debug_show_im(image_rgb, "Target letter on screen")
 
         return target_x + cw / 2, target_y + ch / 2

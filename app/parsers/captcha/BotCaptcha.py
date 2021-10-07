@@ -1,4 +1,4 @@
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 
 import cv2
 import pytesseract
@@ -8,12 +8,12 @@ class BotCaptchaParser(BaseParser):
     def __init__(self, env_path, debug=False):
         super().__init__(env_path, debug)
 
-    def parse_image(self, dialog, default_scale=500):
-        if dialog is None:
+    def parse_image(self, image_rgb, *args, **kwargs):
+        if image_rgb is None:
             return None
 
-        text_area = self.crop_text_area(dialog)
-        return self.parse_text(text_area, default_scale)
+        text_area = self.crop_text_area(image_rgb)
+        return self.parse_text(text_area, kwargs["default_scale"])
 
     def crop_text_area(self, dialog_rgb):
         text_area_rgb = dialog_rgb[5:60, 34:300]

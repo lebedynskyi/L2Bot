@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pytesseract
 
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 
 
 class UserStatusParser(BaseParser):
@@ -10,7 +10,7 @@ class UserStatusParser(BaseParser):
         super().__init__(env_path, debug)
         self.template = cv2.cvtColor(status_template, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, screen_rgb):
+    def parse_image(self, screen_rgb, *args, **kwargs):
         hp_rgb = self.crop_hp(screen_rgb)
         if hp_rgb is not None:
             hp_text = self.extract_text(hp_rgb).replace(" ", "")

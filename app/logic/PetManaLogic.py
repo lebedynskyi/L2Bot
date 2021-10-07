@@ -24,9 +24,7 @@ class PetManaLogic(BaseLogic):
         self.hp_parser = hp_parser
         self.farm_logic = farm_logic
 
-    def _on_tick(self, screen_rgb, current_time):
-        last_action_delta = current_time - self.last_action_time
-
+    def _on_tick(self, screen_rgb, current_time, last_action_delta):
         action_performed = self.handle_state(last_action_delta, screen_rgb)
 
         if action_performed:

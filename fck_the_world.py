@@ -1,16 +1,22 @@
 import os
+import time
+
 import cv2
 
 from app.AppLooper import AppLooper
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.FarmLogic import FarmLogic
+from app.logic.ManorLogicNew import SellCastle, ManorLogicNew
 from app.logic.PetManaLogic import PetManaLogic
 from app.logic.UserDeathLogic import UserDeathLogic
-from app.logic.UserStatusLogic import UserStatusLogic
 from app.parsers.captcha.BotCaptcha import BotCaptchaParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
 from app.parsers.farm.TargetParser import TargetParser
+from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
+from app.parsers.manor.CastlesListParser import CastlesListParser
+from app.parsers.manor.CropListParser import CropListParser
+from app.parsers.manor.ManorDialogParser import ManorDialogParser
 from app.parsers.status.UserDeathStatusParser import UserDeathStatusParser
 from app.parsers.status.UserStatusParser import UserStatusParser
 from app.solver.CaptchaSolver import CaptchaSolver
@@ -18,7 +24,31 @@ from app.solver.CaptchaSolver import CaptchaSolver
 env_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def loop_spoil_farm():
+def manor_app():
+    time.sleep(5)
+    castles = [
+        SellCastle("Aden", "Fake", start_index=2, finish_index=4, crop_number=2)
+        # SellCastle("Aden", "Fake", start_index=2, finish_index=4, crop_number=2)
+    ]
+
+    manor_dialog_template = cv2.imread("res/template/manor/manor_template_1.png")
+    manor_dialog_parser = ManorDialogParser(env_path, manor_dialog_template)
+
+    crop_list_template = cv2.imread("res/template/manor/crop_sales_dialog.png")
+    crop_list_parser = CropListParser(env_path, crop_list_template)
+
+    castles_list_template = cv2.imread("res/template/manor/chooser_template.png")
+    castles_list_parser = CastlesListParser(env_path, castles_list_template)
+
+    castles_chooser_parser_template = cv2.imread("res/template/manor/chooser_expanded_template.png")
+    castles_chooser_parser = CastlesListChooserParser(env_path, castles_chooser_parser_template)
+
+    manor = ManorLogicNew(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+    looper = AppLooper([manor], tick_delay=-1)
+    looper.loop()
+
+
+def farm_app():
     warn_template = cv2.imread("res/template/warning_template.png")
     dialog_parser = WarnDialogParser(env_path, warn_template)
 
@@ -40,7 +70,6 @@ def loop_spoil_farm():
     captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathLogic(death_parser)
     farm = FarmLogic(target_parser)
-    # status = UserStatusLogic(status_parser)
     pet = PetManaLogic(status_parser, farm)
 
     looper = AppLooper([captcha, death, farm, pet])
@@ -48,4 +77,5 @@ def loop_spoil_farm():
 
 
 if __name__ == "__main__":
-    loop_spoil_farm()
+    # farm_app()
+    manor_app()

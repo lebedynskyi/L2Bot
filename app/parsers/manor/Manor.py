@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from pytesseract import pytesseract
 
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 
 MANOR_DIALOG = 0
 CROP_SALES = 1
@@ -24,6 +24,7 @@ class CastleLookArea:
         self.alternative_name = alternative_name
 
 
+@DeprecationWarning
 class ManorParser(BaseParser):
     current_stadia = MANOR_DIALOG
 
@@ -44,7 +45,7 @@ class ManorParser(BaseParser):
         self.chooser_template = cv2.cvtColor(chooser_template, cv2.COLOR_RGB2GRAY)
         self.chooser_expanded_template = cv2.cvtColor(chooser_template_expanded, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, screen_rgb):
+    def parse_image(self, screen_rgb, *args, **kwargs):
         if self.current_stadia == MANOR_DIALOG:
             return self.handle_manor_dialog(screen_rgb)
         elif self.current_stadia == CROP_SALES:
@@ -61,35 +62,6 @@ class ManorParser(BaseParser):
             return self.handle_sell()
         elif self.current_stadia == FINISH:
             exit(0)
-        return None
-
-    def handle_manor_dialog(self, screen_rgb):
-        print("Manor: %s Look for Manor dialog" % datetime.now())
-        image_rgb = screen_rgb.copy()
-        image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
-        match = cv2.matchTemplate(image, self.manor_template, cv2.TM_CCORR_NORMED)
-        thresh_hold = 0.89
-        loc = np.where(match >= thresh_hold)
-        hh, ww = self.manor_template.shape[:2]
-        # Match could have more than 1 item
-
-        match_points = list(zip(*loc[::-1]))
-        if match_points:
-            first_points = match_points[0]
-            sale_btn = ((first_points[0] + 535, first_points[1] + 275), (first_points[0] + 550, first_points[1] + 290))
-            print("Manor: %s Found Manor dialog" % datetime.now())
-
-            if self.debug:
-                debug_img = screen_rgb.copy()
-                self.draw_match_squares(debug_img, match_points, ww, hh)
-                cv2.rectangle(debug_img, sale_btn[0], sale_btn[1], (0, 0, 255), 1)
-                self.debug_show_im(debug_img)
-
-            sell_x = (sale_btn[0][0] + sale_btn[1][0]) / 2
-            sell_y = (sale_btn[1][1] + sale_btn[0][1]) / 2
-            self.current_stadia = self.current_stadia + 1
-            return sell_x, sell_y
-        print("Manor: Manor not found")
         return None
 
     def handle_crop_sales(self, screen_rgb):
@@ -258,6 +230,6 @@ class ManorParser(BaseParser):
         if self.debug:
             self.debug_show_im(blur, "Debug blurred for text")
 
-        tesseract_config = r"--oem 3 --psm 7 -l eng -c tessedit_char_whitelist= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.+-/='"
+        tesseract_config = r"--oem 3 --psm 7 -l eng -c tessedit_char_whitelist= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"
         text = pytesseract.image_to_string(blur, lang="eng", config=tesseract_config)
         return text

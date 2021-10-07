@@ -1,4 +1,4 @@
-from app.parsers.Base import BaseParser
+from app.parsers.BaseParser import BaseParser
 
 import cv2
 import numpy as np
@@ -9,8 +9,8 @@ class WarnDialogParser(BaseParser):
         super().__init__(env_path, debug)
         self.template = cv2.cvtColor(warning_template, cv2.COLOR_RGB2GRAY)
 
-    def parse_image(self, screen_rgb):
-        image_rgb = screen_rgb.copy()
+    def parse_image(self, image_rgb, *args, **kwargs):
+        image_rgb = image_rgb.copy()
         image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
 
         match = cv2.matchTemplate(image, self.template, cv2.TM_CCORR_NORMED)

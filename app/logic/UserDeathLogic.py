@@ -9,8 +9,7 @@ class UserDeathLogic(BaseLogic):
     def __init__(self, death_parser):
         self.death_parser = death_parser
 
-    def _on_tick(self, screenshot_image, current_time):
-        last_action_delta = current_time - self.last_action_time
+    def _on_tick(self, screenshot_image, current_time, last_action_delta):
         if last_action_delta >= 15:
             is_dead = self.death_parser.parse_image(screenshot_image)
             self.last_action_time = current_time

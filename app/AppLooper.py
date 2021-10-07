@@ -6,12 +6,14 @@ from PIL import ImageGrab
 
 
 class AppLooper:
-    def __init__(self, handlers):
+    def __init__(self, handlers, tick_delay=1):
+        self.tick_delay = tick_delay
         self.handlers = handlers
-        pass
+
+        pyautogui.FAILSAFE = False
+        pyautogui.PAUSE = 0.02
 
     def loop(self):
-        pyautogui.FAILSAFE = False
         while True:
             screenshot = ImageGrab.grab()
             array = np.array(screenshot)
@@ -19,5 +21,7 @@ class AppLooper:
             for handler in self.handlers:
                 handler.on_tick(array, current_time)
 
-            time.sleep(1)
+            if self.tick_delay > 0:
+                time.sleep(self.tick_delay)
+
             print("\r")

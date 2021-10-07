@@ -5,9 +5,6 @@ import time
 import cv2
 import pyautogui
 
-from app.logic.CaptchaLoigic import CaptchaLogic
-# from app.logic.UserDeathLogic import UserDeathLogic
-from app.logic.UserStatusLogic import UserStatusLogic
 from app.parsers.status.UserDeathStatusParser import UserDeathStatusParser
 from app.parsers.status.UserStatusParser import UserStatusParser
 from app.parsers.manor import Manor
@@ -31,31 +28,13 @@ def test_dialog_warn():
     dialog, ok, cancel = dialog_handler.parse_image(screen)
     pyautogui.moveTo(ok[0], ok[1])
 
+
 def test_status_parser():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template, True)
 
     screen = cv2.imread("input/screens/Shot00008.bmp")
     status_parser.parse_image(screen)
-
-
-def test_loop():
-    warn_template = cv2.imread("res/template/warning_template.png")
-    group_template = cv2.imread("res/template/dualbox_template.png")
-
-    dialog_parser = WarnDialogParser(env_path, warn_template)
-    captcha_parser = BotCaptchaParser(env_path)
-    group_parser = GroupDialogParser(env_path, group_template)
-    captcha_solver = CaptchaSolver()
-    logic = CaptchaLogic(dialog_parser, captcha_parser, group_parser, captcha_solver, None)
-
-    while True:
-        btn = logic.check_captcha()
-        if btn is not None:
-            logic.apply_move(btn)
-            time.sleep(1)
-            logic.apply_click(btn)
-        time.sleep(2)
 
 
 def test_tesseract():
@@ -189,33 +168,6 @@ def test_captcha_parser():
                 print("Cannot solve captcha at all, text %s, scale %s" % (captcha_text, scale))
 
 
-# Works in Windows only
-def run_captcha_app():
-    from app.Ui import Ui
-
-    warn_template = cv2.imread("res/template/warning_template.png")
-    group_template = cv2.imread("res/template/dualbox_template.png")
-    status_template = cv2.imread("res/template/status/user_status_template.png")
-    death_template = cv2.imread("res/template/status/user_death_template.png")
-
-
-    dialog_parser = WarnDialogParser(env_path, warn_template)
-    captcha_parser = BotCaptchaParser(env_path)
-    group_captcha_parser = GroupDialogParser(env_path, group_template)
-    user_status_parser = UserStatusParser(env_path, status_template)
-    user_death_parser = UserDeathStatusParser(env_path, death_template)
-
-    captcha_solver = CaptchaSolver()
-
-    icon_path = os.path.join(env_path, "res/app_ico.png")
-
-    app = Ui("Antlbt", icon_path,
-             CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver),
-             UserStatusLogic(user_status_parser),
-             UserDeathLogic(user_death_parser))
-    app.start_ui()
-
-
 def test_death_parser():
     status_template = cv2.imread("res/template/status/user_death_template.png")
     status_parser = UserDeathStatusParser(env_path, status_template, True)
@@ -237,4 +189,3 @@ if __name__ == "__main__":
     # test_manor()
 
     run_manor_app()
-    # run_captcha_app()
