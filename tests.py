@@ -103,5 +103,7 @@ if __name__ == "__main__":
     # screens = get_files_from_folder("input/screens")
     # test_status_parser(screens)
 
-    manor_screens = get_files_from_folder("input/manor")
-    test_manor_logic(manor_screens)
+    # manor_screens = get_files_from_folder("input/manor")
+    # test_manor_logic(manor_screens)
+
+    pass

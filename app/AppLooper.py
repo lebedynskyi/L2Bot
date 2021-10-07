@@ -5,7 +5,7 @@ from PIL import ImageGrab
 
 
 class AppLooper:
-    def __init__(self, handlers, tick_delay=1):
+    def __init__(self, *handlers, tick_delay=1):
         self.tick_delay = tick_delay
         self.handlers = handlers
 

@@ -4,6 +4,7 @@ import time
 import cv2
 
 from app.AppLooper import AppLooper
+from app.logic.BuffLogic import BuffLogic
 from app.logic.CaptchaLoigic import CaptchaLogic
 from app.logic.FarmLogic import FarmLogic
 from app.logic.ManorLogic import SellCastle, ManorLogic
@@ -44,7 +45,7 @@ def manor_app():
     castles_chooser_parser = CastlesListChooserParser(env_path, castles_chooser_parser_template)
 
     manor = ManorLogic(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
-    looper = AppLooper([manor], tick_delay=-1)
+    looper = AppLooper(manor, tick_delay=-1)
     looper.loop()
 
 
@@ -71,13 +72,14 @@ def farm_app():
     death = UserDeathLogic(death_parser)
     farm = FarmLogic(target_parser)
     pet = PetManaLogic(status_parser, farm)
+    buff = BuffLogic()
 
-    looper = AppLooper([captcha, death, farm, pet])
+    looper = AppLooper(captcha, death, farm, pet, buff)
     looper.loop()
 
 
 if __name__ == "__main__":
-    # farm_app()
-    manor_app()
+    farm_app()
+    # manor_app()
 
     pass

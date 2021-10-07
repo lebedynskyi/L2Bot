@@ -2,8 +2,6 @@ from datetime import datetime
 
 import time
 
-import pyautogui
-
 from app.logic.BaseLogic import BaseLogic
 
 STATE_MANOR_DIALOG = 0

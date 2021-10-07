@@ -10,7 +10,7 @@ def alacrity():
     while True:
         print("Loop Alacrity")
         pyautogui.press(ALACRITY)
-        time.sleep(1195)
+        time.sleep()
 
 
 if __name__ == "__main__":
