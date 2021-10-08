@@ -5,7 +5,7 @@ import cv2
 from app.handlers.Manor import ManorHandler, ManorSellCastle
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
-from app.parsers.farm.TargetParser import TargetParser
+from app.parsers.farm.TemplateExistParser import TemplateExistParser
 from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
 from app.parsers.manor.CastlesListParser import CastlesListParser
 from app.parsers.manor.CropListParser import CropListParser
@@ -45,7 +45,7 @@ def test_status_parser():
 
 def test_target_parser():
     target_template = cv2.imread("res/template/farm/target_template.png")
-    parser = TargetParser(env_path, target_template, True)
+    parser = TemplateExistParser(env_path, target_template, True)
     screen = cv2.imread("input/farm/Shot00055.bmp")
     assert parser.parse_image(screen)
 

@@ -6,13 +6,14 @@ from app.AppLooper import AppLooper
 from app.handlers.Buff import BuffHandler
 from app.handlers.Captcha import CaptchaHandler
 from app.handlers.Farm import FarmHandler
+from app.handlers.FarmTransform import FarmMobTransformer
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.PetManaKiller import PetManaHandler
 from app.handlers.UserDeath import UserDeathHandler
 from app.parsers.captcha.BotCaptcha import BotCaptchaParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
-from app.parsers.farm.TargetParser import TargetParser
+from app.parsers.farm.TemplateExistParser import TemplateExistParser
 from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
 from app.parsers.manor.CastlesListParser import CastlesListParser
 from app.parsers.manor.CropListParser import CropListParser
@@ -58,7 +59,7 @@ def farm_app():
     death_parser = UserDeathStatusParser(env_path, death_template)
 
     target_template = cv2.imread("res/template/farm/target_template.png")
-    target_parser = TargetParser(env_path, target_template)
+    target_parser = TemplateExistParser(env_path, target_template)
 
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template)
@@ -69,10 +70,11 @@ def farm_app():
     captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
     farm = FarmHandler(target_parser)
+
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()
 
-    looper = AppLooper(captcha, death, farm, pet, buff)
+    looper = AppLooper(buff, captcha, death, farm, pet)
     looper.loop()
 
 

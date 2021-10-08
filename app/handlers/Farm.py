@@ -8,8 +8,6 @@ KEY_PICK = "F4"
 KEY_SEED = "F5"
 KEY_HARVEST = "F6"
 
-KEY_FAST_HP = "F8"
-
 STATE_SPOIL = 1
 STATE_SEED = 2
 STATE_HARVEST = 3
@@ -29,7 +27,7 @@ class FarmHandler(BaseHandler):
         self.has_target = self.target_parser.parse_image(screen_rgb)
         if self.has_target:
             self.write_log("Farm", "Target exist")
-            action_performed = self.handle_has_target(last_action_delta)
+            action_performed = self.handle_has_target(last_action_delta, screen_rgb)
         else:
             self.write_log("Farm", "Target not exist")
             action_performed = self.handle_no_target(last_action_delta)
@@ -45,7 +43,7 @@ class FarmHandler(BaseHandler):
 
         return False
 
-    def handle_has_target(self, last_action_delta):
+    def handle_has_target(self, last_action_delta, screen_rgb):
         if STATE_SPOIL == self.current_state and last_action_delta >= 0.5:
             pyautogui.press(KEY_SPOIL)
 

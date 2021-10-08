@@ -4,16 +4,16 @@ from app.parsers.BaseParser import BaseParser
 import cv2
 
 
-class TargetParser(BaseParser):
+class TemplateExistParser(BaseParser):
 
     def __init__(self, output_path, target_template, debug=False):
         super().__init__(output_path, debug)
         self.target_template = cv2.cvtColor(target_template, cv2.COLOR_RGB2GRAY)
 
     def parse_image(self, image_rgb, *args, **kwargs):
-        return self.is_target_exist(image_rgb)
+        return self.is_template_present(image_rgb)
 
-    def is_target_exist(self, screen_rgb):
+    def is_template_present(self, screen_rgb):
         image = cv2.cvtColor(screen_rgb, cv2.COLOR_RGB2GRAY)
         match = cv2.matchTemplate(image, self.target_template, cv2.TM_CCORR_NORMED)
         loc = np.where(match >= 0.89)
