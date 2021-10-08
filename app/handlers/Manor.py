@@ -2,7 +2,7 @@ from datetime import datetime
 
 import time
 
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 STATE_MANOR_DIALOG = 0
 STATE_CROP_CHOOSER = 1
@@ -14,7 +14,7 @@ STATE_SELL = 6
 STATE_FINISH = 7
 
 """
-General flow of manor logic:
+General flow of manor handlers:
 
 STATE_MANOR_DIALOG -> This is general manor window. Here we need to press sell crop btn to go list of crops
 STATE_CROP_CHOOSER -> This is a window with list of available crops that player holds
@@ -28,7 +28,7 @@ STATE_FINISH -> Just finish state to exit from the app
 """
 
 
-class SellCastle:
+class ManorSellCastle:
     def __init__(self, castle_name, alternative_castle_name, start_index, finish_index=8, crop_number=1):
         self.castle_name = castle_name
         self.alternative_castle_name = alternative_castle_name
@@ -37,7 +37,7 @@ class SellCastle:
         self.crop_number = crop_number
 
 
-class ManorLogic(BaseLogic):
+class ManorHandler(BaseHandler):
     current_state = STATE_MANOR_DIALOG
     start_time = 0
     finish_time = 0

@@ -1,6 +1,6 @@
 import pyautogui
 
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 KEY_GREATER_HEAL = "F12"
 KEY_TARGET_PET = "F7"
@@ -17,7 +17,7 @@ STATE_RESUME_FARM = 4
 KILL_PET_LIMIT = 2000
 
 
-class PetManaLogic(BaseLogic):
+class PetManaHandler(BaseHandler):
     current_state = STATE_IDLE
 
     def __init__(self, hp_parser, farm_logic):

@@ -1,7 +1,7 @@
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 
-class UserStatusLogic(BaseLogic):
+class UserStatusHandler(BaseHandler):
     def __init__(self, status_parser):
         self.status_parser = status_parser
 

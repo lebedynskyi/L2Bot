@@ -1,5 +1,5 @@
 import pyautogui
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 KEY_NEXT_TARGET = "F1"
 KEY_SPOIL = "F2"
@@ -17,7 +17,7 @@ STATE_SWEEP = 4
 STATE_PICK = 5
 
 
-class FarmLogic(BaseLogic):
+class FarmHandler(BaseHandler):
     current_state = STATE_SPOIL
     has_target = False
 

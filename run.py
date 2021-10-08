@@ -1,15 +1,14 @@
 import os
-import time
 
 import cv2
 
 from app.AppLooper import AppLooper
-from app.logic.BuffLogic import BuffLogic
-from app.logic.CaptchaLoigic import CaptchaLogic
-from app.logic.FarmLogic import FarmLogic
-from app.logic.ManorLogic import SellCastle, ManorLogic
-from app.logic.PetManaLogic import PetManaLogic
-from app.logic.UserDeathLogic import UserDeathLogic
+from app.handlers.Buff import BuffHandler
+from app.handlers.Captcha import CaptchaHandler
+from app.handlers.Farm import FarmHandler
+from app.handlers.Manor import ManorSellCastle, ManorHandler
+from app.handlers.PetManaKiller import PetManaHandler
+from app.handlers.UserDeath import UserDeathHandler
 from app.parsers.captcha.BotCaptcha import BotCaptchaParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
@@ -27,8 +26,8 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 def manor_app():
     castles = [
-        SellCastle("Aden", "Fake", start_index=2),
-        SellCastle("Aden", "Fake", start_index=2)
+        ManorSellCastle("Aden", "Fake", start_index=2),
+        ManorSellCastle("Aden", "Fake", start_index=2)
     ]
 
     manor_dialog_template = cv2.imread("res/template/manor/manor_template_1.png")
@@ -43,7 +42,7 @@ def manor_app():
     castles_chooser_parser_template = cv2.imread("res/template/manor/chooser_expanded_template.png")
     castles_chooser_parser = CastlesListChooserParser(env_path, castles_chooser_parser_template)
 
-    manor = ManorLogic(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+    manor = ManorHandler(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
     looper = AppLooper(manor, tick_delay=-1)
     looper.loop()
 
@@ -67,11 +66,11 @@ def farm_app():
     captcha_parser = BotCaptchaParser(env_path)
     captcha_solver = CaptchaSolver()
 
-    captcha = CaptchaLogic(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
-    death = UserDeathLogic(death_parser)
-    farm = FarmLogic(target_parser)
-    pet = PetManaLogic(status_parser, farm)
-    buff = BuffLogic()
+    captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
+    death = UserDeathHandler(death_parser)
+    farm = FarmHandler(target_parser)
+    pet = PetManaHandler(status_parser, farm)
+    buff = BuffHandler()
 
     looper = AppLooper(captcha, death, farm, pet, buff)
     looper.loop()

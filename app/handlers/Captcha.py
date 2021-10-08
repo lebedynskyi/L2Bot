@@ -1,9 +1,9 @@
 import cv2
 
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 
-class CaptchaLogic(BaseLogic):
+class CaptchaHandler(BaseHandler):
     def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver):
         self.dialog_parser = dialog_parser
         self.captcha_parser = captcha_parser

@@ -8,7 +8,7 @@ pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.02
 
 
-class BaseLogic(ABC):
+class BaseHandler(ABC):
     last_action_time = 0
     paused = False
 
@@ -19,7 +19,7 @@ class BaseLogic(ABC):
 
     @abstractmethod
     def _on_tick(self, screen_rgb, current_time, last_action_delta):
-        raise NotImplementedError("Base logic is not implemented")
+        raise NotImplementedError("Base handlers is not implemented")
 
     def write_log(self, tag, msg):
         time = datetime.now()

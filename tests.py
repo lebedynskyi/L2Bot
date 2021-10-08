@@ -2,7 +2,7 @@ import time
 import os
 import cv2
 
-from app.logic.ManorLogic import ManorLogic, SellCastle
+from app.handlers.Manor import ManorHandler, ManorSellCastle
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.captcha.WarnDialog import WarnDialogParser
 from app.parsers.farm.TargetParser import TargetParser
@@ -85,7 +85,7 @@ def test_death_parser():
 
 
 def test_manor_logic(screen_shots):
-    castles = [SellCastle("Aden", "Fake", 2, 4, 2)]
+    castles = [ManorSellCastle("Aden", "Fake", 2, 4, 2)]
 
     manor_dialog_template = cv2.imread("res/template/manor/manor_template_1.png")
     manor_dialog_parser = ManorDialogParser(env_path, manor_dialog_template, debug=True)
@@ -99,7 +99,7 @@ def test_manor_logic(screen_shots):
     castles_chooser_parser_template = cv2.imread("res/template/manor/chooser_expanded_template.png")
     castles_chooser_parser = CastlesListChooserParser(env_path, castles_chooser_parser_template, debug=True)
 
-    manor = ManorLogic(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+    manor = ManorHandler(castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
 
     for shot in screen_shots:
         image = cv2.imread(shot)

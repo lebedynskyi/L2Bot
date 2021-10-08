@@ -2,10 +2,10 @@ import sys
 
 import cv2
 
-from app.logic.BaseLogic import BaseLogic
+from app.handlers.BaseHandler import BaseHandler
 
 
-class UserDeathLogic(BaseLogic):
+class UserDeathHandler(BaseHandler):
     def __init__(self, death_parser):
         self.death_parser = death_parser
 
