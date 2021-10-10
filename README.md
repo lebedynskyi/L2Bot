@@ -1,13 +1,14 @@
 # Lineage 2 Interlude bot
 
-This s a bot kind of mix of auto clicker and logic with computer vision.  
+This is a bot kind of mix of auto clicker and logic with computer vision.  
 
-Bot is developed for interlude server. I think it easy to adjust it for any server. The main principle is parsing of input images.
+Bot is developed for interlude server. I think it is easy to adjust it for any server. The main principle - parsing of input images as templates and screenshots inside parser
 
 Used next technologies:
 
 * OpenCV for computer vision for looking given templates 
 * Tesseract OCR for extracting text from given images
+* PyAutogui for mouse movement and keyboard clicking
 
 # Main components of the bot:
 
@@ -18,5 +19,58 @@ Used next technologies:
 
 **TODO:**
 * Extract Captcha handler into separate handlers
-* Implement complex handler for farming of Splendor mobs
 * Improve Status handler to check MP and CP and do some action if CP decreasing. BSOE? Stop farm ?
+* Get rid of BotCaptchaParser.  DialogParser should be aware of extracting the text
+
+# Example of built in parsers
+
+
+**Simple way:**
+```python
+target_template = cv2.imread("res/template/farm/target_template.png")
+# General parser. Takes input template and return true if there is any match on the screenshot
+target_parser = TemplateExistParser(env_path, target_template)
+farm_handler = FarmHandler(target_parser)
+
+looper = AppLooper(farm)
+looper.loop()
+```
+
+
+**Full way:**
+```python
+# Parser of warning dialog (Just for captcha parser)
+warn_template = cv2.imread("res/template/warning_template.png")
+dialog_parser = WarnDialogParser(env_path, warn_template)
+
+# Determines Group captcha dialog
+group_template = cv2.imread("res/template/dualbox_template.png")
+group_captcha_parser = GroupDialogParser(env_path, group_template)
+
+# Determines user death window
+death_template = cv2.imread("res/template/status/user_death_template.png")
+death_parser = UserDeathStatusParser(env_path, death_template)
+
+# Determines that player has a target
+target_template = cv2.imread("res/template/farm/target_template.png")
+target_parser = TemplateExistParser(env_path, target_template)
+
+# Parser for user HP / MP count
+status_template = cv2.imread("res/template/status/user_status_template.png")
+status_parser = UserStatusParser(env_path, status_template)
+
+# Parser that extracts text from
+captcha_parser = BotCaptchaParser(env_path)
+captcha_solver = CaptchaSolver()
+
+# Create a bunch of handlers
+captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
+death = UserDeathHandler(death_parser)
+farm = FarmHandler(target_parser)
+pet = PetManaHandler(status_parser, farm)
+buff = BuffHandler()
+
+#Run looper wuth any amount of handlers.
+looper = AppLooper(buff, captcha, death, farm, pet)
+looper.loop()
+```
