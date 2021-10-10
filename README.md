@@ -17,13 +17,12 @@ Used next technologies:
 * Parser - simple parser of the image. In takes screenshot as input and gives some result. The type of the result is unknown. Developer takes care of handling it.
 
 
-**TODO:**
+# TODO
 * Extract Captcha handler into separate handlers
 * Improve Status handler to check MP and CP and do some action if CP decreasing. BSOE? Stop farm ?
-* Get rid of BotCaptchaParser.  DialogParser should be aware of extracting the text
+* Get rid of BotCaptchaParser. DialogParser should be aware of extracting the text
 
-# Example of built in parsers
-
+# Examples of the bot:
 
 **Simple way:**
 ```python
@@ -35,7 +34,6 @@ farm_handler = FarmHandler(target_parser)
 looper = AppLooper(farm)
 looper.loop()
 ```
-
 
 **Full way:**
 ```python
