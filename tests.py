@@ -33,7 +33,7 @@ class TestDependencies(unittest.TestCase):
         assert len(lng) > 0
 
 
-class TestHandler(unittest.TestCase):
+class TestHandlers(unittest.TestCase):
     def test_manor_handler(self):
         screen_shots = list_files("res/input/manor")
         castles = [ManorSellCastle("Aden", "Fake", 2, 4, 2)]
@@ -59,7 +59,7 @@ class TestHandler(unittest.TestCase):
             manor.on_tick(image, time.time())
 
 
-class TestParser(unittest.TestCase):
+class TestParsers(unittest.TestCase):
     def test_status_parser(self):
         status_template = cv2.imread("res/template/status/user_status_template.png")
         status_parser = UserStatusParser(env_path, status_template)
