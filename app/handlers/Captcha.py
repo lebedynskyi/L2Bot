@@ -36,7 +36,7 @@ class CaptchaHandler(BaseHandler):
                     result = self.captcha_solver.solve_math(captcha_text)
                 else:
                     result = self.captcha_solver.solve_logic(captcha_text)
-                cv2.imwrite("output/last_solved_captcha.png", screenshot_image)
+                cv2.imwrite("res/output/last_solved_captcha.png", screenshot_image)
                 if result:
                     return ok_position
                 else:
@@ -44,7 +44,7 @@ class CaptchaHandler(BaseHandler):
             except BaseException as e:
                 print("Cannot solve captcha, it was scale  %s " % scale)
                 print(e)
-                cv2.imwrite("output/last_error.png", screenshot_image)
+                cv2.imwrite("res/output/last_error.png", screenshot_image)
 
     def _check_group_captcha(self, screenshot_image):
         result = self.group_parser.parse_image(screenshot_image)

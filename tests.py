@@ -26,7 +26,7 @@ def get_files_from_folder(folder_path):
 
 def test_dialog_warn():
     warn_template = cv2.imread("res/template/warning_template.png")
-    screen = cv2.imread("input/screens/Yes1.bmp")
+    screen = cv2.imread("res/input/screens/Yes1.bmp")
 
     dialog_handler = WarnDialogParser(env_path, warn_template)
     dialog, ok, cancel = dialog_handler.parse_image(screen)
@@ -39,14 +39,14 @@ def test_status_parser():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template, True)
 
-    screen = cv2.imread("input/screens/Shot00008.bmp")
+    screen = cv2.imread("res/input/screens/Shot00008.bmp")
     assert status_parser.parse_image(screen)
 
 
 def test_target_parser():
     target_template = cv2.imread("res/template/farm/target_template.png")
     parser = TemplateExistParser(env_path, target_template, True)
-    screen = cv2.imread("input/farm/Shot00055.bmp")
+    screen = cv2.imread("res/input/farm/Shot00055.bmp")
     assert parser.parse_image(screen)
 
 
@@ -59,7 +59,7 @@ def test_tesseract():
 
 def test_dualbox_parser():
     warn_template = cv2.imread("res/template/dualbox_template.png")
-    screen = cv2.imread("input/group/Shot00011.bmp")
+    screen = cv2.imread("res/input/group/Shot00011.bmp")
 
     dualbox_handler = GroupDialogParser(env_path, warn_template, False)
     assert dualbox_handler.parse_image(screen)
@@ -80,7 +80,7 @@ def test_death_parser():
     status_template = cv2.imread("res/template/status/user_death_template.png")
     status_parser = UserDeathStatusParser(env_path, status_template, True)
 
-    screen = cv2.imread("input/screens/Shot00037.bmp")
+    screen = cv2.imread("res/input/screens/Shot00037.bmp")
     assert status_parser.parse_image(screen)
 
 

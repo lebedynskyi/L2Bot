@@ -1,57 +1,0 @@
-C:\Users\Vetalll-pc\Documents\Projects\Python\antbl2\venv\Scripts\python.exe C:/Users/Vetalll-pc/Documents/Projects/Python/antbl2/captcha.py
-Manor: 2021-03-23 22:06:07.218766 Look for Manor dialog
-Manor: 2021-03-23 22:06:07.261649 Found Manor dialog
-Manor: 2021-03-23 22:06:07.398989 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:07.650333 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:07.902657 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:08.150993 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:08.410301 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:08.668202 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:08.918111 Look for crops dialog
-Manor: Crops not found
-Manor: 2021-03-23 22:06:09.165448 Look for crops dialog
-Manor: 2021-03-23 22:06:09.205341 Found crops dialog
-Manor: 2021-03-23 22:06:09.424367 Look chooser dialog
-Manor: Chooser not found
-Manor: 2021-03-23 22:06:09.515126 Look chooser dialog
-Manor: Chooser not found
-Manor: 2021-03-23 22:06:09.598901 Look chooser dialog
-Manor: Chooser not found
-Manor: 2021-03-23 22:06:09.683684 Look chooser dialog
-Manor: 2021-03-23 22:06:09.731546 Found chooser dialog
-Manor: 2021-03-23 22:06:09.869178 Look for castles dialog
-Manor: 2021-03-23 22:06:09.869178 Look for castles name
-Manor: 2021-03-23 22:06:10.056676 Castle name | rid” FrILe
-
-Manor: 2021-03-23 22:06:10.056676 Look for castles name
-Manor: 2021-03-23 22:06:10.202287 Castle name 
-Manor: 2021-03-23 22:06:10.202287 Look for castles name
-Manor: 2021-03-23 22:06:10.355893 Castle name IK. _ Cancel
-
-Manor: 2021-03-23 22:06:10.355893 Look for castles name
-Manor: 2021-03-23 22:06:10.513473 Castle name | Sell
-
-Manor: 2021-03-23 22:06:10.513473 Look for castles name
-Manor: 2021-03-23 22:06:10.668665 Castle name 
-Manor: 2021-03-23 22:06:10.668665 Look for castles name
-Manor: 2021-03-23 22:06:10.822927 Castle name 
-Manor: Castles not found
-Manor: 2021-03-23 22:06:10.867801 Look for castles dialog
-Manor: 2021-03-23 22:06:10.867801 Look for castles name
-Manor: 2021-03-23 22:06:11.018398 Castle name Dion
-
-Manor: 2021-03-23 22:06:11.018398 Look for castles name
-Manor: 2021-03-23 22:06:11.168013 Castle name Giran
-
-Manor: 2021-03-23 22:06:11.168013 Look for castles name
-Manor: 2021-03-23 22:06:11.316616 Castle name Aden
-
-Manor: 2021-03-23 22:06:11.317613 Found interested castle -> Aden
-
-Manor: 2021-03-23 22:06:11.715549 Sold

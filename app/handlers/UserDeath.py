@@ -15,7 +15,7 @@ class UserDeathHandler(BaseHandler):
             self.last_action_time = current_time
             if is_dead:
                 self.write_log("Death", "Player dead")
-                cv2.imwrite("output/last_death.png", screenshot_image)
+                cv2.imwrite("res/output/last_death.png", screenshot_image)
                 self.kill_game()
             else:
                 self.write_log("Death", "Player is alive")
