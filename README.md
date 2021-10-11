@@ -22,7 +22,12 @@ Used next technologies:
 * Improve Status handler to check MP and CP and do some action if CP decreasing. BSOE? Stop farm ?
 * Get rid of BotCaptchaParser. DialogParser should be aware of extracting the text
 
-# Examples of the bot:
+# How to use the bot:
+
+* Bot works only on **Windows**
+* Windows screen resolution also must be **1920x1080** pixels
+* Game screen resolution should be set up as **1920x1080** pixels.
+* **It does not matter** is the game on a full screen or in a windowed mode
 
 **Simple way:**
 ```python
