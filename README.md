@@ -1,4 +1,6 @@
-# Lineage 2 Interlude bot
+# Lineage 2 Interlude bot 
+
+![Python unit tests](https://github.com/lebedynskyi/l2_bot/actions/workflows/main.yml/badge.svg)
 
 This is a bot kind of mix of auto clicker and logic with computer vision.  
 
