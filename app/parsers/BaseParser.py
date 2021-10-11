@@ -23,3 +23,6 @@ class BaseParser(ABC):
         cv2.imshow(title, img)
         cv2.setWindowProperty(title, cv2.WND_PROP_VISIBLE, 1)
         cv2.waitKey(0)
+
+    def debug_write_im(self, img):
+        cv2.imwrite("res/output/temp.png", img)

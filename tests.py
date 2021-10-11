@@ -7,8 +7,10 @@ import pytesseract
 
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
-from app.parsers.captcha.WarnDialog import WarnDialogParser
-from app.parsers.farm.TemplateExistParser import TemplateExistParser
+from app.parsers.WarnDialog import WarnDialogParser
+from app.parsers.TemplateExistParser import TemplateExistParser
+from app.parsers.farm.TargetHpParser import TargetHpParser
+from app.parsers.farm.TargetWindowParser import TargetWindowParser
 from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
 from app.parsers.manor.CastlesListParser import CastlesListParser
 from app.parsers.manor.CropListParser import CropListParser
@@ -67,11 +69,34 @@ class TestParsers(unittest.TestCase):
         screen = cv2.imread("res/input/screens/Shot00008.bmp")
         assert status_parser.parse_image(screen)
 
-    def test_target_parser(self):
+    def test_template_exist_parser(self):
         target_template = cv2.imread("res/template/farm/target_template.png")
         parser = TemplateExistParser(env_path, target_template)
         screen = cv2.imread("res/input/farm/Shot00055.bmp")
         assert parser.parse_image(screen)
+
+    def test_target_parser(self):
+        target_template = cv2.imread("res/template/farm/target_template.png")
+        parser = TargetWindowParser(env_path, target_template)
+        screen = cv2.imread("res/input/farm/Shot00055.bmp")
+        assert parser.parse_image(screen) is not None
+
+    def test_target_hp_parser(self):
+        target_template = cv2.imread("res/template/farm/target_template.png")
+        hp_box_parser = TargetWindowParser(env_path, target_template)
+        hp_parser = TargetHpParser(env_path)
+
+        files = list_files("res/input/hp")
+        for f in files:
+            hp_box = hp_box_parser.parse_image(cv2.imread(f))
+            hp = hp_parser.parse_image(hp_box)
+            print("HP {} image -> {}".format(hp, f))
+
+        # hp_box = hp_box_parser.parse_image(cv2.imread("res/input/hp/Shot00051.bmp"))
+        # hp = hp_parser.parse_image(hp_box)
+        # print("HP {}".format(hp))
+
+        assert True
 
     def test_dialog_warn(self):
         warn_template = cv2.imread("res/template/warning_template.png")
@@ -92,7 +117,7 @@ class TestParsers(unittest.TestCase):
 
     def test_death_parser(self):
         status_template = cv2.imread("res/template/status/user_death_template.png")
-        status_parser = UserDeathStatusParser(env_path, status_template )
+        status_parser = UserDeathStatusParser(env_path, status_template)
 
         screen = cv2.imread("res/input/screens/Shot00037.bmp")
         assert status_parser.parse_image(screen)
