@@ -3,3 +3,4 @@ opencv-python~=4.5.1.48
 pytesseract~=0.3.7
 pyautogui~=0.9.52
 wmi
+Pillow~=8.1.0
