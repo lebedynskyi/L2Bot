@@ -12,8 +12,8 @@ class BaseHandler(ABC):
     paused = False
 
     def on_tick(self, screen_rgb, current_time):
-        last_action_delta = current_time - self.last_action_time
         if not self.paused:
+            last_action_delta = current_time - self.last_action_time
             self._on_tick(screen_rgb, current_time, last_action_delta)
 
     @abstractmethod
