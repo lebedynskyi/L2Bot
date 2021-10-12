@@ -8,7 +8,7 @@ KEY_SWEEP = "F3"
 KEY_PICK = "F4"
 KEY_SEED = "F5"
 KEY_HARVEST = "F6"
-KEY_HIT = "F11"
+KEY_STUN = "F11"
 KEY_CLEAR_TARGET = "ESC"
 
 STATE_HIT = -1
@@ -65,7 +65,9 @@ class IntelligentFarmHandler(BaseHandler):
         if STATE_HIT == self.current_state and last_action_delta >= 1:
             target_hp = self.target_hp_parser.parse_image(target_window)
             self.write_log(LOG_TAG, "Farming. Target HP {}%".format(target_hp))
-            if target_hp <= 0:
+            if target_hp <= 5:
+                pyautogui.press(KEY_STUN)
+            elif target_hp <= 0:
                 if self.use_manor:
                     self.current_state = STATE_HARVEST
                 else:
