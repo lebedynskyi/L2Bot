@@ -6,6 +6,7 @@ from app.AppLooper import AppLooper
 from app.handlers.Buff import BuffHandler
 from app.handlers.Captcha import CaptchaHandler
 from app.handlers.ClickerFarm import ClickerFarmHandler
+from app.handlers.IntelligentFarm import IntelligentFarmHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.PetManaKiller import PetManaHandler
 from app.handlers.UserDeath import UserDeathHandler
@@ -27,8 +28,8 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 def manor_app():
     castles = [
-        ManorSellCastle("Aden", "Fake", start_index=2),
-        ManorSellCastle("Aden", "Fake", start_index=2)
+        ManorSellCastle("Aden", "Fake", start_index=4),
+        ManorSellCastle("Rune", "Fake", start_index=4)
     ]
 
     manor_dialog_template = cv2.imread("res/template/manor/manor_template_1.png")
@@ -59,7 +60,7 @@ def farm_app():
     death_parser = UserDeathStatusParser(env_path, death_template)
 
     target_template = cv2.imread("res/template/farm/target_template.png")
-    target_parser = TargetWindowParser(env_path, target_template)
+    target_window_parser = TargetWindowParser(env_path, target_template)
 
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template)
@@ -69,7 +70,7 @@ def farm_app():
 
     captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
-    farm = ClickerFarmHandler(target_parser, TargetHpParser(env_path))
+    farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
 
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()
@@ -81,5 +82,3 @@ def farm_app():
 if __name__ == "__main__":
     farm_app()
     # manor_app()
-
-    pass

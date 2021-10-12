@@ -22,10 +22,10 @@ LOG_TAG = "IFarm"
 
 
 class IntelligentFarmHandler(BaseHandler):
-    current_state = STATE_SPOIL
+    current_state = STATE_TARGET
     has_target = False
 
-    def __init__(self, target_window_parser, target_hp_parser, use_manor):
+    def __init__(self, target_window_parser, target_hp_parser, use_manor=True):
         self.use_manor = use_manor
         self.target_hp_parser = target_hp_parser
         self.target_parser = target_window_parser
@@ -61,7 +61,7 @@ class IntelligentFarmHandler(BaseHandler):
             self.current_state = STATE_HIT
             return True
 
-        if STATE_HIT == self.current_state and last_action_delta >= 3:
+        if STATE_HIT == self.current_state and last_action_delta >= 1:
             target_hp = self.target_hp_parser.parse_image(target_window)
             if target_hp <= 0:
                 if self.use_manor:

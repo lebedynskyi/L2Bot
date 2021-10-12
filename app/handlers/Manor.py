@@ -64,6 +64,7 @@ class ManorHandler(BaseHandler):
 
             if self.current_state == STATE_CASTLES_LIST:
                 # Double click for crop list chooser
+                time.sleep(0.1)
                 self.apply_click(move_click_btn)
 
         elif self.current_state == STATE_CROP_CHOOSER:

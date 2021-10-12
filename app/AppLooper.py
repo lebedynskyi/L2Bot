@@ -25,4 +25,5 @@ class AppLooper:
 
                 print("\r")
             except BaseException as e:
+                print("AppLooper error")
                 print(e)
