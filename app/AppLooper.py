@@ -14,13 +14,16 @@ class AppLooper:
         time.sleep(4)
 
         while True:
-            screenshot = ImageGrab.grab()
-            array = np.array(screenshot)
-            current_time = time.time()
-            for handler in self.handlers:
-                handler.on_tick(array, current_time)
+            try:
+                screenshot = ImageGrab.grab()
+                array = np.array(screenshot)
+                current_time = time.time()
+                for handler in self.handlers:
+                    handler.on_tick(array, current_time)
 
-            if self.tick_delay > 0:
-                time.sleep(self.tick_delay)
+                if self.tick_delay > 0:
+                    time.sleep(self.tick_delay)
 
-            print("\r")
+                print("\r")
+            except BaseException as e:
+                print(e)
