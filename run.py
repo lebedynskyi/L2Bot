@@ -70,7 +70,7 @@ def farm_app():
 
     captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
-    farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
+    farm = ClickerFarmHandler(target_window_parser, TargetHpParser(env_path))
 
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()

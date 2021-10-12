@@ -1,4 +1,5 @@
 import time
+import traceback
 
 import numpy as np
 from PIL import ImageGrab
@@ -24,6 +25,6 @@ class AppLooper:
                     time.sleep(self.tick_delay)
 
                 print("\r")
-            except BaseException as e:
+            except Exception:
                 print("AppLooper error")
-                print(e)
+                print(traceback.format_exc())

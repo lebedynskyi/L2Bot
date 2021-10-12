@@ -32,8 +32,7 @@ class ClickerFarmHandler(BaseHandler):
         if self.has_target:
             hp = self.target_hp_parser.parse_image(target_box)
             self.write_log("Farm", "Target exist, HP = {}%".format(hp))
-            # action_performed = self.handle_has_target(last_action_delta, screen_rgb)
-            action_performed = False
+            action_performed = self.handle_has_target(last_action_delta, screen_rgb)
         else:
             self.write_log("Farm", "Target not exist")
             action_performed = self.handle_no_target(last_action_delta)

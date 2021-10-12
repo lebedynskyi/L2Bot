@@ -63,6 +63,7 @@ class IntelligentFarmHandler(BaseHandler):
 
         if STATE_HIT == self.current_state and last_action_delta >= 1:
             target_hp = self.target_hp_parser.parse_image(target_window)
+            self.write_log(LOG_TAG, "Farming. Target HP {}%".format(target_hp))
             if target_hp <= 0:
                 if self.use_manor:
                     self.current_state = STATE_HARVEST
