@@ -1,7 +1,7 @@
 import time
 import traceback
-
 import numpy as np
+
 from PIL import ImageGrab
 
 
@@ -14,17 +14,23 @@ class AppLooper:
         time.sleep(4)
 
         while True:
+            screenshot = None
             try:
                 screenshot = ImageGrab.grab()
-                array = np.array(screenshot)
-                current_time = time.time()
-                for handler in self.handlers:
-                    handler.on_tick(array, current_time)
-
-                if self.tick_delay > 0:
-                    time.sleep(self.tick_delay)
-
-                print("\r")
-            except Exception:
-                print("AppLooper error")
+            except BaseException:
+                print("AppLooper: cannot make screenshot")
                 print(traceback.format_exc())
+
+            array = np.array(screenshot)
+            current_time = time.time()
+            for handler in self.handlers:
+                try:
+                    handler.on_tick(array, current_time)
+                except BaseException:
+                    print("AppLooper: exception in handler {}".format(handler))
+                    print(traceback.format_exc())
+
+            if self.tick_delay > 0:
+                time.sleep(self.tick_delay)
+
+            print("\r")
