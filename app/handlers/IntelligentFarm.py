@@ -9,6 +9,7 @@ KEY_PICK = "F4"
 KEY_SEED = "F5"
 KEY_HARVEST = "F6"
 KEY_HIT = "F11"
+KEY_CLEAR_TARGET = "ESC"
 
 STATE_HIT = -1
 STATE_TARGET = 0
@@ -82,6 +83,9 @@ class IntelligentFarmHandler(BaseHandler):
             return True
 
         if STATE_PICK == self.current_state and last_action_delta >= 0.75:
+            # we need to clear target here in case mob was not spoiled and prevent entering loop with dead mob.
+            # Also it will speed up selection next target
+            pyautogui.press(KEY_CLEAR_TARGET)
             pyautogui.press(KEY_PICK, presses=2, interval=0.75)
             self.current_state = STATE_TARGET
             return True
