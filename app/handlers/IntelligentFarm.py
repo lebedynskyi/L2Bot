@@ -11,6 +11,7 @@ KEY_HARVEST = "F6"
 KEY_HIT = "F11"
 
 STATE_HIT = -1
+STATE_TARGET = 0
 STATE_SPOIL = 1
 STATE_SEED = 2
 STATE_HARVEST = 3
@@ -24,24 +25,66 @@ class IntelligentFarmHandler(BaseHandler):
     current_state = STATE_SPOIL
     has_target = False
 
-    def __init__(self, target_window_parser, target_hp_parser):
+    def __init__(self, target_window_parser, target_hp_parser, use_manor):
+        self.use_manor = use_manor
         self.target_hp_parser = target_hp_parser
         self.target_parser = target_window_parser
 
     def _on_tick(self, image_rgb, current_time, last_action_delta):
-        target_window = self.target_parser.parse_image(image_rgb)
-        self.has_target = target_window is not None
-        if self.has_target:
-            self.write_log("LOG_TAG", "Target exist")
-            action_performed = self.handle_has_target(last_action_delta, target_window, image_rgb)
-        else:
-            self.write_log("LOG_TAG", "Target not exist")
-            action_performed = self.handle_no_target(last_action_delta)
+        action_performed = self.handle_state(last_action_delta, image_rgb)
 
         if action_performed:
             self.last_action_time = current_time
 
-    def handle_has_target(last_action_delta, target_window, screen_rgb):
+    def handle_state(self, last_action_delta, screen_rgb):
+        target_window = self.target_parser.parse_image(screen_rgb)
+        self.has_target = target_window is not None
+
+        if self.current_state == STATE_TARGET and last_action_delta >= 1:
+            if self.has_target:
+                self.current_state = STATE_SPOIL
+            else:
+                pyautogui.press(KEY_NEXT_TARGET)
+            return True
+
+        if STATE_SPOIL == self.current_state and last_action_delta >= 0.5:
+            pyautogui.press(KEY_SPOIL)
+
+            if self.use_manor:
+                self.current_state = STATE_SEED
+            else:
+                self.current_state = STATE_HIT
+            return True
+
+        if STATE_SEED == self.current_state and last_action_delta >= 2:
+            pyautogui.press(KEY_SEED)
+            self.current_state = STATE_HIT
+            return True
+
+        if STATE_HIT == self.current_state and last_action_delta >= 3:
+            target_hp = self.target_hp_parser.parse_image(target_window)
+            if target_hp <= 0:
+                if self.use_manor:
+                    self.current_state = STATE_HARVEST
+                else:
+                    self.current_state = STATE_SWEEP
+            return True
+
+        if STATE_HARVEST == self.current_state and last_action_delta >= 0.75:
+            pyautogui.press(KEY_HARVEST)
+            self.current_state = STATE_SWEEP
+            return True
+
+        if STATE_SWEEP == self.current_state and last_action_delta >= 0.75:
+            pyautogui.press(KEY_SWEEP)
+            self.current_state = STATE_PICK
+            return True
+
+        if STATE_PICK == self.current_state and last_action_delta >= 0.75:
+            pyautogui.press(KEY_PICK, presses=2, interval=0.75)
+            self.current_state = STATE_TARGET
+            return True
+
         return False
 
     def handle_no_target(self, last_action_delta):

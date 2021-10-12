@@ -23,6 +23,7 @@ Used next technologies:
 * Extract Captcha handler into separate handlers
 * Improve Status handler to check MP and CP and do some action if CP decreasing. BSOE? Stop farm ?
 * Get rid of BotCaptchaParser. DialogParser should be aware of extracting the text
+* Use appropriate decoding RGB of mage instead of GRB
 
 # How to use the bot:
 
