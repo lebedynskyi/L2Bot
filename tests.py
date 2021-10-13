@@ -3,6 +3,7 @@ import time
 import unittest
 
 import cv2
+import pytesseract
 
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
@@ -28,9 +29,8 @@ def list_files(folder_path):
     return sorted(files)
 
 
-class TestDependencies:
+class TestDependencies(unittest.TestCase):
     def test_tesseract(self):
-        import pytesseract
         lng = pytesseract.get_languages()
         assert len(lng) > 0
 
