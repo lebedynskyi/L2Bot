@@ -10,9 +10,8 @@ from app.handlers.IntelligentFarm import IntelligentFarmHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.PetManaKiller import PetManaHandler
 from app.handlers.UserDeath import UserDeathHandler
-from app.parsers.captcha.BotCaptcha import BotCaptchaParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
-from app.parsers.WarnDialog import WarnDialogParser
+from app.parsers.DialogParsers import WarnDialogParser, DialogContentParser
 from app.parsers.farm.TargetHpParser import TargetHpParser
 from app.parsers.farm.TargetWindowParser import TargetWindowParser
 from app.parsers.manor.CastlesListChooserParser import CastlesListChooserParser
@@ -65,12 +64,12 @@ def farm_app():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template)
 
-    captcha_parser = BotCaptchaParser(env_path)
+    captcha_parser = DialogContentParser(env_path)
     captcha_solver = CaptchaSolver()
 
     captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
-    farm = ClickerFarmHandler(target_window_parser, TargetHpParser(env_path))
+    farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
 
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()

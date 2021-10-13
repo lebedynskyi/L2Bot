@@ -66,13 +66,13 @@ status_template = cv2.imread("res/template/status/user_status_template.png")
 status_parser = UserStatusParser(env_path, status_template)
 
 # Parser that extracts text from
-captcha_parser = BotCaptchaParser(env_path)
+captcha_parser = DialogContentParser(env_path)
 captcha_solver = CaptchaSolver()
 
 # Create a bunch of handlers
 captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
 death = UserDeathHandler(death_parser)
-farm = FarmHandler(target_parser)
+farm = IntelligentFarmHandler(target_parser, TargetHpParser(env_path))
 pet = PetManaHandler(status_parser, farm)
 buff = BuffHandler()
 
