@@ -68,7 +68,7 @@ class ManorHandler(BaseHandler):
                 self.apply_click(move_click_btn)
 
         elif self.current_state == STATE_CROP_CHOOSER:
-            # Manor is in maintenance mode. There is no chosr dialog
+            # Manor is in maintenance mode. There is no chooser dialog
             time.sleep(0.1)
             self.apply_click()
 
@@ -76,13 +76,13 @@ class ManorHandler(BaseHandler):
         if STATE_MANOR_DIALOG == self.current_state:
             sell_crop_btn = self.manor_dialog_parser.parse_image(screen_rgb)
             self.current_state = STATE_CROP_CHOOSER
-            self.start_time = datetime.now()
             return sell_crop_btn
 
         if STATE_CROP_CHOOSER == self.current_state:
             chosen_crop, self.cached_sell_btn = self.crop_list_parser.parse_image(screen_rgb)
 
             if chosen_crop:
+                self.start_time = datetime.now()
                 self.current_state = STATE_CASTLES_LIST
             else:
                 self.write_log("Manor", "No crops chooser dialog yet. Wait it")

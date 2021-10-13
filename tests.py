@@ -92,10 +92,6 @@ class TestParsers(unittest.TestCase):
             hp = hp_parser.parse_image(hp_box)
             print("HP {} image -> {}".format(hp, f))
 
-        # hp_box = hp_box_parser.parse_image(cv2.imread("res/input/hp/Shot00051.bmp"))
-        # hp = hp_parser.parse_image(hp_box)
-        # print("HP {}".format(hp))
-
         assert True
 
     def test_dialog_warn(self):

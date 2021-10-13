@@ -5,7 +5,6 @@ import cv2
 from app.AppLooper import AppLooper
 from app.handlers.Buff import BuffHandler
 from app.handlers.Captcha import CaptchaHandler
-from app.handlers.ClickerFarm import ClickerFarmHandler
 from app.handlers.IntelligentFarm import IntelligentFarmHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.PetManaKiller import PetManaHandler
@@ -50,7 +49,7 @@ def manor_app():
 
 def farm_app():
     warn_template = cv2.imread("res/template/warning_template.png")
-    dialog_parser = WarnDialogParser(env_path, warn_template)
+    warn_dialog_parser = WarnDialogParser(env_path, warn_template)
 
     group_template = cv2.imread("res/template/dualbox_template.png")
     group_captcha_parser = GroupDialogParser(env_path, group_template)
@@ -64,10 +63,10 @@ def farm_app():
     status_template = cv2.imread("res/template/status/user_status_template.png")
     status_parser = UserStatusParser(env_path, status_template)
 
-    captcha_parser = DialogContentParser(env_path)
+    dialog_content_parser = DialogContentParser(env_path)
     captcha_solver = CaptchaSolver()
 
-    captcha = CaptchaHandler(dialog_parser, captcha_parser, group_captcha_parser, captcha_solver)
+    captcha = CaptchaHandler(warn_dialog_parser, dialog_content_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
     farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
 

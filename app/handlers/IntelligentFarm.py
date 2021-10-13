@@ -45,6 +45,7 @@ class IntelligentFarmHandler(BaseHandler):
             if self.has_target:
                 self.current_state = STATE_SPOIL
             else:
+                self.write_log(LOG_TAG, "Looking for target")
                 pyautogui.press(KEY_NEXT_TARGET)
             return True
 

@@ -1,3 +1,5 @@
+import pytesseract
+
 from app.parsers.BaseParser import BaseParser
 
 import cv2
