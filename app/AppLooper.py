@@ -17,7 +17,7 @@ class AppLooper:
             screenshot = None
             try:
                 screenshot = ImageGrab.grab()
-            except BaseException:
+            except Exception:
                 print("AppLooper: cannot make screenshot")
                 print(traceback.format_exc())
 
@@ -26,7 +26,7 @@ class AppLooper:
             for handler in self.handlers:
                 try:
                     handler.on_tick(array, current_time)
-                except BaseException:
+                except Exception:
                     print("AppLooper: exception in handler {}".format(handler))
                     print(traceback.format_exc())
 
