@@ -32,24 +32,36 @@ class CastlesListChooserParser(BaseParser):
                 debug_img = image_rgb.copy()
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 self.debug_show_im(debug_img, "Castle chooser")
-            for i in range(looking_castle.start_index, looking_castle.finish_index):
+
+            if looking_castle.castle_number <= 2:
+                print("Manor: look for castle {}".format(looking_castle.castle_name))
+                for i in range(looking_castle.start_index, looking_castle.finish_index):
+                    castle = (
+                        # 17 pixels height per 1 castle
+                        # (first_match[0] + 116, first_match[1] + 122 + i * 17),
+                        # (first_match[0] + 255, first_match[1] + 122 + i * 17 + 17)
+                        (first_match[0], first_match[1] + i * 17),
+                        (first_match[0] + 140, first_match[1] + i * 17 + 17)
+                    )
+
+                    castle_name_string = self._parse_castle_name(image_rgb, castle)
+                    if looking_castle.alternative_castle_name is not None and looking_castle.alternative_castle_name in castle_name_string:
+                        castle_x = (castle[0][0] + castle[1][0]) / 2
+                        castle_y = (castle[1][1] + castle[0][1]) / 2
+
+                    if looking_castle.castle_name in castle_name_string:
+                        castle_x = (castle[0][0] + castle[1][0]) / 2
+                        castle_y = (castle[1][1] + castle[0][1]) / 2
+                        break
+
+            else:
+                print("Manor: Use castle position {}".format(looking_castle.castle_number))
                 castle = (
-                    # 17 pixels height per 1 castle
-                    # (first_match[0] + 116, first_match[1] + 122 + i * 17),
-                    # (first_match[0] + 255, first_match[1] + 122 + i * 17 + 17)
-                    (first_match[0], first_match[1] + i * 17),
-                    (first_match[0] + 140, first_match[1] + i * 17 + 17)
+                    (first_match[0], first_match[1] + looking_castle.castle_number * 17),
+                    (first_match[0] + 140, first_match[1] + looking_castle.castle_number * 17 + 17)
                 )
-
-                castle_name_string = self._parse_castle_name(image_rgb, castle)
-                if looking_castle.alternative_castle_name is not None and looking_castle.alternative_castle_name in castle_name_string:
-                    castle_x = (castle[0][0] + castle[1][0]) / 2
-                    castle_y = (castle[1][1] + castle[0][1]) / 2
-
-                if looking_castle.castle_name in castle_name_string:
-                    castle_x = (castle[0][0] + castle[1][0]) / 2
-                    castle_y = (castle[1][1] + castle[0][1]) / 2
-                    break
+                castle_x = (castle[0][0] + castle[1][0]) / 2
+                castle_y = (castle[1][1] + castle[0][1]) / 2
 
         if castle_y is not None and castle_y is not None:
             return castle_x, castle_y

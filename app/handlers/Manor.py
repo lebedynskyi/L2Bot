@@ -29,9 +29,10 @@ STATE_FINISH -> Just finish state to exit from the app
 
 
 class ManorSellCastle:
-    def __init__(self, castle_name, alternative_castle_name, start_index, finish_index=8, crop_number=1):
+    def __init__(self, castle_name, alt_castle_name, start_index, finish_index=8, crop_number=1, castle_number=0):
+        self.castle_number = castle_number
         self.castle_name = castle_name
-        self.alternative_castle_name = alternative_castle_name
+        self.alternative_castle_name = alt_castle_name
         self.start_index = start_index
         self.finish_index = finish_index
         self.crop_number = crop_number
