@@ -33,7 +33,7 @@ class CastlesListChooserParser(BaseParser):
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 self.debug_show_im(debug_img, "Castle chooser")
 
-            if looking_castle.castle_number <= 2:
+            if looking_castle.castle_number < 2:
                 print("Manor: look for castle {}".format(looking_castle.castle_name))
                 for i in range(looking_castle.start_index, looking_castle.finish_index):
                     castle = (

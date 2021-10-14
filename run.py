@@ -26,8 +26,8 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 def manor_app():
     castles = [
-        ManorSellCastle("Aden", "Fake", start_index=4),
-        ManorSellCastle("Rune", "Fake", start_index=4)
+        ManorSellCastle("Aden", "Fake", start_index=4, castle_number=2)
+        # ManorSellCastle("Rune", "Fake", start_index=4)
     ]
 
     manor_dialog_template = cv2.imread("res/template/manor/manor_template_1.png")
@@ -78,5 +78,5 @@ def farm_app():
 
 
 if __name__ == "__main__":
-    farm_app()
-    # manor_app()
+    # farm_app()
+    manor_app()
