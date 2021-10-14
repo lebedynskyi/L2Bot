@@ -106,7 +106,8 @@ class ManorHandler(BaseHandler):
             if castle_btn:
                 self.current_state = STATE_MAX_PRICE
             else:
-                self.write_log("Manor", "No castles chooser drop down yet. Wait it")
+                self.write_log("Manor", "No interested castle found. Stop it?")
+                exit(1)
             return castle_btn
 
         if STATE_MAX_PRICE == self.current_state:
@@ -123,12 +124,12 @@ class ManorHandler(BaseHandler):
             if next_index < len(self.castles):
                 self.current_castle_index = next_index
                 self.current_state = STATE_MANOR_DIALOG
+                self.write_log("Manor", "Sold crops")
+                self.write_log("Manor", "Start time {}".format(self.start_time))
+                self.write_log("Manor", "Finish time {}".format(self.finish_time))
             else:
                 self.current_state = STATE_FINISH
             return self.cached_sell_btn
 
         if STATE_FINISH == self.current_state:
-            self.write_log("Manor", "Sold crops")
-            self.write_log("Manor", "Start time {}".format(self.start_time))
-            self.write_log("Manor", "Finish time {}".format(self.finish_time))
             exit(0)
