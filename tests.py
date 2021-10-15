@@ -6,6 +6,7 @@ import cv2
 import pytesseract
 
 from app.handlers.Manor import ManorSellCastle, ManorHandler
+from app.parsers.ColorParser import ColorParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.DialogParsers import WarnDialogParser
 from app.parsers.TemplateExistParser import TemplateExistParser
@@ -117,6 +118,19 @@ class TestParsers(unittest.TestCase):
 
         screen = cv2.imread("res/input/screens/Shot00037.bmp")
         assert status_parser.parse_image(screen)
+
+    def test_color_parser(self):
+        screen = cv2.imread("res/input/manor/Shot00023.bmp")
+        x, y = screen.shape[0], screen.shape[1]
+        center = int(y / 2), int(x / 2)
+        point1 = int(center[0] + center[0] / 2), int(center[1] + center[1] / 2)
+        point2 = int(center[0] + center[0] / 2), int(center[1] - center[1] / 2)
+
+        color_parser = ColorParser(env_path, area_size=15, points=[point1, point2])
+        colors = color_parser.parse_image(screen)
+
+        for c in colors:
+            print(c)
 
 
 if __name__ == '__main__':
