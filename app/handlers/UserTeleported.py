@@ -32,7 +32,7 @@ class UserTeleportedHandler(BaseHandler):
         colors = self.color_parser.parse_image(screen_rgb, points=[point1, point2])
 
         for c in colors:
-            if c[0] >= 10 or c[1] >= 10 or c[2] >= 10:
+            if c[0] >= 15 or c[1] >= 15 or c[2] >= 15:
                 if self.was_teleported:
                     self.on_teleport_ended(screen_rgb)
                 break
