@@ -15,6 +15,7 @@ msg = ["Why i here?. I just farmed", "For whrat? Did'nt do anything.. Just farmi
 
 KEY_SIT = "F12"
 
+
 class UserTeleportedHandler(BaseHandler):
     was_teleported = False
 
