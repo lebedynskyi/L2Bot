@@ -75,10 +75,10 @@ def farm_app():
     farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()
-    teleport = UserTeleportedHandler(color_parser)
+    teleport = UserTeleportedHandler(color_parser,handlers_to_pause=[pet, buff, death])
 
-    # looper = AppLooper(buff, captcha, death, farm, pet, teleport)
-    looper = AppLooper(teleport)
+    looper = AppLooper(buff, captcha, death, pet, teleport)
+    # looper = AppLooper(teleport)
     looper.loop()
 
 

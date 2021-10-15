@@ -1,10 +1,25 @@
-import numpy as np
+import time
+
+import random
+
+import cv2
+import pyautogui
 
 from app.handlers.BaseHandler import BaseHandler
 
+greetings = ["kek", "hi", "lololo", "omg"]
+
+question = ["Why??", "And why ?"]
+
+msg = ["Why i here?. I just farmed", "For whrat? Did'nt do anything.. Just farming", "omg. i just was farming antelops"]
+
+KEY_SIT = "F12"
 
 class UserTeleportedHandler(BaseHandler):
-    def __init__(self, color_parser):
+    was_teleported = False
+
+    def __init__(self, color_parser, handlers_to_pause):
+        self.handlers_to_pause = handlers_to_pause
         self.color_parser = color_parser
 
     def _on_tick(self, screen_rgb, current_time, last_action_delta):
@@ -15,13 +30,39 @@ class UserTeleportedHandler(BaseHandler):
 
         colors = self.color_parser.parse_image(screen_rgb, points=[point1, point2])
 
-        dark_colors = []
-
         for c in colors:
-            if c[0] < 10 and c[1] < 10 and c[2] < 10:
-                # The point is dark!
-                dark_colors.append(True)
-            else:
+            if c[0] >= 10 or c[1] >= 10 or c[2] >= 10:
+                if self.was_teleported:
+                    self.on_teleport_ended(screen_rgb)
                 break
         else:
-            self.write_log("Teleport", "Detected teleporting. Write some word to chat !")
+            self.on_teleport_detected()
+
+    def on_teleport_detected(self):
+        self.write_log("Teleport", "Detected teleporting. Write some word to chat !")
+        self.was_teleported = True
+
+        for h in self.handlers_to_pause:
+            h.pause()
+            self.write_log("Teleport", "Pause handler {}".format(h))
+
+    def on_teleport_ended(self, screen):
+        self.write_log("Teleport", "Teleport finished")
+        self.pause()
+
+        time.sleep(1)
+        pyautogui.typewrite(random.choice(greetings))
+        pyautogui.press("ENTER")
+
+        time.sleep(3)
+        pyautogui.typewrite(random.choice(question))
+        pyautogui.press("ENTER")
+
+        time.sleep(4)
+        pyautogui.typewrite(random.choice(msg))
+        pyautogui.press("ENTER")
+
+        time.sleep(5)
+        pyautogui.press(KEY_SIT)
+
+        cv2.imwrite("res/output/after_teleport.png", screen)
