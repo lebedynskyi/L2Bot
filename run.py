@@ -9,6 +9,8 @@ from app.handlers.IntelligentFarm import IntelligentFarmHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.PetManaKiller import PetManaHandler
 from app.handlers.UserDeath import UserDeathHandler
+from app.handlers.UserTeleported import UserTeleportedHandler
+from app.parsers.ColorParser import ColorParser
 from app.parsers.captcha.GroupDialogParser import GroupDialogParser
 from app.parsers.DialogParsers import WarnDialogParser, DialogContentParser
 from app.parsers.farm.TargetHpParser import TargetHpParser
@@ -66,17 +68,19 @@ def farm_app():
     dialog_content_parser = DialogContentParser(env_path)
     captcha_solver = CaptchaSolver()
 
+    color_parser = ColorParser(env_path, 20)
+
     captcha = CaptchaHandler(warn_dialog_parser, dialog_content_parser, group_captcha_parser, captcha_solver)
     death = UserDeathHandler(death_parser)
     farm = IntelligentFarmHandler(target_window_parser, TargetHpParser(env_path))
-
     pet = PetManaHandler(status_parser, farm)
     buff = BuffHandler()
+    teleport = UserTeleportedHandler(color_parser)
 
-    looper = AppLooper(buff, captcha, death, farm, pet)
+    looper = AppLooper(buff, captcha, death, farm, pet, teleport)
     looper.loop()
 
 
 if __name__ == "__main__":
-    # farm_app()
-    manor_app()
+    farm_app()
+    # manor_app()
