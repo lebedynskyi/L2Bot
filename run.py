@@ -77,7 +77,8 @@ def farm_app():
     buff = BuffHandler()
     teleport = UserTeleportedHandler(color_parser)
 
-    looper = AppLooper(buff, captcha, death, farm, pet, teleport)
+    # looper = AppLooper(buff, captcha, death, farm, pet, teleport)
+    looper = AppLooper(teleport)
     looper.loop()
 
 
