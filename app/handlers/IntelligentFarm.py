@@ -71,9 +71,16 @@ class IntelligentFarmHandler(BaseHandler):
                     self.current_state = STATE_HARVEST
                 else:
                     self.current_state = STATE_SWEEP
+                return True
             elif target_hp is not None and target_hp <= 6:
                 pyautogui.press(KEY_STUN)
-            return True
+                return True
+            elif last_action_delta > 10:
+                pyautogui.typewrite("/attack")
+                pyautogui.press("ENTER")
+                return True
+
+            return False
 
         if STATE_HARVEST == self.current_state and last_action_delta >= 0.75:
             pyautogui.press(KEY_HARVEST)
