@@ -80,3 +80,9 @@ buff = BuffHandler()
 looper = AppLooper(buff, captcha, death, farm, pet)
 looper.loop()
 ```
+
+
+hi
+do you want to share knowledge about this project and help me use it and meaby learn how to configurate it and develop by my own and with cooperation with you?
+I love l2 and like python.
+bartosz.badlewski@gmail.com my email. We can discuss.
