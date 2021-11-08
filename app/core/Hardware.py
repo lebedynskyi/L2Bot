@@ -1,111 +1,83 @@
 import ctypes
-from ctypes import wintypes
 import time
 
-user32 = ctypes.WinDLL('user32', use_last_error=True)
+SendInput = ctypes.windll.user32.SendInput
 
-INPUT_MOUSE = 0
-INPUT_KEYBOARD = 1
-INPUT_HARDWARE = 2
+W = 0x11
+A = 0x1E
+S = 0x1F
+F1 = 0x3B
+D = 0x20
+UP = 0xC8
+LEFT = 0xCB
+RIGHT = 0xCD
+DOWN = 0xD0
+ENTER = 0x1C
+ESC = 0x01
+TWO = 0x03
 
-KEYEVENTF_EXTENDEDKEY = 0x0001
-KEYEVENTF_KEYUP = 0x0002
-KEYEVENTF_UNICODE = 0x0004
-KEYEVENTF_SCANCODE = 0x0008
-
-MAPVK_VK_TO_VSC = 0
-
-# msdn.microsoft.com/en-us/library/dd375731
-VK_TAB = 0x09
-VK_MENU = 0x12
-
-# C struct definitions
-
-wintypes.ULONG_PTR = wintypes.WPARAM
+# C struct redefinitions
+PUL = ctypes.POINTER(ctypes.c_ulong)
 
 
-class MOUSEINPUT(ctypes.Structure):
-    _fields_ = (("dx", wintypes.LONG),
-                ("dy", wintypes.LONG),
-                ("mouseData", wintypes.DWORD),
-                ("dwFlags", wintypes.DWORD),
-                ("time", wintypes.DWORD),
-                ("dwExtraInfo", wintypes.ULONG_PTR))
+class KeyBdInput(ctypes.Structure):
+    _fields_ = [("wVk", ctypes.c_ushort),
+                ("wScan", ctypes.c_ushort),
+                ("dwFlags", ctypes.c_ulong),
+                ("time", ctypes.c_ulong),
+                ("dwExtraInfo", PUL)]
 
 
-class KEYBDINPUT(ctypes.Structure):
-    _fields_ = (("wVk", wintypes.WORD),
-                ("wScan", wintypes.WORD),
-                ("dwFlags", wintypes.DWORD),
-                ("time", wintypes.DWORD),
-                ("dwExtraInfo", wintypes.ULONG_PTR))
-
-    def __init__(self, *args, **kwds):
-        super(KEYBDINPUT, self).__init__(*args, **kwds)
-        # some programs use the scan code even if KEYEVENTF_SCANCODE
-        # isn't set in dwFflags, so attempt to map the correct code.
-        if not self.dwFlags & KEYEVENTF_UNICODE:
-            self.wScan = user32.MapVirtualKeyExW(self.wVk,
-                                                 MAPVK_VK_TO_VSC, 0)
+class HardwareInput(ctypes.Structure):
+    _fields_ = [("uMsg", ctypes.c_ulong),
+                ("wParamL", ctypes.c_short),
+                ("wParamH", ctypes.c_ushort)]
 
 
-class HARDWAREINPUT(ctypes.Structure):
-    _fields_ = (("uMsg", wintypes.DWORD),
-                ("wParamL", wintypes.WORD),
-                ("wParamH", wintypes.WORD))
+class MouseInput(ctypes.Structure):
+    _fields_ = [("dx", ctypes.c_long),
+                ("dy", ctypes.c_long),
+                ("mouseData", ctypes.c_ulong),
+                ("dwFlags", ctypes.c_ulong),
+                ("time", ctypes.c_ulong),
+                ("dwExtraInfo", PUL)]
 
 
-class INPUT(ctypes.Structure):
-    class _INPUT(ctypes.Union):
-        _fields_ = (("ki", KEYBDINPUT),
-                    ("mi", MOUSEINPUT),
-                    ("hi", HARDWAREINPUT))
-
-    _anonymous_ = ("_input",)
-    _fields_ = (("type", wintypes.DWORD),
-                ("_input", _INPUT))
+class Input_I(ctypes.Union):
+    _fields_ = [("ki", KeyBdInput),
+                ("mi", MouseInput),
+                ("hi", HardwareInput)]
 
 
-LPINPUT = ctypes.POINTER(INPUT)
+class Input(ctypes.Structure):
+    _fields_ = [("type", ctypes.c_ulong),
+                ("ii", Input_I)]
 
 
-def _check_count(result, func, args):
-    if result == 0:
-        raise ctypes.WinError(ctypes.get_last_error())
-    return args
-
-
-user32.SendInput.errcheck = _check_count
-user32.SendInput.argtypes = (wintypes.UINT,  # nInputs
-                             LPINPUT,  # pInputs
-                             ctypes.c_int)  # cbSize
-
-
-# Functions
-
+# Actuals Functions
 def PressKey(hexKeyCode):
-    x = INPUT(type=INPUT_KEYBOARD,
-              ki=KEYBDINPUT(wVk=hexKeyCode))
-    user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
+    extra = ctypes.c_ulong(0)
+    ii_ = Input_I()
+    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra))
+    x = Input(ctypes.c_ulong(1), ii_)
+    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
 def ReleaseKey(hexKeyCode):
-    x = INPUT(type=INPUT_KEYBOARD,
-              ki=KEYBDINPUT(wVk=hexKeyCode,
-                            dwFlags=KEYEVENTF_KEYUP))
-    user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
+    extra = ctypes.c_ulong(0)
+    ii_ = Input_I()
+    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 | 0x0002, 0,
+                        ctypes.pointer(extra))
+    x = Input(ctypes.c_ulong(1), ii_)
+    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
-def AltTab():
-    """Press Alt+Tab and hold Alt key for 2 seconds
-    in order to see the overlay.
-    """
-    PressKey(VK_MENU)  # Alt
-    PressKey(VK_TAB)  # Tab
-    ReleaseKey(VK_TAB)  # Tab~
-    time.sleep(2)
-    ReleaseKey(VK_MENU)  # Alt~
+# directx scan codes
+# http://www.gamespp.com/directx/directInputKeyboardScanCodes.html
 
-
-if __name__ == "__main__":
-    AltTab()
+if __name__ == '__main__':
+    while (True):
+        PressKey(F1)
+        time.sleep(1)
+        ReleaseKey(F1)
+        time.sleep(1)
