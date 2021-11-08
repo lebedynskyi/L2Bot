@@ -14,6 +14,9 @@ question = ["Why??", "And why ?"]
 msg = ["Why i here?. I just farmed", "For whrat? Did'nt do anything.. Just farming", "omg. i just was farming antelops"]
 
 KEY_SIT = "F12"
+KEY_ENTER = "ENTER"
+
+TELEPORT_TAG = "Teleport"
 
 
 class UserTeleportedHandler(BaseHandler):
@@ -32,6 +35,7 @@ class UserTeleportedHandler(BaseHandler):
         colors = self.color_parser.parse_image(screen_rgb, points=[point1, point2])
 
         for c in colors:
+            # Check 3 main colors. When user is teleporting he has a black screen
             if c[0] >= 15 or c[1] >= 15 or c[2] >= 15:
                 if self.was_teleported:
                     self.on_teleport_ended(screen_rgb)
@@ -40,28 +44,28 @@ class UserTeleportedHandler(BaseHandler):
             self.on_teleport_detected()
 
     def on_teleport_detected(self):
-        self.write_log("Teleport", "Detected teleporting. Write some word to chat !")
+        self.write_log(TELEPORT_TAG, "Detected teleporting. Write some word to chat !")
         self.was_teleported = True
 
         for h in self.handlers_to_pause:
             h.pause()
-            self.write_log("Teleport", "Pause handler {}".format(h))
+            self.write_log(TELEPORT_TAG, "Paused handler {}".format(h))
 
     def on_teleport_ended(self, screen):
-        self.write_log("Teleport", "Teleport finished")
+        self.write_log(TELEPORT_TAG, "Teleport finished")
         self.pause()
 
         time.sleep(1)
         pyautogui.typewrite(random.choice(greetings))
-        pyautogui.press("ENTER")
+        pyautogui.press(KEY_ENTER)
 
         time.sleep(3)
         pyautogui.typewrite(random.choice(question))
-        pyautogui.press("ENTER")
+        pyautogui.press(KEY_ENTER)
 
         time.sleep(4)
         pyautogui.typewrite(random.choice(msg))
-        pyautogui.press("ENTER")
+        pyautogui.press(KEY_ENTER)
 
         time.sleep(5)
         pyautogui.press(KEY_SIT)

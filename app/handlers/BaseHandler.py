@@ -7,6 +7,19 @@ pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.02
 
 
+def apply_click(button=None):
+    if button is None:
+        pyautogui.mouseDown()
+        pyautogui.mouseUp()
+    else:
+        pyautogui.mouseDown(int(button[0]), int(button[1]))
+        pyautogui.mouseUp(int(button[0]), int(button[1]))
+
+
+def apply_move(button):
+    pyautogui.moveTo(int(button[0]), int(button[1]))
+
+
 class BaseHandler(ABC):
     last_action_time = 0
     paused = False
@@ -29,14 +42,3 @@ class BaseHandler(ABC):
 
     def resume(self):
         self.paused = False
-
-    def apply_click(self, button=None):
-        if button is None:
-            pyautogui.mouseDown()
-            pyautogui.mouseUp()
-        else:
-            pyautogui.mouseDown(int(button[0]), int(button[1]))
-            pyautogui.mouseUp(int(button[0]), int(button[1]))
-
-    def apply_move(self, button):
-        pyautogui.moveTo(int(button[0]), int(button[1]))

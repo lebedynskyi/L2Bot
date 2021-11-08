@@ -26,8 +26,10 @@ class TargetHpParser(BaseParser):
 
         # Color segmentation
         hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
-        lower_red = np.array([0, 50, 50])
-        upper_red = np.array([5, 255, 255])
+        # lower_red = np.array([0, 50, 50])
+        # upper_red = np.array([5, 255, 255])
+        lower_red = np.array([120, 170, 0])
+        upper_red = np.array([245, 255, 255])
         mask = cv2.inRange(hsv, lower_red, upper_red)
         res = cv2.bitwise_and(resized, resized, mask=mask)
 
@@ -36,15 +38,6 @@ class TargetHpParser(BaseParser):
         blurred = cv2.GaussianBlur(imgray, (5, 5), 0)
         ret, thresholded = cv2.threshold(blurred, 50, 255, 0)
         contours, h = cv2.findContours(thresholded, 1, 2)
-
-        # # Square detection
-        # for cnt in contours:
-        #     approx = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
-        #     if (len(approx) == 4) & (cv2.contourArea(cnt) > 25):  # to discard noise from the color segmentation
-        #         contour_poly = cv2.approxPolyDP(cnt, 3, True)
-        #         center, radius = cv2.minEnclosingCircle(contour_poly)
-        #         color = (0, 255, 0)
-        #         cv2.circle(resized, (int(center[0]), int(center[1])), int(radius), color, 2)
 
         if contours:
             cnt = contours[0]
@@ -56,7 +49,7 @@ class TargetHpParser(BaseParser):
                 if self.debug:
                     color = (0, 255, 0)
                     cv2.circle(resized, (int(center[0]), int(center[1])), int(radius), color, 2)
-                    self.debug_show_im(resized, "ddd")
+                    self.debug_show_im(resized, "Found limits")
 
                 resized_width = int(resized.shape[1])
                 hp_width = radius * 2

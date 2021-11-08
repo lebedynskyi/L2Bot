@@ -1,6 +1,6 @@
 import cv2
 
-from app.handlers.BaseHandler import BaseHandler
+from app.handlers.BaseHandler import BaseHandler, apply_click
 
 
 class CaptchaHandler(BaseHandler):
@@ -19,7 +19,7 @@ class CaptchaHandler(BaseHandler):
                 answer = self._check_group_captcha(screenshot_image)
 
             if answer:
-                self.apply_click(answer)
+                apply_click(answer)
 
         return answer
 
