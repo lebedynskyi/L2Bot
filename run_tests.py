@@ -3,7 +3,7 @@ import unittest
 
 import cv2
 
-from app.core.Templates import load_templates
+from app.core.templates import load_templates
 from app.parsers.farm.TargetHpParser import TargetHpParser
 from app.parsers.farm.TargetWindowParser import TargetWindowParser
 

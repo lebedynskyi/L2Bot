@@ -1,7 +1,7 @@
 import os
 
-from app.core.AppLooper import AppLooper
-from app.core.Templates import load_templates
+from app.core.looper import AppLooper
+from app.core.templates import load_templates
 from app.handlers.OrcShamanFarm import OrcShamanFarmHandler
 from app.parsers.farm.TargetHpParser import TargetHpParser
 from app.parsers.farm.TargetWindowParser import TargetWindowParser

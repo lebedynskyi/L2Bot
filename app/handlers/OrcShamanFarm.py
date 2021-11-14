@@ -1,4 +1,5 @@
 import random
+import time
 
 import pyautogui
 
@@ -32,10 +33,18 @@ class OrcShamanFarmHandler(BaseHandler):
         self.target_parser = target_window_parser
 
     def _on_tick(self, screen_rgb, current_time, last_action_delta):
-        action_performed = self.handle_state(last_action_delta, screen_rgb)
+        action_performed = self.dummy_state(last_action_delta, screen_rgb)
 
         if action_performed:
             self.last_action_time = current_time
+
+    def dummy_state(self, last_action_delta, screen):
+        if last_action_delta >= 2:
+            pyautogui.press("F5")
+            time.sleep(2)
+            pyautogui.press("5")
+            print("Pressed")
+        return True
 
     def handle_state(self, last_action_delta, screen_rgb):
         target_window = self.target_parser.parse_image(screen_rgb)
