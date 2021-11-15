@@ -1,7 +1,6 @@
-import app.core.controls
+import random
+import time
 from app.handlers.BaseHandler import BaseHandler
-
-COMMAND_ATTACK = "/attack"
 
 STATE_HIT = -1
 STATE_TARGET = 0
@@ -47,7 +46,7 @@ class SpoilManorFarmHandler(BaseHandler):
         target_window = self.target_parser.parse_image(screen_rgb)
         self.has_target = target_window is not None
 
-        if self.current_state == STATE_TARGET and last_action_delta >= 1:
+        if self.current_state == STATE_TARGET and last_action_delta >= random.randint(1, 3):
             if self.has_target:
                 self.current_state = STATE_SPOIL if self.use_spoil else STATE_SEED if self.use_manor else STATE_HIT
             else:
@@ -60,7 +59,7 @@ class SpoilManorFarmHandler(BaseHandler):
             self.current_state = STATE_SEED if self.use_manor else STATE_HIT
             return True
 
-        if STATE_SEED == self.current_state and last_action_delta >= 0.5:
+        if STATE_SEED == self.current_state and last_action_delta >= (2 if self.use_spoil else 0.5):
             self.keyboard.press(self.KEY_SEED)
             self.current_state = STATE_HIT
             return True
@@ -74,7 +73,7 @@ class SpoilManorFarmHandler(BaseHandler):
             elif self.use_skills and target_hp is not None and target_hp <= 6:
                 self.keyboard.press(self.KEY_SKILL)
                 return True
-            elif last_action_delta > 10:
+            elif last_action_delta > random.randint(8, 12):
                 self.keyboard.press(self.KEY_HIT)
                 return True
 
@@ -94,6 +93,8 @@ class SpoilManorFarmHandler(BaseHandler):
             # we need to clear target here in case mob was not spoiled and prevent entering loop with dead mob.
             # Also it will speed up selection of next target
             self.keyboard.press(self.KEY_CLEAR_TARGET)
+            self.keyboard.press(self.KEY_PICK)
+            time.sleep(0.5)
             self.keyboard.press(self.KEY_PICK)
             self.current_state = STATE_TARGET
             return True

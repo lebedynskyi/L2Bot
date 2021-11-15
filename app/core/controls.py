@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Keyboard(ABC):
     KEY_MOUSE_LEFT = None
     KEY_MOUSE_RIGHT = None
