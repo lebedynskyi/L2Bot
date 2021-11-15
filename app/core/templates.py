@@ -8,6 +8,8 @@ def load_templates(folder):
 
     ), Status(
 
+    ), Captcha(
+        warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder))
     ))
 
 
@@ -16,7 +18,8 @@ class TemplateLoader:
 
 
 class Templates:
-    def __init__(self, farm, manor, status):
+    def __init__(self, farm, manor, status, captcha):
+        self.captcha = captcha
         self.status = status
         self.manor = manor
         self.farm = farm
@@ -36,4 +39,5 @@ class Status:
 
 
 class Captcha:
-    pass
+    def __init__(self, warn_dialog):
+        self.warn_dialog = warn_dialog

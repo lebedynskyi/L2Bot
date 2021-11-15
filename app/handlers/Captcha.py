@@ -4,7 +4,8 @@ from app.handlers.BaseHandler import BaseHandler, apply_click
 
 
 class CaptchaHandler(BaseHandler):
-    def __init__(self, dialog_parser, captcha_parser, group_parser, captcha_solver):
+    def __init__(self, keyboard, dialog_parser, captcha_parser, group_parser, captcha_solver):
+        super().__init__(keyboard)
         self.dialog_parser = dialog_parser
         self.captcha_parser = captcha_parser
         self.captcha_solver = captcha_solver
