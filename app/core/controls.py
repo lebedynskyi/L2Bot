@@ -4,6 +4,7 @@ import pyautogui
 pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.02
 
+
 class Keyboard(ABC):
     @abstractmethod
     def init(self):
@@ -22,11 +23,11 @@ class Keyboard(ABC):
         pass
 
     @abstractmethod
-    def mouse_down(self):
+    def mouse_down(self, btn):
         pass
 
     @abstractmethod
-    def mouse_up(self):
+    def mouse_up(self, btn):
         pass
 
     @abstractmethod
@@ -102,50 +103,23 @@ class ArduinoKeyboard(Keyboard):
         answer = self.arduino.readline()
         return data == answer
 
-    def mouse_down(self):
-        pass
+    def mouse_down(self, btn):
+        data = str.encode("7{}".format(btn))
+        self.arduino.write(data)
+        answer = self.arduino.readline()
+        return data == answer
 
-    def mouse_up(self):
-        pass
+    def mouse_up(self, btn):
+        data = str.encode("8{}".format(btn))
+        self.arduino.write(data)
+        answer = self.arduino.readline()
+        return data == answer
 
     def close(self):
         self.arduino.close()
         self.arduino = None
 
 
-class SoftwareKeyboard(Keyboard):
-    def press(self, value):
-        pass
-
-    def text(self, text):
-        pass
-
-    def mouse_move(self, x_range, y_range):
-        pass
-
-    def mouse_click(self, btn):
-        pass
-
-    def mouse_down(self):
-        pass
-
-    def mouse_up(self):
-        pass
-
-
 if __name__ == '__main__':
     keyboard = ArduinoKeyboard()
     keyboard.init()
-
-    # try:
-    #     while True:
-    #         inp = input("Enter a value: ")
-    #         print("Sending -> {}".format(inp))
-    #         res = keyboard.text(inp)
-    #         print("Received -> {}".format(res))
-    # except Exception as e:
-    #     keyboard.close()
-    #
-    # keyboard.mouse_move(500, 150)
-    # keyboard.mouse_click(keyboard.KEY_MOUSE_RIGHT)
-    # keyboard.close()
