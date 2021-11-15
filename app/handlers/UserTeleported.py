@@ -3,17 +3,17 @@ import time
 import random
 
 import cv2
-import pyautogui
 
+from app.core.controls import Keyboard
 from app.handlers.BaseHandler import BaseHandler
 
-greetings = ["kek", "hi", "lololo", "omg"]
+greetings = ["kek", "hi", "plololo", "omg", "Hello"]
 
-question = ["Why??", "And why ?"]
+question = ["Why??", "And why ?", "lol"]
 
-msg = ["Why i here?. I just farmed", "For whrat? Did'nt do anything.. Just farming", "omg. i just was farming antelops"]
+msg = ["Why you TP me?. I just farmed", "For whrat? Did'nt do anything.. just farming", "omg. i just was farming"]
 
-KEY_SIT = "F12"
+KEY_SIT = Keyboard.KEY_F12
 KEY_ENTER = "ENTER"
 
 TELEPORT_TAG = "Teleport"
@@ -56,18 +56,18 @@ class UserTeleportedHandler(BaseHandler):
         self.pause()
 
         time.sleep(1)
-        pyautogui.typewrite(random.choice(greetings))
-        pyautogui.press(KEY_ENTER)
+        self.keyboard.text(random.choice(greetings))
+        self.keyboard.press(KEY_ENTER)
 
         time.sleep(3)
-        pyautogui.typewrite(random.choice(question))
-        pyautogui.press(KEY_ENTER)
+        self.keyboard.text(random.choice(question))
+        self.keyboard.press(KEY_ENTER)
 
         time.sleep(4)
-        pyautogui.typewrite(random.choice(msg))
-        pyautogui.press(KEY_ENTER)
+        self.keyboard.text(random.choice(msg))
+        self.keyboard.press(KEY_ENTER)
 
         time.sleep(5)
-        pyautogui.press(KEY_SIT)
+        self.keyboard.press(KEY_SIT)
 
         cv2.imwrite("res/output/after_teleport.png", screen)

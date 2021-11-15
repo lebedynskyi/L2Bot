@@ -2,7 +2,8 @@ from app.handlers.BaseHandler import BaseHandler
 
 
 class UserStatusHandler(BaseHandler):
-    def __init__(self, status_parser):
+    def __init__(self, status_parser, keyboard):
+        super().__init__(keyboard)
         self.status_parser = status_parser
 
     def _on_tick(self, screen_rgb, current_time, last_action_delta):

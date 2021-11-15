@@ -6,7 +6,8 @@ from app.handlers.BaseHandler import BaseHandler
 
 
 class UserDeathHandler(BaseHandler):
-    def __init__(self, death_parser):
+    def __init__(self, keyboard, death_parser):
+        super().__init__(keyboard)
         self.death_parser = death_parser
 
     def _on_tick(self, screenshot_image, current_time, last_action_delta):

@@ -1,8 +1,5 @@
-import pyautogui
-
 from app.handlers.BaseHandler import BaseHandler
 
-KEY_GREATER_HEAL = "F12"
 KEY_TARGET_PET = "F7"
 KEY_KILL_PET = "F8"
 KEY_RES_PET = "F9"
@@ -20,7 +17,8 @@ KILL_PET_LIMIT = 2000
 class PetManaHandler(BaseHandler):
     current_state = STATE_IDLE
 
-    def __init__(self, hp_parser, farm_logic):
+    def __init__(self, keyboard, hp_parser, farm_logic):
+        super().__init__(keyboard)
         self.hp_parser = hp_parser
         self.farm_logic = farm_logic
 
@@ -40,25 +38,25 @@ class PetManaHandler(BaseHandler):
             return True
 
         if self.current_state == STATE_TARGET_PET and last_action_delta >= 1:
-            pyautogui.press(KEY_TARGET_PET)
+            self.keyboard.press(KEY_TARGET_PET)
             self.current_state = STATE_KILL_PET
             self.write_log("HPLogic", "Pet in target")
             return True
 
         if self.current_state == STATE_KILL_PET and last_action_delta >= 1:
-            pyautogui.press(KEY_KILL_PET)
+            self.keyboard.press(KEY_KILL_PET)
             self.current_state = STATE_RES_PET
             self.write_log("HPLogic", "Killing pet")
             return True
 
         if self.current_state == STATE_RES_PET and last_action_delta >= 10:
-            pyautogui.press(KEY_RES_PET)
+            self.keyboard.press(KEY_RES_PET)
             self.current_state = STATE_RESUME_FARM
             self.write_log("HPLogic", "Res the pet")
             return True
 
         if self.current_state == STATE_RESUME_FARM and last_action_delta >= 25:
-            pyautogui.press(KEY_CLEAR_TARGET, presses=2, interval=0.5)
+            self.keyboard.press(KEY_CLEAR_TARGET, presses=2, interval=0.5)
             self.current_state = STATE_IDLE
             self.farm_logic.resume()
             self.write_log("HPLogic", "Pet is alive. Continue farm")

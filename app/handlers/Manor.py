@@ -48,7 +48,9 @@ class ManorHandler(BaseHandler):
     cached_max_price_btn = None
     cached_ok_btn = None
 
-    def __init__(self, castles, manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser):
+    def __init__(self, keyboard, castles,
+                 manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser):
+        super().__init__(keyboard)
         self.castles = castles
         self.castles_list_chooser_parser = castles_chooser_parser
         self.castles_list_parser = castles_list_parser

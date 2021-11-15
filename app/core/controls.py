@@ -17,6 +17,10 @@ class Keyboard(ABC):
     KEY_ENTER = None
     KEY_ESC = None
 
+    KEY_MOUSE_LEFT = None
+    KEY_MOUSE_RIGHT = None
+    KEY_MIDDLE = None
+
     @abstractmethod
     def init(self):
         pass
@@ -42,7 +46,7 @@ class Keyboard(ABC):
         pass
 
     @abstractmethod
-    def mouse_click(self):
+    def mouse_click(self, btn):
         pass
 
 
@@ -63,9 +67,12 @@ class ArduinoKeyboard(Keyboard):
         self.KEY_F10 = 0xCB
         self.KEY_F11 = 0xCC
         self.KEY_F12 = 0xCD
+        self.KEY_ENTER = 0xB0
+        self.KEY_ESC = 0xB1
 
-        self.KEY_ENTER = 0xCD
-        self.KEY_ESC = 0xCD
+        KEY_MOUSE_LEFT = 1
+        KEY_MOUSE_RIGHT = 2
+        KEY_MIDDLE = 4
 
         self.baudrate = baudrate
         self.port = port
@@ -93,11 +100,18 @@ class ArduinoKeyboard(Keyboard):
         answer = self.arduino.readline()
         return data == answer
 
-    def mouse_move(self, x_range, y_range):
+    def mouse_move(self, x, y):
+        # mouseX, mouseY = mouse_pos('abs')
+        # znakX, znakY = '+', '+'
+        # if mouseX - x > 0 then znakX = '-' end
+        # if mouseY - y > 0 then znakY = '-' end
         pass
 
-    def mouse_click(self):
-        pass
+    def mouse_click(self, btn):
+        data = str.encode("6{}".format(btn))
+        self.arduino.write(data)
+        answer = self.arduino.readline()
+        return data == answer
 
     def mouse_down(self):
         pass
@@ -126,7 +140,7 @@ class SoftwareKeyboard(Keyboard):
     def mouse_move(self, x_range, y_range):
         pass
 
-    def mouse_click(self):
+    def mouse_click(self, btn):
         pass
 
     def mouse_down(self):
