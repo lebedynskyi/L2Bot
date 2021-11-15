@@ -1,13 +1,10 @@
-import math
 from abc import ABC, abstractmethod
 import pyautogui
 
+pyautogui.FAILSAFE = False
+pyautogui.PAUSE = 0.02
 
 class Keyboard(ABC):
-    KEY_MOUSE_LEFT = None
-    KEY_MOUSE_RIGHT = None
-    KEY_MIDDLE = None
-
     @abstractmethod
     def init(self):
         pass
@@ -59,7 +56,7 @@ class ArduinoKeyboard(Keyboard):
 
         self.KEY_MOUSE_LEFT = 1
         self.KEY_MOUSE_RIGHT = 2
-        self.KEY_MIDDLE = 4
+        self.KEY_MOUSE_MIDDLE = 4
 
         self.baudrate = baudrate
         self.port = port
@@ -95,6 +92,9 @@ class ArduinoKeyboard(Keyboard):
         znak_y = "+" if y_delta < 0 else "-"
 
         data = "5{}{}{}".format(znak_x, znak_y, abs(x_delta) * 0xFFFF + abs(y_delta))
+        self.arduino.write(data.encode())
+        answer = self.arduino.readline()
+        return data == answer
 
     def mouse_click(self, btn):
         data = str.encode("6{}".format(btn))
@@ -114,11 +114,6 @@ class ArduinoKeyboard(Keyboard):
 
 
 class SoftwareKeyboard(Keyboard):
-
-    def init(self):
-        self.pyautogui.FAILSAFE = False
-        self.pyautogui.PAUSE = 0.02
-
     def press(self, value):
         pass
 
@@ -150,5 +145,7 @@ if __name__ == '__main__':
     #         print("Received -> {}".format(res))
     # except Exception as e:
     #     keyboard.close()
-
-    keyboard.mouse_move(150, 150)
+    #
+    # keyboard.mouse_move(500, 150)
+    # keyboard.mouse_click(keyboard.KEY_MOUSE_RIGHT)
+    # keyboard.close()
