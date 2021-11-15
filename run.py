@@ -3,8 +3,8 @@ import os
 from app.core.looper import AppLooper
 from app.core.templates import load_templates
 from app.handlers.OrcShamanFarm import OrcShamanFarmHandler
-from app.parsers.farm.TargetHpParser import TargetHpParser
-from app.parsers.farm.TargetWindowParser import TargetWindowParser
+from app.parsers.reborn_classic.farm.TargetHpParser import TargetHpParser
+from app.parsers.reborn_classic.farm.TargetWindowParser import TargetWindowParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
