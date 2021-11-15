@@ -1,14 +1,15 @@
+from app.core.controls import Keyboard
 from app.handlers.BaseHandler import BaseHandler
 
-KEY_NEXT_TARGET = "F1"
-KEY_SPOIL = "F2"
-KEY_SWEEP = "F3"
-KEY_PICK = "F4"
-KEY_SEED = "F5"
-KEY_HARVEST = "F6"
-KEY_SKILL = "F11"
-KEY_ENTER = "ENTER"
-KEY_CLEAR_TARGET = "ESC"
+KEY_NEXT_TARGET = Keyboard.KEY_F1
+KEY_SPOIL = Keyboard.KEY_F2
+KEY_SWEEP = Keyboard.KEY_F3
+KEY_PICK = Keyboard.KEY_F4
+KEY_SEED = Keyboard.KEY_F5
+KEY_HARVEST = Keyboard.KEY_F6
+KEY_SKILL = Keyboard.KEY_F11
+KEY_ENTER = Keyboard.KEY_ENTER
+KEY_CLEAR_TARGET = Keyboard.KEY_ESC
 
 COMMAND_ATTACK = "/attack"
 

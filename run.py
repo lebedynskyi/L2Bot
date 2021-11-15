@@ -1,4 +1,5 @@
 import os
+import time
 
 from app.core.controls import ArduinoKeyboard
 from app.core.looper import AppLooper
@@ -19,9 +20,10 @@ def farm_app():
     target_hp_parser = TargetHpParser(env_path)
 
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
-                                 use_skills=False, use_manor=False, use_spoil=False)
+                                 use_skills=False, use_manor=True, use_spoil=False)
     return AppLooper(farm)
 
 
 if __name__ == "__main__":
+    time.sleep(5)
     farm_app().loop()

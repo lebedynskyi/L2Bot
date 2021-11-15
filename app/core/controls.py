@@ -14,6 +14,8 @@ class Keyboard(ABC):
     KEY_F10 = None
     KEY_F11 = None
     KEY_F12 = None
+    KEY_ENTER = None
+    KEY_ESC = None
 
     @abstractmethod
     def init(self):
@@ -62,6 +64,9 @@ class ArduinoKeyboard(Keyboard):
         self.KEY_F11 = 0xCC
         self.KEY_F12 = 0xCD
 
+        self.KEY_ENTER = 0xCD
+        self.KEY_ESC = 0xCD
+
         self.baudrate = baudrate
         self.port = port
 
@@ -73,7 +78,7 @@ class ArduinoKeyboard(Keyboard):
         answer = self.arduino.readline()
 
         print("Arduino initialization answer -> {}".format(answer))
-        if answer is not question:
+        if answer != question:
             raise ConnectionError("Not expected answer from arduino")
 
     def press(self, value):
