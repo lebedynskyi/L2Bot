@@ -1,4 +1,6 @@
+import math
 from abc import ABC, abstractmethod
+import pyautogui
 
 
 class Keyboard(ABC):
@@ -86,11 +88,13 @@ class ArduinoKeyboard(Keyboard):
         return data == answer
 
     def mouse_move(self, x, y):
-        # mouseX, mouseY = mouse_pos('abs')
-        # znakX, znakY = '+', '+'
-        # if mouseX - x > 0 then znakX = '-' end
-        # if mouseY - y > 0 then znakY = '-' end
-        pass
+        mouse_x, mouse_y = pyautogui.position()
+        x_delta, y_delta = mouse_x - x, mouse_y - y
+
+        znak_x = "+" if x_delta < 0 else "-"
+        znak_y = "+" if y_delta < 0 else "-"
+
+        data = "5{}{}{}".format(znak_x, znak_y, abs(x_delta) * 0xFFFF + abs(y_delta))
 
     def mouse_click(self, btn):
         data = str.encode("6{}".format(btn))
@@ -110,7 +114,6 @@ class ArduinoKeyboard(Keyboard):
 
 
 class SoftwareKeyboard(Keyboard):
-    import pyautogui
 
     def init(self):
         self.pyautogui.FAILSAFE = False
@@ -139,11 +142,13 @@ if __name__ == '__main__':
     keyboard = ArduinoKeyboard()
     keyboard.init()
 
-    try:
-        while True:
-            inp = input("Enter a value: ")
-            print("Sending -> {}".format(inp))
-            res = keyboard.text(inp)
-            print("Received -> {}".format(res))
-    except Exception as e:
-        keyboard.close()
+    # try:
+    #     while True:
+    #         inp = input("Enter a value: ")
+    #         print("Sending -> {}".format(inp))
+    #         res = keyboard.text(inp)
+    #         print("Received -> {}".format(res))
+    # except Exception as e:
+    #     keyboard.close()
+
+    keyboard.mouse_move(150, 150)
