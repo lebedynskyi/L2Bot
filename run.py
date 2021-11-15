@@ -2,9 +2,9 @@ import os
 import time
 
 from app.core.controls import ArduinoKeyboard
+from app.handlers.farm import SpoilManorFarmHandler
 from app.core.looper import AppLooper
 from app.core.templates import load_templates
-from app.handlers.farm import SpoilManorFarmHandler
 from app.parsers.classic.target import TargetWindowParser
 from app.parsers.classic.target import TargetHpParser
 
@@ -25,5 +25,5 @@ def farm_app():
 
 
 if __name__ == "__main__":
-    time.sleep(5)
+    time.sleep(1)
     farm_app().loop()

@@ -1,22 +1,6 @@
 from abc import ABC, abstractmethod
 
-
 class Keyboard(ABC):
-    KEY_F1 = None
-    KEY_F2 = None
-    KEY_F3 = None
-    KEY_F4 = None
-    KEY_F5 = None
-    KEY_F6 = None
-    KEY_F7 = None
-    KEY_F8 = None
-    KEY_F9 = None
-    KEY_F10 = None
-    KEY_F11 = None
-    KEY_F12 = None
-    KEY_ENTER = None
-    KEY_ESC = None
-
     KEY_MOUSE_LEFT = None
     KEY_MOUSE_RIGHT = None
     KEY_MIDDLE = None
@@ -70,9 +54,9 @@ class ArduinoKeyboard(Keyboard):
         self.KEY_ENTER = 0xB0
         self.KEY_ESC = 0xB1
 
-        KEY_MOUSE_LEFT = 1
-        KEY_MOUSE_RIGHT = 2
-        KEY_MIDDLE = 4
+        self.KEY_MOUSE_LEFT = 1
+        self.KEY_MOUSE_RIGHT = 2
+        self.KEY_MIDDLE = 4
 
         self.baudrate = baudrate
         self.port = port

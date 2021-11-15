@@ -13,6 +13,8 @@ class TargetHpParser(BaseParser):
         return image_rgb[20:28, 12:163]
 
     def parse_hp(self, hp_area):
+        hp_area = cv2.cvtColor(hp_area, cv2.COLOR_BGR2RGB)
+
         width = int(hp_area.shape[1] * 5)
         height = int(hp_area.shape[0] * 5)
         dim = (width, height)
