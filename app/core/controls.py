@@ -31,7 +31,7 @@ class Keyboard(ABC):
         pass
 
     @abstractmethod
-    def mouse_click(self, btn):
+    def mouse_click(self, btn, cords):
         pass
 
 
@@ -97,7 +97,10 @@ class ArduinoKeyboard(Keyboard):
         answer = self.arduino.readline()
         return data == answer
 
-    def mouse_click(self, btn):
+    def mouse_click(self, btn, cords=None):
+        if cords is not None:
+            self.mouse_move(cords[0], cords[1])
+
         data = str.encode("6{}".format(btn))
         self.arduino.write(data)
         answer = self.arduino.readline()

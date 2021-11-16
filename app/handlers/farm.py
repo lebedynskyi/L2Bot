@@ -65,6 +65,11 @@ class SpoilManorFarmHandler(BaseHandler):
             return True
 
         if STATE_HIT == self.current_state and last_action_delta >= 1:
+            if target_window is None:
+                self.write_log(LOG_TAG, "No target reset state")
+                self.current_state = STATE_TARGET
+                return True
+
             target_hp = self.target_hp_parser.parse_image(target_window)
             self.write_log(LOG_TAG, "Farming. Target HP {}%".format(target_hp))
             if target_hp is not None and target_hp <= 0:
@@ -89,12 +94,12 @@ class SpoilManorFarmHandler(BaseHandler):
             self.current_state = STATE_PICK
             return True
 
-        if STATE_PICK == self.current_state and last_action_delta >= 0.75:
+        if STATE_PICK == self.current_state and last_action_delta >= 1:
             # we need to clear target here in case mob was not spoiled and prevent entering loop with dead mob.
             # Also it will speed up selection of next target
             self.keyboard.press(self.KEY_CLEAR_TARGET)
             self.keyboard.press(self.KEY_PICK)
-            time.sleep(0.5)
+            time.sleep(1)
             self.keyboard.press(self.KEY_PICK)
             self.current_state = STATE_TARGET
             return True

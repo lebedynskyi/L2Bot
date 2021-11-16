@@ -27,9 +27,10 @@ class UserDeathHandler(BaseHandler):
         for process in f.Win32_Process():
             name = process.name
             print(name)
-            if name == "l2.exe":
+            if name == "L2.bin":
                 process.Terminate()
                 self.write_log("Death", "Game killed")
+                break
         else:
             self.write_log("Death", "Game not found")
 
