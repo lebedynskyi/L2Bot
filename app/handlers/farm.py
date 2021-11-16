@@ -46,7 +46,7 @@ class SpoilManorFarmHandler(BaseHandler):
         target_window = self.target_parser.parse_image(screen_rgb)
         self.has_target = target_window is not None
 
-        if self.current_state == STATE_TARGET and last_action_delta >= random.randint(1, 3):
+        if self.current_state == STATE_TARGET and last_action_delta >= round(random.uniform(0.5, 2), 2):
             if self.has_target:
                 self.current_state = STATE_SPOIL if self.use_spoil else STATE_SEED if self.use_manor else STATE_HIT
             else:
