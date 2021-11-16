@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 from app.parsers.base import BaseParser
 

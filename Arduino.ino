@@ -56,7 +56,7 @@ void loop()
       buffer[buffPos++] = Serial.read();
       buffer[buffPos] = '\0';
     }
-    else   // буфер переполнен
+    else   //  Buffer overflow
     {
       while (Serial.available()) {
         int temp = Serial.read();
@@ -68,7 +68,7 @@ void loop()
   }
 
   switch (buffer[0]) {
-    case SET_DELAY:  // установки паузы для клавиш клавиутуры и мыши
+    case SET_DELAY:  // Setup delays for Mouse and Keyboards
       {
         switch (buffer[1]) {
           case SET_KEYBOARD_DELAY:
@@ -91,7 +91,7 @@ void loop()
         }
         break;
       }
-    case PRESS_KEY:  // нажатие клавиши
+    case PRESS_KEY:  // Button actions
       {
         char key = atoi(&buffer[1]);
         Keyboard.press(key);
@@ -100,7 +100,7 @@ void loop()
         delay(KEYBOARD_DELAY);
         break;
       }
-    case PRINT_STRING:  // напечатать строку
+    case PRINT_STRING:  // Write string
       {
         for (int i = 1; i < buffPos; i++) {
           Keyboard.write(buffer[i]);
@@ -108,39 +108,39 @@ void loop()
         }
         break;
       }
-    case KEY_DOWN:  // зажать клавишу
+    case KEY_DOWN:  // Press key
       {
         Keyboard.press(atoi(&buffer[1]));
         delay(KEYBOARD_DELAY + random(RANDOM_KEY));
         break;
       }
-    case KEY_UP:  // отпустить клавишу
+    case KEY_UP:  // Release key
       {
         Keyboard.release(atoi(&buffer[1]));
         delay(KEYBOARD_DELAY);
         break;
       }
-    case MOUSE_MOVE:  // переместить курсор мыши
+    case MOUSE_MOVE:  // Move mouse to x y positions
       {
         long coordinate = atol(&buffer[3]);
         
-        // x и y на сколько пикселей нужно сместить курсор
+        // x and y length we need to move mouse. Not final points.
         long x = coordinate / 65535;
         long y = coordinate % 65535;
 
-        // нужно двигать влево/вправо вверх/вниз
+        // The way where we need to move
         if (buffer[1] == '-')
           x = -x;
         if (buffer[2] == '-')
           y = -y;
 
 
-        // сколько нужно сделать шагов
+        // The number of steps
         int count_step;
         float stepX = MOUSE_MOVE_OFFSET, stepY = MOUSE_MOVE_OFFSET;   
-        int remainsX = 0, remainsY = 0; // сколько останется в конце
+        int remainsX = 0, remainsY = 0; // How much left in the end
 
-        if (abs(x) > abs(y))  // если по X больше двигать курсор чем по Y
+        if (abs(x) > abs(y))  // If length in X axis is more than y axis
         {
           count_step = abs(x) / MOUSE_MOVE_OFFSET;
           if (count_step > 0)
@@ -175,7 +175,7 @@ void loop()
         }
 
         float temp = 0.0;
-        for (int i = 0; i < count_step; i++)  // перемещение курсора
+        for (int i = 0; i < count_step; i++)  // moving of mouse coursor
         {
           if (abs(x) > abs(y))  
           {

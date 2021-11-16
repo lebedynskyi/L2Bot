@@ -7,7 +7,7 @@ def load_templates(folder):
     ), Manor(
 
     ), Status(
-
+        user_death=cv2.imread("{folder}/status/user_death_template.png".format(folder=folder))
     ), Captcha(
         warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder))
     ))
@@ -35,7 +35,8 @@ class Manor:
 
 
 class Status:
-    pass
+    def __init__(self, user_death):
+        self.user_death = user_death
 
 
 class Captcha:
