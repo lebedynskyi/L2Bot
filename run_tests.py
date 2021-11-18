@@ -66,10 +66,9 @@ class TestManor(unittest.TestCase):
         ]
 
         manor_dialog_parser = ManorDialogParser(env_path, self.templates.manor.manor_dialog_template)
-        crop_list_parser = CropListParser(env_path, self.templates.manor.crop_sales_dialog)
-        castles_list_parser = CastlesListParser(env_path, self.templates.manor.chooser_template, True)
-        castles_chooser_parser = CastlesListChooserParser(env_path, self.templates.manor.chooser_expanded_template,
-                                                          True)
+        crop_list_parser = CropListParser(env_path, self.templates.manor.crop_sales_dialog, True)
+        castles_list_parser = CastlesListParser(env_path, self.templates.manor.chooser_template)
+        castles_chooser_parser = CastlesListChooserParser(env_path, self.templates.manor.chooser_expanded_template)
         manor = ManorHandler(self.keyboard, castles,
                              manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
 

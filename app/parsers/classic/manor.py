@@ -153,7 +153,7 @@ class CropListParser(BaseParser):
         if match_points:
             first_match = match_points[0]
             crop_sale = ((first_match[0] + 460, first_match[1] + 245), (first_match[0] + 475, first_match[1] + 260))
-            seed_row = ((first_match[0] + 50, first_match[1] + 25), (first_match[0] + 65, first_match[1] + 40))
+            seed_row = ((first_match[0] + 535, first_match[1] + 25), (first_match[0] + 550, first_match[1] + 40))
 
             if self.debug:
                 debug_img = image_rgb.copy()
