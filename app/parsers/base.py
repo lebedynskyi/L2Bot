@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import cv2
 
@@ -26,3 +27,7 @@ class BaseParser(ABC):
 
     def debug_write_im(self, img):
         cv2.imwrite("res/output/temp.png", img)
+
+    def write_log(self, tag, msg):
+        time = datetime.now()
+        print("|{0}|  {1}: {2}".format(time, tag, msg))

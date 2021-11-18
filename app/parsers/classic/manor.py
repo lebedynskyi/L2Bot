@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import cv2
 import numpy as np
 import pytesseract
@@ -27,6 +25,7 @@ class CastlesListChooserParser(BaseParser):
         castle_y = None
 
         if match_points:
+            self.write_log("CastleChooser", "Castles found")
             first_match = match_points[0]
 
             if self.debug:
@@ -36,7 +35,7 @@ class CastlesListChooserParser(BaseParser):
                 self.debug_show_im(debug_img, "Castle chooser")
 
             if looking_castle.castle_number < 2:
-                print("Manor: look for castle {}".format(looking_castle.castle_name))
+                self.write_log("CastleChooser", "Look for castle {}".format(looking_castle.castle_name))
                 for i in range(looking_castle.start_index, looking_castle.finish_index):
                     castle = (
                         # 17 pixels height per 1 castle
@@ -57,7 +56,7 @@ class CastlesListChooserParser(BaseParser):
                         break
 
             else:
-                print("Manor: Use castle position {}".format(looking_castle.castle_number))
+                self.write_log("CastleChooser", "Use castle position {}".format(looking_castle.castle_number))
                 castle = (
                     (first_match[0], first_match[1] + looking_castle.castle_number * 17),
                     (first_match[0] + 140, first_match[1] + looking_castle.castle_number * 17 + 17)
@@ -66,9 +65,10 @@ class CastlesListChooserParser(BaseParser):
                 castle_y = (castle[1][1] + castle[0][1]) / 2
 
         if castle_y is not None and castle_y is not None:
+            self.write_log("CastleChooser", " Castle parsed")
             return castle_x, castle_y
 
-        print("Manor: Castles not found")
+        self.write_log("CastleChooser", " Castles not found")
         return None
 
     def _parse_castle_name(self, screen_rgb, castle_area):
@@ -108,6 +108,7 @@ class CastlesListParser(BaseParser):
         match_points = list(zip(*loc[::-1]))
 
         if match_points:
+            self.write_log("CastlesList", "Castles found")
             first_match = match_points[0]
 
             drop_down_btn = ((first_match[0] + 240, first_match[1] + 125), (first_match[0] + 255, first_match[1] + 140))
@@ -132,7 +133,10 @@ class CastlesListParser(BaseParser):
             max_price_ok_x = (max_price_ok[0][0] + max_price_ok[1][0]) / 2
             max_price_ok_y = (max_price_ok[1][1] + max_price_ok[0][1]) / 2
 
+            self.write_log("CastlesList", "Castles parsed")
             return (select_x, select_y), (max_price_x, max_price_y), (max_price_ok_x, max_price_ok_y)
+
+        self.write_log("CastlesList", "Castles not found")
         return None, None, None
 
 
@@ -142,7 +146,6 @@ class CropListParser(BaseParser):
         self.crop_sales_template = cv2.cvtColor(crop_sales_template, cv2.COLOR_RGB2GRAY)
 
     def parse_image(self, image_rgb, *args, **kwargs):
-        print("Manor: %s Look for crops dialog" % datetime.now())
         image_rgb = image_rgb.copy()
         image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
         match = cv2.matchTemplate(image, self.crop_sales_template, cv2.TM_CCORR_NORMED)
@@ -151,6 +154,7 @@ class CropListParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
+            self.write_log("CropListParser", "Crops dialog found")
             first_match = match_points[0]
             crop_sale = ((first_match[0] + 460, first_match[1] + 245), (first_match[0] + 475, first_match[1] + 260))
             seed_row = ((first_match[0] + 535, first_match[1] + 25), (first_match[0] + 550, first_match[1] + 40))
@@ -166,7 +170,10 @@ class CropListParser(BaseParser):
             seed_y = (seed_row[1][1] + seed_row[0][1]) / 2
             crop_sell_x = (crop_sale[0][0] + crop_sale[1][0]) / 2
             crop_sell_y = (crop_sale[1][1] + crop_sale[0][1]) / 2
+            self.write_log("CropListParser", "Crops dialog parsed")
             return (seed_x, seed_y), (crop_sell_x, crop_sell_y)
+
+        self.write_log("CropListParser", "Crops not found")
         return None, None
 
 
@@ -183,6 +190,7 @@ class ManorDialogParser(BaseParser):
 
         match_points = list(zip(*loc[::-1]))
         if match_points:
+            self.write_log("ManorDialogParser", "Manor dialog found")
             first_points = match_points[0]
             sale_btn = ((first_points[0] + 535, first_points[1] + 275), (first_points[0] + 550, first_points[1] + 290))
 
@@ -195,5 +203,7 @@ class ManorDialogParser(BaseParser):
 
             sell_x = (sale_btn[0][0] + sale_btn[1][0]) / 2
             sell_y = (sale_btn[1][1] + sale_btn[0][1]) / 2
+            self.write_log("ManorDialogParser", "Manor dialog parsed")
             return sell_x, sell_y
+        self.write_log("ManorDialogParser", "Manor dialog not found")
         return None
