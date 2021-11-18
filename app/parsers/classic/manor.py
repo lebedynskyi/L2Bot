@@ -110,7 +110,7 @@ class CastlesListParser(BaseParser):
         if match_points:
             first_match = match_points[0]
 
-            select_btn = ((first_match[0] + 150, first_match[1] + 122), (first_match[0] + 165, first_match[1] + 137))
+            drop_down_btn = ((first_match[0] + 240, first_match[1] + 125), (first_match[0] + 255, first_match[1] + 140))
             max_price_ok = ((first_match[0] + 112, first_match[1] + 187), (first_match[0] + 127, first_match[1] + 202))
             max_price = ((first_match[0] + 210, first_match[1] + 150), (first_match[0] + 230, first_match[1] + 165))
 
@@ -118,13 +118,13 @@ class CastlesListParser(BaseParser):
                 debug_img = image_rgb.copy()
                 hh, ww = self.castles_list_template.shape[:2]
                 self.draw_match_squares(debug_img, match_points, ww, hh)
-                cv2.rectangle(debug_img, select_btn[0], select_btn[1], (0, 0, 255), 1)
+                cv2.rectangle(debug_img, drop_down_btn[0], drop_down_btn[1], (0, 255, 0), 1)
                 cv2.rectangle(debug_img, max_price_ok[0], max_price_ok[1], (0, 0, 255), 1)
-                cv2.rectangle(debug_img, max_price[0], max_price[1], (0, 0, 255), 1)
+                cv2.rectangle(debug_img, max_price[0], max_price[1], (255, 0, 0), 1)
                 self.debug_show_im(debug_img, "Collapsed dialog")
 
-            select_x = (select_btn[0][0] + select_btn[1][0]) / 2
-            select_y = (select_btn[1][1] + select_btn[0][1]) / 2
+            select_x = (drop_down_btn[0][0] + drop_down_btn[1][0]) / 2
+            select_y = (drop_down_btn[1][1] + drop_down_btn[0][1]) / 2
 
             max_price_x = (max_price[0][0] + max_price[1][0]) / 2
             max_price_y = (max_price[1][1] + max_price[0][1]) / 2
