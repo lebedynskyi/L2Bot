@@ -65,7 +65,7 @@ class TestManor(unittest.TestCase):
             # ManorSellCastle("Giran", "Fake", start_index=3)
         ]
 
-        manor_dialog_parser = ManorDialogParser(env_path, self.templates.manor.manor_dialog_template, True)
+        manor_dialog_parser = ManorDialogParser(env_path, self.templates.manor.manor_dialog_template)
         crop_list_parser = CropListParser(env_path, self.templates.manor.crop_sales_dialog, True)
         castles_list_parser = CastlesListParser(env_path, self.templates.manor.chooser_template, True)
         castles_chooser_parser = CastlesListChooserParser(env_path, self.templates.manor.chooser_expanded_template,

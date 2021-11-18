@@ -152,13 +152,13 @@ class CropListParser(BaseParser):
         match_points = list(zip(*loc[::-1]))
         if match_points:
             first_match = match_points[0]
-            crop_sale = ((first_match[0] + 470, first_match[1] + 5), (first_match[0] + 485, first_match[1] + 20))
-            seed_row = ((first_match[0] + 50, first_match[1] - 200), (first_match[0] + 65, first_match[1] - 215))
+            crop_sale = ((first_match[0] + 460, first_match[1] + 245), (first_match[0] + 475, first_match[1] + 260))
+            seed_row = ((first_match[0] + 50, first_match[1] + 25), (first_match[0] + 65, first_match[1] + 40))
 
             if self.debug:
                 debug_img = image_rgb.copy()
                 self.draw_match_squares(debug_img, match_points, ww, hh)
-                cv2.rectangle(debug_img, seed_row[0], seed_row[1], (0, 0, 255), 1)
+                cv2.rectangle(debug_img, seed_row[0], seed_row[1], (0, 255, 0), 1)
                 cv2.rectangle(debug_img, crop_sale[0], crop_sale[1], (0, 0, 255), 1)
                 self.debug_show_im(debug_img)
 
