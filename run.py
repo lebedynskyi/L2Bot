@@ -22,7 +22,7 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 def farm_app():
     keyboard = ArduinoKeyboard()
-    keyboard.init()
+    keyboard.init(0.1)
 
     templates = load_templates("res/template/classic")
     target_window_parser = TargetWindowParser(env_path, templates.farm.target)
@@ -44,7 +44,7 @@ def farm_app():
 
 def manor_app():
     keyboard = ArduinoKeyboard()
-    keyboard.init()
+    keyboard.init(0.01)
 
     templates = load_templates("res/template/classic")
 

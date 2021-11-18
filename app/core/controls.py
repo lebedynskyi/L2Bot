@@ -8,7 +8,7 @@ pyautogui.PAUSE = 0.02
 
 class Keyboard(ABC):
     @abstractmethod
-    def init(self):
+    def init(self, time_out):
         pass
 
     @abstractmethod
@@ -57,7 +57,7 @@ class MockKeyboard(Keyboard):
         self.KEY_MOUSE_RIGHT = None
         self.KEY_MOUSE_MIDDLE = None
 
-    def init(self):
+    def init(self, time_out):
         pass
 
     def press(self, value):
@@ -80,7 +80,7 @@ class MockKeyboard(Keyboard):
 
 
 class SoftKeyboard(Keyboard):
-    def init(self):
+    def init(self, time_out):
         pass
 
     def press(self, value):
@@ -154,10 +154,10 @@ class ArduinoKeyboard(Keyboard):
         self.baudrate = baudrate
         self.port = port
 
-    def init(self):
+    def init(self, time_out):
         question = str.encode("Initialized")
 
-        self.arduino = self.serial.Serial(port=self.port, baudrate=self.baudrate, timeout=0.1)
+        self.arduino = self.serial.Serial(port=self.port, baudrate=self.baudrate, timeout=time_out)
         self.arduino.write(question)
         answer = self.arduino.readline()
 

@@ -62,8 +62,8 @@ class ManorHandler(BaseHandler):
 
         if move_click_btn is not None:
             # Just need some delay to let game handle mouse movement
-            self.keyboard.mouse_move(move_click_btn[0], move_click_btn[1])
-            self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, None)
+            # self.keyboard.mouse_move(move_click_btn[0], move_click_btn[1])
+            self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, move_click_btn)
 
             if self.current_state == STATE_CASTLES_LIST:
                 # Double click for crop list chooser
@@ -73,10 +73,12 @@ class ManorHandler(BaseHandler):
         elif self.current_state == STATE_CROP_CHOOSER:
             # Manor is in maintenance mode. There is no chooser dialog
             time.sleep(0.1)
+            self.start_time = datetime.now()
             self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, None)
 
     def handle_state(self, screen_rgb):
         if STATE_MANOR_DIALOG == self.current_state:
+            self.start_time = datetime.now()
             sell_crop_btn = self.manor_dialog_parser.parse_image(screen_rgb)
             self.current_state = STATE_CROP_CHOOSER
             return sell_crop_btn
@@ -85,7 +87,6 @@ class ManorHandler(BaseHandler):
             chosen_crop, self.cached_sell_btn = self.crop_list_parser.parse_image(screen_rgb)
 
             if chosen_crop:
-                self.start_time = datetime.now()
                 self.current_state = STATE_CASTLES_LIST
             else:
                 self.write_log("Manor", "No crops chooser dialog yet. Wait it")
