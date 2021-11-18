@@ -37,8 +37,9 @@ def farm_app():
     captcha = CaptchaHandler(keyboard, warn_dialog_parser, dialog_text_parser, group_captcha_dialog_parser, solver)
     death = UserDeathHandler(keyboard, user_death_parser)
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
-                                 use_skills=False, use_manor=True, use_spoil=True)
-    return AppLooper(death, captcha, farm, bottles)
+                                 use_skills=True, use_manor=True, use_spoil=True)
+    # return AppLooper(death, captcha, farm, bottles)
+    return AppLooper(captcha)
 
 
 def manor_app():
@@ -48,7 +49,7 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Aden", "Fake", start_index=4, castle_number=4)
+        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=2)
         # ManorSellCastle("Giran", "Fake", start_index=3)
     ]
 
@@ -58,9 +59,10 @@ def manor_app():
     castles_chooser_parser = CastlesListChooserParser(env_path, templates.manor.chooser_expanded_template)
     manor = ManorHandler(keyboard, castles,
                          manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
-    return AppLooper(manor, -1)
+    return AppLooper(manor, tick_delay=-1)
 
 
 if __name__ == "__main__":
-    time.sleep(4)
-    farm_app().loop()
+    time.sleep(1)
+    # farm_app().loop()
+    manor_app().loop()

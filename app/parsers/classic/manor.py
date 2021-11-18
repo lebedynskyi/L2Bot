@@ -85,7 +85,7 @@ class CastlesListChooserParser(BaseParser):
         # resize image
         resized = cv2.resize(thresh, dim, interpolation=cv2.INTER_AREA)
 
-        blur = cv2.GaussianBlur(resized, (5, 5), 0)
+        blur = cv2.GaussianBlur(resized, (7, 7), 0)
         if self.debug:
             self.debug_show_im(blur, "Debug blurred for text")
 
@@ -160,7 +160,7 @@ class CropListParser(BaseParser):
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 cv2.rectangle(debug_img, seed_row[0], seed_row[1], (0, 255, 0), 1)
                 cv2.rectangle(debug_img, crop_sale[0], crop_sale[1], (0, 0, 255), 1)
-                self.debug_show_im(debug_img)
+                self.debug_show_im(debug_img, "Crop list")
 
             seed_x = (seed_row[0][0] + seed_row[1][0]) / 2
             seed_y = (seed_row[1][1] + seed_row[0][1]) / 2
@@ -191,7 +191,7 @@ class ManorDialogParser(BaseParser):
                 hh, ww = self.manor_template.shape[:2]
                 self.draw_match_squares(debug_img, match_points, ww, hh)
                 cv2.rectangle(debug_img, sale_btn[0], sale_btn[1], (0, 0, 255), 1)
-                self.debug_show_im(debug_img)
+                self.debug_show_im(debug_img, "Manor dialog")
 
             sell_x = (sale_btn[0][0] + sale_btn[1][0]) / 2
             sell_y = (sale_btn[1][1] + sale_btn[0][1]) / 2

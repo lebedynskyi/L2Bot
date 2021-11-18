@@ -68,7 +68,7 @@ class ManorHandler(BaseHandler):
             if self.current_state == STATE_CASTLES_LIST:
                 # Double click for crop list chooser
                 time.sleep(0.1)
-                self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, move_click_btn)
+                self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, None)
 
         elif self.current_state == STATE_CROP_CHOOSER:
             # Manor is in maintenance mode. There is no chooser dialog
@@ -126,11 +126,12 @@ class ManorHandler(BaseHandler):
             if next_index < len(self.castles):
                 self.current_castle_index = next_index
                 self.current_state = STATE_MANOR_DIALOG
-                self.write_log("Manor", "Sold crops")
-                self.write_log("Manor", "Start time {}".format(self.start_time))
-                self.write_log("Manor", "Finish time {}".format(self.finish_time))
             else:
                 self.current_state = STATE_FINISH
+
+            self.write_log("Manor", "Sold crops")
+            self.write_log("Manor", "Start time {}".format(self.start_time))
+            self.write_log("Manor", "Finish time {}".format(self.finish_time))
             return self.cached_sell_btn
 
         if STATE_FINISH == self.current_state:

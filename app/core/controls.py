@@ -179,12 +179,14 @@ class ArduinoKeyboard(Keyboard):
 
     def mouse_move(self, x, y):
         mouse_x, mouse_y = pyautogui.position()
-        x_delta, y_delta = mouse_x - x, mouse_y - y
+        x_delta = int(mouse_x) - int(x)
+        y_delta = int(mouse_y) - int(y)
 
         znak_x = "+" if x_delta < 0 else "-"
         znak_y = "+" if y_delta < 0 else "-"
 
-        data = "5{}{}{}".format(znak_x, znak_y, abs(x_delta) * 0xFFFF + abs(y_delta))
+        cords_value = abs(x_delta) * 0xFFFF + abs(y_delta)
+        data = "5{}{}{}".format(znak_x, znak_y, cords_value)
         self.arduino.write(data.encode())
         answer = self.arduino.readline()
         return data == answer

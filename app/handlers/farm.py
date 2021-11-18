@@ -75,7 +75,7 @@ class SpoilManorFarmHandler(BaseHandler):
             if target_hp is not None and target_hp <= 0:
                 self.current_state = STATE_HARVEST if self.use_manor else STATE_SWEEP if self.use_spoil else STATE_PICK
                 return True
-            elif self.use_skills and target_hp is not None and target_hp <= 6:
+            elif self.use_skills and target_hp is not None and target_hp <= 10:
                 self.keyboard.press(self.KEY_SKILL)
                 return True
             elif last_action_delta > random.randint(8, 12):
