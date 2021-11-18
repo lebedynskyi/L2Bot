@@ -1,3 +1,4 @@
+import time
 from abc import ABC, abstractmethod
 import pyautogui
 
@@ -33,6 +34,54 @@ class Keyboard(ABC):
     @abstractmethod
     def mouse_click(self, btn, cords):
         pass
+
+
+class SoftKeyboard(Keyboard):
+    def init(self):
+        pass
+
+    def press(self, value):
+        pyautogui.press(value)
+
+    def text(self, text):
+        pyautogui.typewrite(text)
+
+    def mouse_move(self, x, y):
+        pyautogui.moveTo(x, y, duration=0.2)
+
+    def mouse_down(self, btn):
+        pyautogui.mouseDown()
+
+    def mouse_up(self, btn):
+        pyautogui.mouseUp()
+
+    def mouse_click(self, btn):
+        if btn == self.KEY_MOUSE_LEFT:
+            pyautogui.leftClick()
+        elif btn == self.KEY_MOUSE_RIGHT:
+            pyautogui.rightClick()
+        elif btn == self.KEY_MOUSE_MIDDLE:
+            pyautogui.middleClick()
+
+    def __init__(self):
+        self.KEY_F1 = "F1"
+        self.KEY_F2 = "F2"
+        self.KEY_F3 = "F3"
+        self.KEY_F4 = "F4"
+        self.KEY_F5 = "F5"
+        self.KEY_F6 = "F6"
+        self.KEY_F7 = "F7"
+        self.KEY_F8 = "F8"
+        self.KEY_F9 = "F9"
+        self.KEY_F10 = "F10"
+        self.KEY_F11 = "F11"
+        self.KEY_F12 = "F12"
+        self.KEY_ENTER = "ENTER"
+        self.KEY_ESC = "ESC"
+
+        self.KEY_MOUSE_LEFT = 1
+        self.KEY_MOUSE_RIGHT = 2
+        self.KEY_MOUSE_MIDDLE = 4
 
 
 class ArduinoKeyboard(Keyboard):
@@ -124,5 +173,11 @@ class ArduinoKeyboard(Keyboard):
 
 
 if __name__ == '__main__':
-    keyboard = ArduinoKeyboard()
+    keyboard = SoftKeyboard()
     keyboard.init()
+
+    keyboard.mouse_move(700, 850)
+    time.sleep(1)
+    keyboard.mouse_click(keyboard.KEY_MOUSE_LEFT)
+    keyboard.text("Hello world")
+    keyboard.press(keyboard.KEY_ENTER)
