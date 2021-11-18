@@ -36,6 +36,49 @@ class Keyboard(ABC):
         pass
 
 
+class MockKeyboard(Keyboard):
+    def __init__(self):
+        self.KEY_F1 = None
+        self.KEY_F2 = None
+        self.KEY_F3 = None
+        self.KEY_F4 = None
+        self.KEY_F5 = None
+        self.KEY_F6 = None
+        self.KEY_F7 = None
+        self.KEY_F8 = None
+        self.KEY_F9 = None
+        self.KEY_F10 = None
+        self.KEY_F11 = None
+        self.KEY_F12 = None
+        self.KEY_ENTER = None
+        self.KEY_ESC = None
+
+        self.KEY_MOUSE_LEFT = None
+        self.KEY_MOUSE_RIGHT = None
+        self.KEY_MOUSE_MIDDLE = None
+
+    def init(self):
+        pass
+
+    def press(self, value):
+        pass
+
+    def text(self, text):
+        pass
+
+    def mouse_move(self, x_range, y_range):
+        pass
+
+    def mouse_down(self, btn):
+        pass
+
+    def mouse_up(self, btn):
+        pass
+
+    def mouse_click(self, btn, cords):
+        pass
+
+
 class SoftKeyboard(Keyboard):
     def init(self):
         pass

@@ -5,7 +5,10 @@ def load_templates(folder):
     return Templates(Farm(
         target=cv2.imread("{folder}/farm/target_template.png".format(folder=folder))
     ), Manor(
-
+        manor_dialog_template=cv2.imread("{folder}/manor/manor_dialog_template.png".format(folder=folder)),
+        crop_sales_dialog=cv2.imread("{folder}/manor/crop_sales_dialog.png".format(folder=folder)),
+        chooser_template=cv2.imread("{folder}/manor/chooser_template.png".format(folder=folder)),
+        chooser_expanded_template=cv2.imread("{folder}/manor/chooser_expanded_template.png".format(folder=folder))
     ), Status(
         user_death=cv2.imread("{folder}/status/user_death_template.png".format(folder=folder))
     ), Captcha(
@@ -31,7 +34,11 @@ class Farm:
 
 
 class Manor:
-    pass
+    def __init__(self, manor_dialog_template, crop_sales_dialog, chooser_template, chooser_expanded_template):
+        self.chooser_expanded_template = chooser_expanded_template
+        self.chooser_template = chooser_template
+        self.crop_sales_dialog = crop_sales_dialog
+        self.manor_dialog_template = manor_dialog_template
 
 
 class Status:

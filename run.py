@@ -3,11 +3,13 @@ import time
 
 from app.core.controls import ArduinoKeyboard
 from app.handlers.Captcha import CaptchaHandler
+from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.handlers.buff import UseBottlesHandler
 from app.handlers.UserDeath import UserDeathHandler
 from app.handlers.farm import SpoilManorFarmHandler
 from app.core.looper import AppLooper
 from app.core.templates import load_templates
+from app.parsers.classic.manor import ManorDialogParser, CropListParser, CastlesListParser, CastlesListChooserParser
 from app.parsers.classic.target import TargetWindowParser
 from app.parsers.classic.target import TargetHpParser
 from app.parsers.classic.ui import WarnDialogParser, GroupDialogParser
@@ -39,6 +41,26 @@ def farm_app():
     return AppLooper(death, captcha, farm, bottles)
 
 
+def manor_app():
+    keyboard = ArduinoKeyboard()
+    keyboard.init()
+
+    templates = load_templates("res/template/classic")
+
+    castles = [
+        ManorSellCastle("Aden", "Fake", start_index=4, castle_number=4)
+        # ManorSellCastle("Giran", "Fake", start_index=3)
+    ]
+
+    manor_dialog_parser = ManorDialogParser(env_path, templates.manor.manor_dialog_template)
+    crop_list_parser = CropListParser(env_path, templates.manor.crop_sales_dialog)
+    castles_list_parser = CastlesListParser(env_path, templates.manor.chooser_template)
+    castles_chooser_parser = CastlesListChooserParser(env_path, templates.manor.chooser_expanded_template)
+    manor = ManorHandler(keyboard, castles,
+                         manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+    return AppLooper(manor, -1)
+
+
 if __name__ == "__main__":
-    time.sleep(1)
+    time.sleep(4)
     farm_app().loop()
