@@ -101,6 +101,7 @@ class SpoilManorFarmHandler(BaseHandler):
             self.keyboard.press(self.KEY_PICK)
             time.sleep(1)
             self.keyboard.press(self.KEY_PICK)
+            self.keyboard.press(self.KEY_NEXT_TARGET)
             self.current_state = STATE_TARGET
             return True
 

@@ -35,5 +35,5 @@ class UserDeathHandler(BaseHandler):
         else:
             self.write_log("Death", "Game not found")
 
-        os.system("shutdown /s /t 1")
+        # os.system("shutdown /s /t 1")
         sys.exit(1)
