@@ -90,7 +90,7 @@ class SoftKeyboard(Keyboard):
         pyautogui.typewrite(text)
 
     def mouse_move(self, x, y):
-        pyautogui.moveTo(x, y, duration=0.2)
+        pyautogui.moveTo(x, y)
 
     def mouse_down(self, btn):
         pyautogui.mouseDown()
@@ -98,7 +98,8 @@ class SoftKeyboard(Keyboard):
     def mouse_up(self, btn):
         pyautogui.mouseUp()
 
-    def mouse_click(self, btn):
+    def mouse_click(self, btn, cords):
+        self.mouse_move(cords[0]/2, cords[1]/2)
         if btn == self.KEY_MOUSE_LEFT:
             pyautogui.leftClick()
         elif btn == self.KEY_MOUSE_RIGHT:

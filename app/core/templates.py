@@ -12,7 +12,8 @@ def load_templates(folder):
     ), Status(
         user_death=cv2.imread("{folder}/status/user_death_template.png".format(folder=folder))
     ), Captcha(
-        warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder))
+        warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder)),
+        dualbox_dialog=cv2.imread("{folder}/captcha/dualbox_template.png".format(folder=folder)),
     ))
 
 
@@ -47,5 +48,6 @@ class Status:
 
 
 class Captcha:
-    def __init__(self, warn_dialog):
+    def __init__(self, warn_dialog, dualbox_dialog):
+        self.dualbox_dialog = dualbox_dialog
         self.warn_dialog = warn_dialog

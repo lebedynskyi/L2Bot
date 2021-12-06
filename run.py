@@ -29,7 +29,7 @@ def spoil_manor_app():
     target_window_parser = TargetWindowParser(env_path, templates.farm.target)
     target_hp_parser = TargetHpParser(env_path)
     warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
-    group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.warn_dialog)
+    group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.dualbox_dialog)
     dialog_text_parser = DialogTextParser(env_path)
     solver = CaptchaSolver()
     user_death_parser = UserDeathStatusParser(env_path, templates.status.user_death)
