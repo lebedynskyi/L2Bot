@@ -10,7 +10,8 @@ def load_templates(folder):
         chooser_template=cv2.imread("{folder}/manor/chooser_template.png".format(folder=folder)),
         chooser_expanded_template=cv2.imread("{folder}/manor/chooser_expanded_template.png".format(folder=folder))
     ), Status(
-        user_death=cv2.imread("{folder}/status/user_death_template.png".format(folder=folder))
+        user_death=cv2.imread("{folder}/status/user_death_template.png".format(folder=folder)),
+        user_status=cv2.imread("{folder}/status/user_status_template.png".format(folder=folder)),
     ), Captcha(
         warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder)),
         dualbox_dialog=cv2.imread("{folder}/captcha/dualbox_template.png".format(folder=folder)),
@@ -43,7 +44,8 @@ class Manor:
 
 
 class Status:
-    def __init__(self, user_death):
+    def __init__(self, user_death, user_status):
+        self.user_status = user_status
         self.user_death = user_death
 
 
