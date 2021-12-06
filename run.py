@@ -83,8 +83,8 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Goddard", "Fake", start_index=2, castle_number=5),
-        ManorSellCastle("Gludio", "Gludio", start_index=2, castle_number=2)
+        ManorSellCastle("Goddard", "Fake", start_index=2, castle_number=5)
+        # ManorSellCastle("Gludio", "Gludio", start_index=2, castle_number=2)
         # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
     ]
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     time.sleep(1)
     # app = spoil_manor_app()
     # app = captcha_app()
-    app = farm_pp_app()
-    # app = manor_app()
+    # app = farm_pp_app()
+    app = manor_app()
 
     app.loop()
