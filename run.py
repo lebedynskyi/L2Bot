@@ -4,6 +4,7 @@ import time
 from app.core.controls import ArduinoKeyboard
 from app.handlers.Captcha import CaptchaHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
+from app.handlers.PetManaKiller import PetManaTimerHandler
 from app.handlers.buff import UseBottlesHandler, SelfBuffHandler
 from app.handlers.UserDeath import UserDeathHandler
 from app.handlers.farm import SpoilManorFarmHandler
@@ -41,6 +42,18 @@ def spoil_manor_app():
     return AppLooper(death, captcha, farm, bottles)
 
 
+def captcha_app():
+    keyboard = ArduinoKeyboard()
+    keyboard.init(0.1)
+    templates = load_templates("res/template/classic")
+    warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
+    group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.warn_dialog)
+    dialog_text_parser = DialogTextParser(env_path)
+    solver = CaptchaSolver()
+    captcha = CaptchaHandler(keyboard, warn_dialog_parser, dialog_text_parser, group_captcha_dialog_parser, solver)
+    return AppLooper(captcha)
+
+
 def farm_pp_app():
     keyboard = ArduinoKeyboard()
     keyboard.init(0.1)
@@ -58,8 +71,9 @@ def farm_pp_app():
     death = UserDeathHandler(keyboard, user_death_parser)
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
                                  use_skills=False, use_manor=True, use_spoil=False)
-    self_buff = SelfBuffHandler(keyboard, farm)
-    return AppLooper(death, captcha, farm, self_buff)
+    pet_killer = PetManaTimerHandler(keyboard, farm)
+    self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
+    return AppLooper(death, captcha, self_buff, pet_killer, farm)
 
 
 def manor_app():
@@ -69,9 +83,9 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Giran", "Fake", start_index=2, castle_number=3),
-        ManorSellCastle("Gludio", "Gludio", start_index=3, castle_number=2),
-        ManorSellCastle("Oren", "Giran", start_index=2)
+        ManorSellCastle("Goddard", "Fake", start_index=2, castle_number=5),
+        ManorSellCastle("Gludio", "Gludio", start_index=2, castle_number=2)
+        # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
     ]
 
     manor_dialog_parser = ManorDialogParser(env_path, templates.manor.manor_dialog_template)
@@ -86,6 +100,7 @@ def manor_app():
 if __name__ == "__main__":
     time.sleep(1)
     # app = spoil_manor_app()
+    # app = captcha_app()
     app = farm_pp_app()
     # app = manor_app()
 
