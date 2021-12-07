@@ -101,7 +101,7 @@ if __name__ == "__main__":
     time.sleep(1)
     # app = spoil_manor_app()
     # app = captcha_app()
-    # app = farm_pp_app()
-    app = manor_app()
+    app = farm_pp_app()
+    # app = manor_app()
 
     app.loop()

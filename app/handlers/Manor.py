@@ -68,7 +68,7 @@ class ManorHandler(BaseHandler):
             if self.current_state == STATE_CASTLES_LIST:
                 # Double click for crop list chooser
                 time.sleep(0.1)
-                self.key    board.mouse_click(self.keyboard.KEY_MOUSE_LEFT, None)
+                self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, None)
 
         elif self.current_state == STATE_CROP_CHOOSER:
             # Manor is in maintenance mode. There is no chooser dialog

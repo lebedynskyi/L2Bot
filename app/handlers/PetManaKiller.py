@@ -81,7 +81,7 @@ class PetManaTimerHandler(BaseHandler):
             self.last_action_time = current_time
 
     def handle_state(self, last_action_delta, screen_rgb):
-        if self.current_state == STATE_IDLE and last_action_delta >= 22 * 60 and not self.farm_logic.has_target:
+        if self.current_state == STATE_IDLE and last_action_delta >= 10 * 60 and not self.farm_logic.has_target:
             self.farm_logic.pause()
             self.current_state = STATE_TARGET_PET
             self.write_log("PetKiller", "Tim to kill Kill the pet")
