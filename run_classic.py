@@ -4,13 +4,14 @@ import time
 from app.core.controls import ArduinoKeyboard
 from app.handlers.Captcha import CaptchaHandler
 from app.handlers.Manor import ManorSellCastle, ManorHandler
-from app.handlers.PetManaKiller import PetManaTimerHandler
+from app.handlers.PetManaKiller import PetManaHandler
 from app.handlers.buff import UseBottlesHandler, SelfBuffHandler
 from app.handlers.UserDeath import UserDeathHandler
 from app.handlers.farm import SpoilManorFarmHandler
 from app.core.looper import AppLooper
 from app.core.templates import load_templates
 from app.parsers.classic.manor import ManorDialogParser, CropListParser, CastlesListParser, CastlesListChooserParser
+from app.parsers.classic.status import PetStatusParser
 from app.parsers.classic.target import TargetWindowParser
 from app.parsers.classic.target import TargetHpParser
 from app.parsers.classic.ui import WarnDialogParser, GroupDialogParser
@@ -60,6 +61,7 @@ def farm_pp_app():
 
     templates = load_templates("res/template/classic")
     target_window_parser = TargetWindowParser(env_path, templates.farm.target)
+    pet_status_parser = PetStatusParser(env_path, templates.status.user_pet)
     target_hp_parser = TargetHpParser(env_path)
     warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
     group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.warn_dialog)
@@ -71,7 +73,7 @@ def farm_pp_app():
     death = UserDeathHandler(keyboard, user_death_parser)
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
                                  use_skills=False, use_manor=True, use_spoil=False)
-    pet_killer = PetManaTimerHandler(keyboard, farm)
+    pet_killer = PetManaHandler(keyboard, pet_status_parser, [farm])
     self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
     return AppLooper(death, captcha, self_buff, pet_killer, farm)
 

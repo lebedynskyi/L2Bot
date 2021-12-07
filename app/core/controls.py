@@ -117,9 +117,9 @@ class SoftKeyboard(Keyboard):
         self.KEY_F7 = "F7"
         self.KEY_F8 = "F8"
         self.KEY_F9 = "F9"
-        self.KEY_F10 = "F10"
-        self.KEY_F11 = "F11"
-        self.KEY_F12 = "F12"
+        self.KEY_F10 = "0"
+        self.KEY_F11 = "-"
+        self.KEY_F12 = "="
         self.KEY_ENTER = "ENTER"
         self.KEY_ESC = "ESC"
 

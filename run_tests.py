@@ -8,6 +8,7 @@ from app.core.controls import MockKeyboard
 from app.core.templates import load_templates
 from app.handlers.Manor import ManorSellCastle, ManorHandler
 from app.parsers.classic.manor import ManorDialogParser, CropListParser, CastlesListParser, CastlesListChooserParser
+from app.parsers.classic.status import PetStatusParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -54,32 +55,42 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 #         print(solver.solve_math(captcha_text))
 
 
-class TestManor(unittest.TestCase):
+# class TestManor(unittest.TestCase):
+#     def setUp(self):
+#         self.templates = load_templates("res/template/classic")
+#         self.keyboard = MockKeyboard()
+#
+#     def test_manor(self):
+#         castles = [
+#             ManorSellCastle("Gludio", "Fake", start_index=2)
+#             # ManorSellCastle("Giran", "Fake", start_index=3)
+#         ]
+#
+#         manor_dialog_parser = ManorDialogParser(env_path, self.templates.manor.manor_dialog_template)
+#         crop_list_parser = CropListParser(env_path, self.templates.manor.crop_sales_dialog)
+#         castles_list_parser = CastlesListParser(env_path, self.templates.manor.chooser_template)
+#         castles_chooser_parser = CastlesListChooserParser(env_path, self.templates.manor.chooser_expanded_template)
+#         manor = ManorHandler(self.keyboard, castles,
+#                              manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
+#
+#         screen1 = cv2.imread("res/input/classic/manor/Shot00016.bmp")
+#         screen2 = cv2.imread("res/input/classic/manor/Shot00017.bmp")
+#         screen3 = cv2.imread("res/input/classic/manor/Shot00018.bmp")
+#         screen4 = cv2.imread("res/input/classic/manor/Shot00019.bmp")
+#         manor.on_tick(screen1, time.time())
+#         manor.on_tick(screen2, time.time())
+#         manor.on_tick(screen3, time.time())
+#         manor.on_tick(screen4, time.time())
+
+
+class TestPetParser(unittest.TestCase):
     def setUp(self):
         self.templates = load_templates("res/template/classic")
-        self.keyboard = MockKeyboard()
 
-    def test_manor(self):
-        castles = [
-            ManorSellCastle("Gludio", "Fake", start_index=2)
-            # ManorSellCastle("Giran", "Fake", start_index=3)
-        ]
-
-        manor_dialog_parser = ManorDialogParser(env_path, self.templates.manor.manor_dialog_template)
-        crop_list_parser = CropListParser(env_path, self.templates.manor.crop_sales_dialog)
-        castles_list_parser = CastlesListParser(env_path, self.templates.manor.chooser_template)
-        castles_chooser_parser = CastlesListChooserParser(env_path, self.templates.manor.chooser_expanded_template)
-        manor = ManorHandler(self.keyboard, castles,
-                             manor_dialog_parser, crop_list_parser, castles_list_parser, castles_chooser_parser)
-
-        screen1 = cv2.imread("res/input/classic/manor/Shot00016.bmp")
-        screen2 = cv2.imread("res/input/classic/manor/Shot00017.bmp")
-        screen3 = cv2.imread("res/input/classic/manor/Shot00018.bmp")
-        screen4 = cv2.imread("res/input/classic/manor/Shot00019.bmp")
-        manor.on_tick(screen1, time.time())
-        manor.on_tick(screen2, time.time())
-        manor.on_tick(screen3, time.time())
-        manor.on_tick(screen4, time.time())
+    def test_pet_small_dialog(self):
+        screen = cv2.imread("res/input/classic/pet/Shot00023.bmp")
+        parser = PetStatusParser(env_path, self.templates.status.user_pet, False)
+        hp, mp = parser.parse_image(screen)
 
 
 if __name__ == '__main__':
