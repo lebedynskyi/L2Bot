@@ -16,6 +16,7 @@ LOG_TAG = "IFarm"
 class SpoilManorFarmHandler(BaseHandler):
     current_state = STATE_TARGET
     has_target = False
+    target_hp = -1
 
     def __init__(self, keyboard, target_window_parser, target_hp_parser, use_skills, use_manor=True, use_spoil=True):
         super().__init__(keyboard)
@@ -70,12 +71,12 @@ class SpoilManorFarmHandler(BaseHandler):
                 self.current_state = STATE_TARGET
                 return True
 
-            target_hp = self.target_hp_parser.parse_image(target_window)
-            self.write_log(LOG_TAG, "Farming. Target HP {}%".format(target_hp))
-            if target_hp is not None and target_hp <= 0:
+            self.target_hp = self.target_hp_parser.parse_image(target_window)
+            self.write_log(LOG_TAG, "Farming. Target HP {}%".format(self.target_hp))
+            if self.target_hp is not None and self.target_hp <= 0:
                 self.current_state = STATE_HARVEST if self.use_manor else STATE_SWEEP if self.use_spoil else STATE_PICK
                 return True
-            elif self.use_skills and target_hp is not None and target_hp <= 10:
+            elif self.use_skills and self.target_hp is not None and self.target_hp <= 10:
                 self.keyboard.press(self.KEY_SKILL)
                 return True
             elif last_action_delta > random.randint(8, 12):

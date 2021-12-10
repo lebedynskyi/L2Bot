@@ -73,7 +73,7 @@ def farm_pp_app():
     death = UserDeathHandler(keyboard, user_death_parser)
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
                                  use_skills=False, use_manor=True, use_spoil=False)
-    pet_killer = PetManaHandler(keyboard, pet_status_parser, [farm])
+    pet_killer = PetManaHandler(keyboard, pet_status_parser, farm, [farm])
     self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
     return AppLooper(death, captcha, self_buff, pet_killer, farm)
 
@@ -86,7 +86,7 @@ def manor_app():
 
     castles = [
         ManorSellCastle("Goddard", "Fake", start_index=2, castle_number=5)
-        # ManorSellCastle("Gludio", "Gludio", start_index=2, castle_number=2)
+        # ManorSellCastle("Goddard", "Rune", start_index=3)
         # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
     ]
 

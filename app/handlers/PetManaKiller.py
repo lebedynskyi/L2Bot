@@ -5,14 +5,15 @@ STATE_TARGET_PET = 1
 STATE_KILL_PET = 2
 STATE_RES_PET = 3
 STATE_RESUME_FARM = 4
-KILL_PET_MANA_LIMIT_PERCENT = 5
+KILL_PET_MANA_LIMIT_PERCENT = 10
 
 
 class PetManaHandler(BaseHandler):
     current_state = STATE_IDLE
 
-    def __init__(self, keyboard, pet_status_parser, pausable_logics):
+    def __init__(self, keyboard, pet_status_parser, farm_logic, pausable_logics):
         super().__init__(keyboard)
+        self.farm_logic = farm_logic
         self.KEY_TARGET_PET = keyboard.KEY_F7
         self.KEY_KILL_PET = keyboard.KEY_F8
         self.KEY_RES_PET = keyboard.KEY_F9
@@ -32,13 +33,16 @@ class PetManaHandler(BaseHandler):
         self.pet_hp, self.pet_mp = self.pet_status_parser.parse_image(screen_rgb)
         self.alive = True if self.pet_hp > 0 else False
 
-        if self.current_state == STATE_IDLE and last_action_delta >= 5 and not self.farm_logic.has_target:
+        if self.current_state == STATE_IDLE and last_action_delta >= 1 and (
+                not self.farm_logic.has_target or self.farm_logic.target_hp <= 0):
             if self.pet_mp is not None and self.pet_mp <= KILL_PET_MANA_LIMIT_PERCENT:
                 for logic in self.pausable_logics:
                     logic.pause()
 
                 self.current_state = STATE_TARGET_PET
                 self.write_log("Pet", "To low mp. Kill the pet")
+            else:
+                self.write_log("Pet", "HP-> {}, MP-> {}".format(self.pet_hp, self.pet_mp))
             return True
 
         if self.current_state == STATE_TARGET_PET and last_action_delta >= 1:
@@ -66,7 +70,7 @@ class PetManaHandler(BaseHandler):
             if not self.alive:
                 return False
 
-            self.keyboard.press(self.KEY_CLEAR_TARGET, presses=2, interval=0.5)
+            self.keyboard.press(self.KEY_CLEAR_TARGET)
             self.current_state = STATE_IDLE
             self.write_log("Pet", "Pet is alive. Continue farm")
 
