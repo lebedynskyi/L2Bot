@@ -67,8 +67,9 @@ class PetManaHandler(BaseHandler):
 
         if self.current_state == STATE_RESUME_FARM and last_action_delta >= 1:
             if not self.alive:
+                self.write_log(PET_TAG, "Not alive wait it")
                 if last_action_delta > 65:
-                    self.current_state = STATE_RES_PET
+                    self.current_state = STATE_TARGET_PET
                     return True
 
                 return False
