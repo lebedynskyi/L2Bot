@@ -67,6 +67,10 @@ class PetManaHandler(BaseHandler):
 
         if self.current_state == STATE_RESUME_FARM and last_action_delta >= 1:
             if not self.alive:
+                if last_action_delta > 65:
+                    self.current_state = STATE_RES_PET
+                    return True
+
                 return False
 
             self.keyboard.press(self.KEY_CLEAR_TARGET)
