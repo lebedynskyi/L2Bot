@@ -1,11 +1,11 @@
 import os
 import time
 
-from app.core.controls import SoftKeyboard, ArduinoKeyboard
-from app.handlers.Captcha import CaptchaHandler
-from app.handlers.PetManaKiller import PetManaHandler
-from app.handlers.buff import UseBottlesHandler, SelfBuffHandler
-from app.handlers.UserDeath import UserDeathHandler
+from app.core.controls import ArduinoKeyboard
+from app.handlers.captcha import CaptchaHandler
+from app.handlers.pet import PetManaHandler
+from app.handlers.buff import SelfBuffHandler
+from app.handlers.user import UserDeathHandler
 from app.handlers.farm import SpoilManorFarmHandler
 from app.core.looper import AppLooper
 from app.core.templates import load_templates
@@ -20,7 +20,7 @@ from app.solver.CaptchaSolver import CaptchaSolver
 env_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def farm_osx_app():
+def farm_app():
     keyboard = ArduinoKeyboard()
     keyboard.init(0.1)
 
@@ -44,10 +44,8 @@ def farm_osx_app():
     pet_killer = PetManaHandler(keyboard, pet_status_parser, [farm])
     self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
     return AppLooper(death, captcha, self_buff, farm, pet_killer)
-    # return AppLooper(captcha)
 
 
 if __name__ == "__main__":
     time.sleep(1)
     # farm_app().loop()
-    farm_osx_app().loop()

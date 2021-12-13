@@ -1,4 +1,4 @@
-from app.handlers.BaseHandler import BaseHandler
+from app.handlers.base import BaseHandler
 
 STATE_IDLE = 0
 STATE_BUFF = 1

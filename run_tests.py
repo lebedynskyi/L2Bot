@@ -1,14 +1,10 @@
 import os
-import time
 import unittest
 
 import cv2
 
-from app.core.controls import MockKeyboard
 from app.core.templates import load_templates
-from app.handlers.Manor import ManorSellCastle, ManorHandler
-from app.parsers.classic.manor import ManorDialogParser, CropListParser, CastlesListParser, CastlesListChooserParser
-from app.parsers.classic.status import PetStatusParser
+from app.parsers.reborn_classic.status import PetStatusParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -85,12 +81,13 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 class TestPetParser(unittest.TestCase):
     def setUp(self):
-        self.templates = load_templates("res/template/classic")
+        self.templates = load_templates("res/template/reborn_classic")
 
     def test_pet_small_dialog(self):
-        screen = cv2.imread("res/input/classic/pet/Shot00023.bmp")
-        parser = PetStatusParser(env_path, self.templates.status.user_pet, False)
+        screen = cv2.imread("res/input/reborn_classic/pet/Shot00004.bmp")
+        parser = PetStatusParser(env_path, self.templates.status.user_pet, True)
         hp, mp = parser.parse_image(screen)
+        print("HP -> {}    MP -> {}".format(hp, mp))
 
 
 if __name__ == '__main__':

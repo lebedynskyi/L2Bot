@@ -1,6 +1,6 @@
 import cv2
 
-from app.handlers.BaseHandler import BaseHandler
+from app.handlers.base import BaseHandler
 
 
 class CaptchaHandler(BaseHandler):

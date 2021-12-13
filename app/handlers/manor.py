@@ -2,7 +2,7 @@ from datetime import datetime
 
 import time
 
-from app.handlers.BaseHandler import BaseHandler
+from app.handlers.base import BaseHandler
 
 STATE_MANOR_DIALOG = 0
 STATE_CROP_CHOOSER = 1

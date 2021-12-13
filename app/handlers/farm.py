@@ -1,6 +1,6 @@
 import random
 import time
-from app.handlers.BaseHandler import BaseHandler
+from app.handlers.base import BaseHandler
 
 STATE_HIT = -1
 STATE_TARGET = 0

@@ -27,14 +27,3 @@ class BaseHandler(ABC):
 
     def resume(self):
         self.is_paused = False
-
-    # def apply_mouse_click(self, cords=None):
-    #     if cords is None:
-    #         self.keyboard.mouseDown()
-    #         self.keyboard.mouseUp()
-    #     else:
-    #         self.keyboard.mouseDown(int(cords[0]), int(cords[1]))
-    #         self.keyboard.mouseUp(int(cords[0]), int(cords[1]))
-    #
-    # def apply_mouse_move(self, cords):
-    #     self.keyboard.mouse_move(int(cords[0]), int(cords[1]))
