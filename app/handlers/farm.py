@@ -66,7 +66,7 @@ class SpoilManorFarmHandler(BaseHandler):
             return True
 
         if STATE_HIT == self.current_state and last_action_delta >= 1:
-            if target_window is None:
+            if not self.has_target:
                 self.write_log(LOG_TAG, "No target reset state")
                 self.current_state = STATE_TARGET
                 return True

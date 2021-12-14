@@ -26,7 +26,7 @@ class TargetHpParser(BaseParser):
 
         # Color segmentation
         hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
-        lower_red = np.array([0, 50, 70]) # 50 almostt best. need try 70
+        lower_red = np.array([0, 50, 50])
         upper_red = np.array([2, 255, 255])
         mask = cv2.inRange(hsv, lower_red, upper_red)
         res = cv2.bitwise_and(resized, resized, mask=mask)

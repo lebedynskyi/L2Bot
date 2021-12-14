@@ -4,34 +4,34 @@ import unittest
 import cv2
 
 from app.core.templates import load_templates
+from app.parsers.classic.target import TargetWindowParser, TargetHpParser
 from app.parsers.reborn_classic.status import PetStatusParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
 
-#
-# class TestParsers(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.templates = load_templates("res/template/classic")
-#
-#     def test_target_window_parser(self):
-#         parser = TargetWindowParser(env_path, self.templates.farm.target, debug=False)
-#
-#         screen = cv2.imread("res/input/classic/target/Shot00002.bmp")
-#         assert len(screen) > 0
-#
-#         result = parser.parse_image(screen)
-#         assert result is not None and len(result) > 0
-#         return result
-#
-#     def test_target_hp(self):
-#         screen = cv2.imread("res/input/classic/target/Shot00005.bmp")
-#         window_parser = TargetWindowParser(env_path, self.templates.farm.target, debug=False)
-#         parser = TargetHpParser(env_path, debug=False)
-#         hp_box = window_parser.parse_image(screen)
-#         result = parser.parse_image(hp_box)
-#         print(result)
+class TestParsers(unittest.TestCase):
+
+    def setUp(self):
+        self.templates = load_templates("res/template/classic")
+
+    def test_target_window_parser(self):
+        parser = TargetWindowParser(env_path, self.templates.farm.target, debug=False)
+
+        screen = cv2.imread("res/input/classic/target/Shot00002.bmp")
+        assert len(screen) > 0
+
+        result = parser.parse_image(screen)
+        assert result is not None and len(result) > 0
+        return result
+
+    def test_target_hp(self):
+        screen = cv2.imread("res/input/classic/target/Shot00003.bmp")
+        window_parser = TargetWindowParser(env_path, self.templates.farm.target, debug=False)
+        parser = TargetHpParser(env_path, debug=True)
+        hp_box = window_parser.parse_image(screen)
+        result = parser.parse_image(hp_box)
+        print(result)
 
 
 # class TestSoloCaptcha(unittest.TestCase):
@@ -78,16 +78,16 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 #         manor.on_tick(screen3, time.time())
 #         manor.on_tick(screen4, time.time())
 
-
-class TestPetParser(unittest.TestCase):
-    def setUp(self):
-        self.templates = load_templates("res/template/reborn_classic")
-
-    def test_pet_small_dialog(self):
-        screen = cv2.imread("res/input/reborn_classic/pet/Shot00004.bmp")
-        parser = PetStatusParser(env_path, self.templates.status.user_pet, True)
-        hp, mp = parser.parse_image(screen)
-        print("HP -> {}    MP -> {}".format(hp, mp))
+#
+# class TestPetParser(unittest.TestCase):
+#     def setUp(self):
+#         self.templates = load_templates("res/template/reborn_classic")
+#
+#     def test_pet_small_dialog(self):
+#         screen = cv2.imread("res/input/reborn_classic/pet/4.bmp")
+#         parser = PetStatusParser(env_path, self.templates.status.user_pet, True)
+#         hp, mp = parser.parse_image(screen)
+#         print("HP -> {}    MP -> {}".format(hp, mp))
 
 
 if __name__ == '__main__':
