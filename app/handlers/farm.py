@@ -46,7 +46,7 @@ class SpoilManorFarmHandler(BaseHandler):
     def handle_state(self, last_action_delta, screen_rgb):
         target_window = self.target_parser.parse_image(screen_rgb)
         self.has_target = target_window is not None
-        self.target_hp = self.target_hp_parser.parse_image(target_window)
+        self.target_hp = self.target_hp_parser.parse_image(target_window) if target_window is not None else -1
 
         if self.current_state == STATE_TARGET and last_action_delta >= round(random.uniform(0.5, 2), 2):
             if self.has_target:

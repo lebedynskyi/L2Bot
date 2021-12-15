@@ -16,25 +16,13 @@ from app.parsers.classic.target import TargetWindowParser
 from app.parsers.classic.target import TargetHpParser
 from app.parsers.classic.ui import WarnDialogParser, GroupDialogParser
 from app.parsers.text import DialogTextParser
-from app.solver.CaptchaSolver import CaptchaSolver
 from app.parsers.reborn_classic.player import UserDeathStatusParser
+from app.solver.CaptchaSolver import CaptchaSolver
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def captcha_app():
-    keyboard = ArduinoKeyboard()
-    keyboard.init(0.1)
-    templates = load_templates("res/template/classic")
-    warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
-    group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.warn_dialog)
-    dialog_text_parser = DialogTextParser(env_path)
-    solver = CaptchaSolver()
-    captcha = CaptchaHandler(keyboard, warn_dialog_parser, dialog_text_parser, group_captcha_dialog_parser, solver)
-    return AppLooper(captcha)
-
-
-def farm_pp_app():
+def farm_app():
     keyboard = ArduinoKeyboard()
     keyboard.init(0.1)
 
@@ -64,9 +52,9 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Goddard", "Fake", start_index=2, castle_number=5)
-        # ManorSellCastle("Goddard", "Rune", start_index=3)
-        # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
+        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=4),
+        ManorSellCastle("Gludio", "Rune", start_index=2, castle_number=3),
+        ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
     ]
 
     manor_dialog_parser = ManorDialogParser(env_path, templates.manor.manor_dialog_template)
@@ -80,8 +68,7 @@ def manor_app():
 
 if __name__ == "__main__":
     time.sleep(1)
-    # app = captcha_app()
-    app = farm_pp_app()
+    app = farm_app()
     # app = manor_app()
 
     app.loop()
