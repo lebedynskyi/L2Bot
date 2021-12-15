@@ -46,6 +46,7 @@ class SpoilManorFarmHandler(BaseHandler):
     def handle_state(self, last_action_delta, screen_rgb):
         target_window = self.target_parser.parse_image(screen_rgb)
         self.has_target = target_window is not None
+        self.target_hp = self.target_hp_parser.parse_image(target_window)
 
         if self.current_state == STATE_TARGET and last_action_delta >= round(random.uniform(0.5, 2), 2):
             if self.has_target:
@@ -56,11 +57,19 @@ class SpoilManorFarmHandler(BaseHandler):
             return True
 
         if STATE_SPOIL == self.current_state and last_action_delta >= 0.5:
+            if self.target_hp < 0:
+                self.current_state = STATE_TARGET
+                return True
+
             self.keyboard.press(self.KEY_SPOIL)
             self.current_state = STATE_SEED if self.use_manor else STATE_HIT
             return True
 
         if STATE_SEED == self.current_state and last_action_delta >= (2 if self.use_spoil else 0.5):
+            if self.target_hp < 0:
+                self.current_state = STATE_TARGET
+                return True
+
             self.keyboard.press(self.KEY_SEED)
             self.current_state = STATE_HIT
             return True
@@ -71,7 +80,6 @@ class SpoilManorFarmHandler(BaseHandler):
                 self.current_state = STATE_TARGET
                 return True
 
-            self.target_hp = self.target_hp_parser.parse_image(target_window)
             self.write_log(LOG_TAG, "Farming. Target HP {}%".format(self.target_hp))
             if self.target_hp is not None and self.target_hp <= 0:
                 self.current_state = STATE_HARVEST if self.use_manor else STATE_SWEEP if self.use_spoil else STATE_PICK

@@ -5,7 +5,6 @@ import cv2
 
 from app.core.templates import load_templates
 from app.parsers.classic.target import TargetWindowParser, TargetHpParser
-from app.parsers.reborn_classic.status import PetStatusParser
 
 env_path = os.path.dirname(os.path.realpath(__file__))
 
