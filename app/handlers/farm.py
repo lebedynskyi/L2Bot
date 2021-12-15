@@ -59,6 +59,7 @@ class SpoilManorFarmHandler(BaseHandler):
         if STATE_SPOIL == self.current_state and last_action_delta >= 0.5:
             if self.target_hp < 0:
                 self.current_state = STATE_TARGET
+                self.keyboard.press(self.KEY_CLEAR_TARGET)
                 return True
 
             self.keyboard.press(self.KEY_SPOIL)
@@ -68,6 +69,7 @@ class SpoilManorFarmHandler(BaseHandler):
         if STATE_SEED == self.current_state and last_action_delta >= (2 if self.use_spoil else 0.5):
             if self.target_hp < 0:
                 self.current_state = STATE_TARGET
+                self.keyboard.press(self.KEY_CLEAR_TARGET)
                 return True
 
             self.keyboard.press(self.KEY_SEED)
