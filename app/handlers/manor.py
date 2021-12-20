@@ -104,10 +104,12 @@ class ManorHandler(BaseHandler):
             return castles_drop_down_btn
 
         if STATE_CASTLES_CHOOSER == self.current_state:
-            castle_btn = self.castles_list_chooser_parser.parse_image(screen_rgb,
-                                                                      castle=self.castles[self.current_castle_index])
+            looking_castle = self.castles[self.current_castle_index]
+            castle_btn = self.castles_list_chooser_parser.parse_image(screen_rgb, castle=looking_castle)
             if castle_btn:
                 self.current_state = STATE_MAX_PRICE
+            elif looking_castle.castle_number > 0:
+                self.write_log("Manor", "No castles chooser dialog yet. Wait it")
             else:
                 self.write_log("Manor", "No interested castle found. Stop it?")
                 exit(1)

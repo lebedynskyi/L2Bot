@@ -52,9 +52,9 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=4),
-        ManorSellCastle("Gludio", "Rune", start_index=2, castle_number=3),
-        ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
+        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=2),
+        ManorSellCastle("Giran", "Rune", start_index=2, castle_number=2)
+        # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
     ]
 
     manor_dialog_parser = ManorDialogParser(env_path, templates.manor.manor_dialog_template)
@@ -67,7 +67,7 @@ def manor_app():
 
 
 if __name__ == "__main__":
-    time.sleep(1)
+    # time.sleep(1)
     app = farm_app()
     # app = manor_app()
 
