@@ -42,7 +42,7 @@ def farm_app():
                                  use_skills=False, use_manor=True, use_spoil=False)
     pet_killer = PetManaHandler(keyboard, pet_status_parser, farm, [farm])
     self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
-    return AppLooper(death, captcha, self_buff, pet_killer, farm)
+    return AppLooper(death, captcha, self_buff, farm, pet_killer)
 
 
 def manor_app():
