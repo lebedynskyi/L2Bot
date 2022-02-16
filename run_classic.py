@@ -42,7 +42,7 @@ def farm_app():
                                  use_skills=False, use_manor=True, use_spoil=False)
     pet_killer = PetManaHandler(keyboard, pet_status_parser, farm, [farm])
     self_buff = SelfBuffHandler(keyboard, farm, [farm, pet_killer])
-    return AppLooper(death, captcha, self_buff, farm, pet_killer)
+    return AppLooper(death, captcha, self_buff, pet_killer, farm)
 
 
 def manor_app():
@@ -52,9 +52,9 @@ def manor_app():
     templates = load_templates("res/template/classic")
 
     castles = [
-        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=2),
-        ManorSellCastle("Giran", "Rune", start_index=2, castle_number=2)
-        # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=3)
+        ManorSellCastle("Gludio", "Fake", start_index=2, castle_number=3),
+        ManorSellCastle("Rune", "Aden", start_index=3)
+        # ManorSellCastle("Oren", "Giran", start_index=2, castle_number=2)
     ]
 
     manor_dialog_parser = ManorDialogParser(env_path, templates.manor.manor_dialog_template)
@@ -68,7 +68,7 @@ def manor_app():
 
 if __name__ == "__main__":
     # time.sleep(1)
-    app = farm_app()
-    # app = manor_app()
+    # app = farm_app()
+    app = manor_app()
 
     app.loop()
