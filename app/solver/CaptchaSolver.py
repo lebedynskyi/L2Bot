@@ -1,3 +1,4 @@
+import random
 import re
 
 regexp = re.compile('[+\-*=\s^/]|[0-9]+')
@@ -7,11 +8,19 @@ class CaptchaSolver:
     def __init__(self):
         pass
 
-    def is_ariphmetic(self, text):
+    def solve(self, captcha_text):
+        if self._is_ariphmetic(captcha_text):
+            result = self._solve_math(captcha_text)
+        else:
+            result = self._solve_logic(captcha_text)
+
+        return result
+
+    def _is_ariphmetic(self, text):
         math_chars = regexp.findall(text)
         return len(math_chars) >= 5 and "=" in text
 
-    def solve_math(self, text):
+    def _solve_math(self, text):
         phrase, answer, eval_answer = self._extract_math_phrase(text)
         # True - OK. False - Cancel
         click_action = self._extract_action(text)
@@ -20,7 +29,7 @@ class CaptchaSolver:
         else:
             return not click_action
 
-    def solve_logic(self, text):
+    def _solve_logic(self, text):
         return self._extract_action(text)
 
     def _extract_math_phrase(self, text):
@@ -36,7 +45,7 @@ class CaptchaSolver:
                 break
 
         for i in range(equals_index + 1, len(text)):
-            char = text[i]
+            char = self._sanitize_math_char(text[i])
             result = regexp.match(char)
             if result is not None:
                 right.append(char)
@@ -52,8 +61,25 @@ class CaptchaSolver:
 
     def _extract_action(self, text):
         words = text.lower().split()
-        click_index = words.index("click")
+        click_index = None
+
+        for word in words:
+            if word.find('click') != -1:
+                click_index = words.index(word)
+                break
+
+        if click_index is None:
+            random_bit = random.getrandbits(1)
+            return bool(random_bit)
 
         action = "".join(words[click_index + 1:click_index + 2])
         print("Solver: dialog click action > %s" % action)
         return len(action) <= 4
+
+    def _sanitize_math_char(self, char):
+        mapping = {
+            'D': '0',
+            'A': '4'
+        }
+
+        return mapping.get(char, char)
