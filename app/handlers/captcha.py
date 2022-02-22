@@ -33,10 +33,8 @@ class CaptchaHandler(BaseHandler):
         for scale in range(500, 800, 100):
             try:
                 captcha_text = self.captcha_parser.parse_image(dialog, default_scale=scale)
-                if self.captcha_solver.is_ariphmetic(captcha_text):
-                    result = self.captcha_solver.solve_math(captcha_text)
-                else:
-                    result = self.captcha_solver.solve_logic(captcha_text)
+                result = self.captcha_solver.solve(captcha_text)
+
                 cv2.imwrite("res/output/last_solved_captcha.png", screenshot_image)
                 if result:
                     return ok_position
