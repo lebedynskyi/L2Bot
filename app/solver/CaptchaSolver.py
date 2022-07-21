@@ -37,7 +37,7 @@ class CaptchaSolver:
         left = []
         right = []
         for i in reversed(range(1, equals_index)):
-            char = text[i]
+            char = self._sanitize_math_char(text[i])
             result = regexp.match(char)
             if result is not None:
                 left.append(char)
