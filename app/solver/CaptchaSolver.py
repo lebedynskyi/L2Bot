@@ -45,7 +45,7 @@ class CaptchaSolver:
                 break
 
         for i in range(equals_index + 1, len(text)):
-            char = self._sanitize_math_char(text[i])
+            char = self._sanitize_math_char(text[i], right_part=True)
             result = regexp.match(char)
             if result is not None:
                 right.append(char)
@@ -76,10 +76,16 @@ class CaptchaSolver:
         print("Solver: dialog click action > %s" % action)
         return len(action) <= 4
 
-    def _sanitize_math_char(self, char):
+    def _sanitize_math_char(self, char, right_part = False):
         mapping = {
             'D': '0',
-            'A': '4'
+            'A': '4',
+            '?': '7'
         }
+
+        # When condition like 1+7=8?
+        # We need to keep '?' for preventing wrong result: 1+7=87
+        if right_part and char == '?':
+            return char
 
         return mapping.get(char, char)
