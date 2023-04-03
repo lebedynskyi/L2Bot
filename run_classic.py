@@ -1,5 +1,4 @@
 import os
-import time
 
 from app.core.controls import ArduinoKeyboard
 from app.handlers.captcha import CaptchaHandler

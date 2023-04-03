@@ -3,8 +3,8 @@ import cv2
 
 def load_templates(folder):
     return Templates(Farm(
-        target=cv2.imread("{folder}/farm/target_template.png".format(folder=folder))
-    ), Manor(
+        target=cv2.imread("{folder}/farm/target_template.png".format(folder=folder))),
+        Manor(
         manor_dialog_template=cv2.imread("{folder}/manor/manor_dialog_template.png".format(folder=folder)),
         crop_sales_dialog=cv2.imread("{folder}/manor/crop_sales_dialog.png".format(folder=folder)),
         chooser_template=cv2.imread("{folder}/manor/chooser_template.png".format(folder=folder)),
@@ -17,10 +17,6 @@ def load_templates(folder):
         warn_dialog=cv2.imread("{folder}/captcha/warning_template.png".format(folder=folder)),
         dualbox_dialog=cv2.imread("{folder}/captcha/dualbox_template.png".format(folder=folder))
     ))
-
-
-class TemplateLoader:
-    pass
 
 
 class Templates:
