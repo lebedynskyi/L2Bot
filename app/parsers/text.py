@@ -4,7 +4,7 @@ import pytesseract
 from app.parsers.base import BaseParser
 
 
-class DialogTextParser(BaseParser):
+class TextParser(BaseParser):
     def __init__(self, env_path, debug=False):
         super().__init__(env_path, debug)
 

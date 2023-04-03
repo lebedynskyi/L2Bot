@@ -3,12 +3,10 @@ import unittest
 
 import cv2
 
-from app.core.templates import load_templates
-from app.handlers.captcha import CaptchaHandler
-from app.parsers.classic.status import FullStatusParser
-from app.parsers.classic.target import TargetWindowParser, TargetHpParser
+import app.core.templates as templates
 from app.parsers.classic.ui import WarnDialogParser
-from app.parsers.text import DialogTextParser
+from app.parsers.flauron.ui import QuizStartDialogParser, QuizContinueDialogParser
+from app.parsers.text import TextParser
 from app.solver.CaptchaSolver import CaptchaSolver
 
 env_path = os.path.dirname(os.path.realpath(__file__))
@@ -94,18 +92,16 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 #         hp, mp = parser.parse_image(screen)
 #         print("HP -> {}    MP -> {}".format(hp, mp))
 
-class TestFullStatus(unittest.TestCase):
+class TestFlauronDialogCaptcha(unittest.TestCase):
     def setUp(self):
-        self.templates = load_templates("res/template/reborn_classic")
+        self.templates = templates.load_templates("res/template/reborn_classic")
 
-    def test_full_status(self):
-        img = cv2.imread("res/input/flauron/Shot00003.jpg")
-        dialog_parser = WarnDialogParser(env_path, self.templates.captcha.warn_dialog, False)
+    def test_dialog_captcha(self):
+        img = cv2.imread("res/input/flauron/dialog_captcha/Shot00001.jpg")
+        dialog_parser = WarnDialogParser(env_path, self.templates.captcha.warn_dialog, debug=False)
         dialog, ok_position, cancel_position = dialog_parser.parse_image(img)
-        cv2.imshow("asda", dialog)
-        cv2.waitKey()
 
-        text_parser = DialogTextParser(env_path, False)
+        text_parser = TextParser(env_path, debug=False)
         text = text_parser.parse_image(dialog, default_scale=500)
 
         solver = CaptchaSolver()
@@ -114,5 +110,26 @@ class TestFullStatus(unittest.TestCase):
         print(answer)
 
 
+class TestFlauronQuizCaptcha(unittest.TestCase):
+    def setUp(self):
+        self.templates = templates.load_templates("res/template/reborn_classic")
+
+    def test_quiz_captcha(self):
+        start_quiz_img = cv2.imread("res/input/flauron/quiz_captcha/Shot00000.jpg")
+        start_quiz_img_1 = cv2.imread("res/input/flauron/quiz_captcha/Shot00001.jpg")
+
+        quiz_parser = QuizStartDialogParser(env_path, self.templates.captcha.captcha_quiz_start, False)
+        rez = quiz_parser.parse_image(start_quiz_img_1)
+        print(rez)
+
+    def test_quiz_continue(self):
+        quiz_parser = QuizContinueDialogParser(env_path, self.templates.captcha.captcha_quiz_continue, False)
+
+        quiz_img = cv2.imread("res/input/flauron/quiz_captcha/Shot00010.jpg")
+        rez = quiz_parser.parse_image(quiz_img)
+        print(rez)
+
+
 if __name__ == '__main__':
+    from tests.TestT import TestTt
     unittest.main()

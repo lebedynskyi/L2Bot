@@ -14,7 +14,7 @@ from app.parsers.classic.status import PetStatusParser
 from app.parsers.classic.target import TargetWindowParser
 from app.parsers.classic.target import TargetHpParser
 from app.parsers.classic.ui import WarnDialogParser, GroupDialogParser
-from app.parsers.text import DialogTextParser
+from app.parsers.text import TextParser
 from app.parsers.reborn_classic.player import UserDeathStatusParser
 from app.solver.CaptchaSolver import CaptchaSolver
 
@@ -31,7 +31,7 @@ def farm_app():
     target_hp_parser = TargetHpParser(env_path)
     warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
     group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.warn_dialog)
-    dialog_text_parser = DialogTextParser(env_path)
+    dialog_text_parser = TextParser(env_path)
     solver = CaptchaSolver()
     user_death_parser = UserDeathStatusParser(env_path, templates.status.user_death)
 

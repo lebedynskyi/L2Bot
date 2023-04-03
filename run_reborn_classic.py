@@ -14,7 +14,7 @@ from app.parsers.reborn_classic.target import TargetWindowParser
 from app.parsers.reborn_classic.target import TargetHpParser
 from app.parsers.reborn_classic.ui import WarnDialogParser, GroupDialogParser
 from app.parsers.reborn_classic.player import UserDeathStatusParser, UserStatusParser
-from app.parsers.text import DialogTextParser
+from app.parsers.text import TextParser
 from app.solver.CaptchaSolver import CaptchaSolver
 
 env_path = os.path.dirname(os.path.realpath(__file__))
@@ -29,15 +29,16 @@ def farm_app():
     target_window_parser = TargetWindowParser(env_path, templates.farm.target)
     pet_status_parser = PetStatusParser(env_path, templates.status.user_pet)
     target_hp_parser = TargetHpParser(env_path)
+
+    user_death_parser = UserDeathStatusParser(env_path, templates.status.user_death)
+    death = UserDeathHandler(keyboard, user_death_parser)
+
     warn_dialog_parser = WarnDialogParser(env_path, templates.captcha.warn_dialog)
     group_captcha_dialog_parser = GroupDialogParser(env_path, templates.captcha.dualbox_dialog)
-    dialog_text_parser = DialogTextParser(env_path)
+    dialog_text_parser = TextParser(env_path)
     solver = CaptchaSolver()
-    user_death_parser = UserDeathStatusParser(env_path, templates.status.user_death)
-
-    # bottles = UseBottlesHandler(keyboard)
     captcha = CaptchaHandler(keyboard, warn_dialog_parser, dialog_text_parser, group_captcha_dialog_parser, solver)
-    death = UserDeathHandler(keyboard, user_death_parser)
+
 
     farm = SpoilManorFarmHandler(keyboard, target_window_parser, target_hp_parser,
                                  use_skills=False, use_manor=True, use_spoil=False)
