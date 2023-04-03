@@ -70,7 +70,7 @@ class QuizStartDialogParser(BaseParser):
         if not group_points:
             return None
 
-        print("WarnDialog: Group found")
+        self.write_log("WarnDialog", "Found")
 
         dialog_header_pt = group_points[0]
 
@@ -109,7 +109,7 @@ class QuizContinueDialogParser(BaseParser):
         if not group_points:
             return None
 
-        print("WarnDialog: Group found")
+        ("WarnDialog: Group found")
 
         dialog_header_pt = group_points[0]
 

@@ -4,7 +4,6 @@ import time
 from app.core.controls import ArduinoKeyboard, SoftKeyboard
 import app.core.templates as templates
 from app.core.looper import AppLooper
-from app.handlers.captcha import CaptchaHandler
 from app.handlers.flauron.captcha import FlauronCaptchaHandler
 from app.parsers.flauron.ui import WarnDialogParser, QuizStartDialogParser, QuizContinueDialogParser
 from app.parsers.text import TextParser
