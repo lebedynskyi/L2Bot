@@ -149,6 +149,9 @@ class QuizContinueDialogParser(BaseParser):
             self.draw_match_squares(debug_look_zone_img, target_points, cw, ch)
             self.debug_show_im(debug_look_zone_img, "Target letter in area")
 
+        if len(target_loc[0]) <= 0:
+            return None
+
         target_y = int(header_loc[0][0] + 90 + target_loc[0][0])
         target_x = int(header_loc[1][0] + target_loc[1][0])
 

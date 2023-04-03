@@ -114,16 +114,15 @@ class TestFlauronQuizCaptcha(unittest.TestCase):
     def setUp(self):
         self.templates = templates.load_templates("res/template/reborn_classic")
 
-    def test_quiz_captcha(self):
-        start_quiz_img = cv2.imread("res/input/flauron/quiz_captcha/Shot00000.jpg")
-        start_quiz_img_1 = cv2.imread("res/input/flauron/quiz_captcha/Shot00001.jpg")
+    def test_quiz_start_captcha(self):
+        start_quiz_img = cv2.imread("res/input/flauron/quiz_captcha/start/Shot00002.jpg")
 
         quiz_parser = QuizStartDialogParser(env_path, self.templates.captcha.captcha_quiz_start, False)
-        rez = quiz_parser.parse_image(start_quiz_img_1)
+        rez = quiz_parser.parse_image(start_quiz_img)
         print(rez)
 
     def test_quiz_continue(self):
-        quiz_parser = QuizContinueDialogParser(env_path, self.templates.captcha.captcha_quiz_continue, False)
+        quiz_parser = QuizContinueDialogParser(env_path, self.templates.captcha.captcha_quiz_continue, True)
 
         quiz_img = cv2.imread("res/input/flauron/quiz_captcha/Shot00010.jpg")
         rez = quiz_parser.parse_image(quiz_img)
