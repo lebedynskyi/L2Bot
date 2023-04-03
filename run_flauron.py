@@ -13,7 +13,7 @@ env_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def farm_app():
-    keyboard = SoftKeyboard()
+    keyboard = ArduinoKeyboard()
     keyboard.init(0.1)
 
     template = templates.load_templates("res/template/reborn_classic")

@@ -22,6 +22,7 @@ class WarnDialogParser(BaseParser):
         hh, ww = self.template.shape[:2]
         warning_points = list(zip(*loc[::-1]))
         if warning_points:
+            self.write_log("WarnDialog", "Found")
             warn_pt = warning_points[0]
             ok_square = ((warn_pt[0] + 92, warn_pt[1] + 92), (warn_pt[0] + 112, warn_pt[1] + 112))
             cancel_square = ((warn_pt[0] + 175, warn_pt[1] + 92), (warn_pt[0] + 195, warn_pt[1] + 112))
@@ -70,7 +71,7 @@ class QuizStartDialogParser(BaseParser):
         if not group_points:
             return None
 
-        self.write_log("WarnDialog", "Found")
+        self.write_log("QuizStart", "Found")
 
         dialog_header_pt = group_points[0]
 
@@ -109,7 +110,7 @@ class QuizContinueDialogParser(BaseParser):
         if not group_points:
             return None
 
-        ("WarnDialog: Group found")
+        self.write_log("QuizContinue", "Found")
 
         dialog_header_pt = group_points[0]
 
