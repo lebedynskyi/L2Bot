@@ -12,6 +12,9 @@ l2_window = None
 
 
 def init_logger():
+    if not os.path.exists("res/output/logs"):
+        os.mkdir("res/output/logs")
+
     formatter = logging.Formatter(fmt="%(asctime)s: %(name)s: %(message)s")
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.level = logging.INFO
@@ -54,8 +57,8 @@ def find_l2_window_callback(hwnd, extra):
     w = rect[2] - x
     h = rect[3] - y
     title = win32gui.GetWindowText(hwnd).lower()
-    if "l2" in title or "lineage" in title:
-        logger.info("Window %s:", )
+    if "lineage ii" == title:
+        logger.info("Window %s:", title)
         logger.info("\tLocation: (%d, %d)", x, y)
         logger.info("\tSize: (%d, %d)", w, h)
 

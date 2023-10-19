@@ -10,7 +10,7 @@ class TestNearestTargets(unittest.TestCase):
         self.parser = C3NearTargetsParser(debug=False)
 
     def test_ttt(self):
-        rgb, grey = read_input_img("../res/input/c3/Shot00008.bmp")
+        rgb, grey = read_input_img("../res/input/c3/Shot00004.bmp")
 
         print("Start %s" % datetime.datetime.now())
         result = self.parser.parse_image(rgb, grey)
