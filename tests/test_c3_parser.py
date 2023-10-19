@@ -1,0 +1,23 @@
+import datetime
+import unittest
+
+from app.parser.target import C3NearTargetsParser
+from tests.base import read_input_img
+
+
+class TestNearestTargets(unittest.TestCase):
+    def setUp(self):
+        self.parser = C3NearTargetsParser(debug=False)
+
+    def test_ttt(self):
+        rgb, grey = read_input_img("../res/input/c3/Shot00008.bmp")
+
+        print("Start %s" % datetime.datetime.now())
+        result = self.parser.parse_image(rgb, grey)
+        for r in result:
+            print("%s distance -> %s" % (r.name, r.distance))
+        print("Finish %s" % datetime.datetime.now())
+
+
+if __name__ == "__main__":
+    unittest.main()
