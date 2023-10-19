@@ -4,8 +4,9 @@ import sys
 from logging.handlers import RotatingFileHandler
 
 from app.base import BaseApp
+from app.capture_tmep import WinCap
 from app.keyboard import SoftKeyboard
-from app.template import GraciaTemplates
+from app.template import GraciaRebornTemplates
 
 logger = logging.getLogger()
 l2_window = None
@@ -32,8 +33,6 @@ def init_logger():
 
 
 def check_dependencies():
-    logger.info("Check dependencies")
-
     import pytesseract
     tes_version = pytesseract.get_tesseract_version()
     logger.info("Tesseract version is %s", tes_version)
@@ -45,8 +44,12 @@ def check_dependencies():
     # import PySide6.QtCore
     # qt_version = PySide6.__version__
     # logger.info("QT version is %s", qt_version)
+    logger.info("Check Dependencies OK")
 
-    logger.info("Check dependencies OK")
+
+def find_l2_window():
+    import win32gui
+    win32gui.EnumWindows(find_l2_window_callback, None)
 
 
 def find_l2_window_callback(hwnd, extra):
@@ -56,34 +59,37 @@ def find_l2_window_callback(hwnd, extra):
     y = rect[1]
     w = rect[2] - x
     h = rect[3] - y
-    title = win32gui.GetWindowText(hwnd).lower()
-    if "lineage ii" == title:
-        logger.info("Window %s:", title)
+    title = win32gui.GetWindowText(hwnd)
+    if "lineage ii" == title.lower():
+        logger.info("Lineage 2 window found")
         logger.info("\tLocation: (%d, %d)", x, y)
         logger.info("\tSize: (%d, %d)", w, h)
-
-
-def find_l2_window():
-    import win32gui
-    win32gui.EnumWindows(find_l2_window_callback, None)
+        global l2_window
+        l2_window = hwnd
+        logger.info("Check Dependencies OK")
 
 
 if __name__ == "__main__":
-    print("Welcome to Vetalll bot")
+    print("--------------  Welcome to Vetalll bot --------------  ")
 
     init_logger()
     check_dependencies()
     keyboard = SoftKeyboard()
 
-    gracia_templates = GraciaTemplates("res/templates")
-    app = BaseApp()
+    gracia_templates = GraciaRebornTemplates()
 
     # run real app on windows only
     if os.name == 'nt':
         find_l2_window()
+
+        if not l2_window:
+            logger.error("Finish app due to  l2 Window not found")
+            exit(1)
+
+        wincap = WinCap(l2_window)
+        app = BaseApp(wincap)
         app.loop()
     else:
-        logger.debug("Finish app due to invalid OS.")
-        exit(0)
+        logger.error("Finish app due to invalid OS or l2 Window not found")
 
-    logger.debug("Finish app")
+    logger.info("Finish app")

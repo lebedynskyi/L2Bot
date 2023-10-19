@@ -40,7 +40,8 @@ class Template:
         return cv2.imread(template_file, flags=cv2.IMREAD_GRAYSCALE)
 
 
-class GraciaTemplates(Template):
-    def __init__(self, folder):
-        super().__init__(folder, "gracia")
+class GraciaRebornTemplates(Template):
+    def __init__(self):
+        super().__init__("res/templates/", "gracia")
         self.captcha_dualbox = None
+        self.captcha_solo = None

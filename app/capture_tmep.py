@@ -1,13 +1,85 @@
+import logging
+from ctypes import windll
 from threading import Thread, Lock
 
 import numpy as np
 import win32con
 import win32gui
 import win32ui
+from PIL import Image
+
+logger = logging.getLogger("WinCap")
 
 
 class WinCap:
-    pass
+    hwnd = None
+    cropped_x = 0
+    cropped_y = 0
+    offset_x = 0
+    offset_y = 0
+    w = 0
+    h = 0
+
+    def __init__(self, hwnd):
+        self.hwnd = hwnd
+        self.update_window_position()
+
+    # get the window size and position
+    def update_window_position(self):
+        window_rect = win32gui.GetWindowRect(self.hwnd)
+        w = window_rect[2] - window_rect[0]
+        h = window_rect[3] - window_rect[1]
+
+        # account for the window border and titlebar and cut them off
+        border_pixels = 8
+        titlebar_pixels = 30
+        self.w = w - (border_pixels * 2)
+        self.wh = h - titlebar_pixels - border_pixels
+        self.cropped_x = border_pixels
+        self.cropped_y = titlebar_pixels
+
+        # set the cropped coordinates offset so we can translate screenshot
+        # images into actual screen positions
+        self.offset_x = window_rect[0] + self.cropped_x
+        self.offset_y = window_rect[1] + self.cropped_y
+
+        logger.debug("Updated l2 window coordinates, w=%s, h=%s, offset_x=%s, offset_y=%s",
+                     self.w, self.h, self.offset_x, self.offset_y)
+
+    def screenshot(self):
+        left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
+        w = right - left
+        h = bot - top
+
+        hwndDC = win32gui.GetWindowDC(self.hwnd)
+        mfcDC = win32ui.CreateDCFromHandle(hwndDC)
+        saveDC = mfcDC.CreateCompatibleDC()
+
+        saveBitMap = win32ui.CreateBitmap()
+        saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
+
+        saveDC.SelectObject(saveBitMap)
+
+        # Change the line below depending on whether you want the whole window
+        # or just the client area.
+        # result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 1)
+        result = windll.user32.PrintWindow(self.hwnd, saveDC.GetSafeHdc(), 0)
+        print
+        result
+
+        bmpinfo = saveBitMap.GetInfo()
+        bmpstr = saveBitMap.GetBitmapBits(True)
+
+        im = Image.frombuffer(
+            'RGB',
+            (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+            bmpstr, 'raw', 'BGRX', 0, 1)
+
+        win32gui.DeleteObject(saveBitMap.GetHandle())
+        saveDC.DeleteDC()
+        mfcDC.DeleteDC()
+        win32gui.ReleaseDC(self.hwnd, hwndDC)
+        return im
 
 
 class WindowCapture:
