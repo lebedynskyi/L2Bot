@@ -4,7 +4,6 @@ import sys
 from logging.handlers import RotatingFileHandler
 
 from app.base import BaseApp
-from app.capture_tmep import WinCap
 from app.keyboard import SoftKeyboard
 from app.template import GraciaRebornTemplates
 
@@ -47,6 +46,14 @@ def check_dependencies():
     logger.info("Check Dependencies OK")
 
 
+def has_admin_right():
+    try:
+        import ctypes
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+
 def find_l2_window():
     import win32gui
     win32gui.EnumWindows(find_l2_window_callback, None)
@@ -78,18 +85,22 @@ if __name__ == "__main__":
 
     gracia_templates = GraciaRebornTemplates()
 
-    # run real app on windows only
-    if os.name == 'nt':
-        find_l2_window()
+    if not os.name == 'nt':
+        logger.error("Finish app due to invalid OS")
+        exit(1)
 
-        if not l2_window:
-            logger.error("Finish app due to  l2 Window not found")
-            exit(1)
+    if not has_admin_right():
+        logger.error("Finish app due to  lack of admin rights")
+        exit(1)
 
-        wincap = WinCap(l2_window)
-        app = BaseApp(wincap)
-        app.loop()
-    else:
-        logger.error("Finish app due to invalid OS or l2 Window not found")
+    find_l2_window()
+    if not l2_window:
+        logger.error("Finish app due to  l2 Window not found")
+        exit(1)
+
+    from app.capture_tmep import WinCap
+    wincap = WinCap(l2_window)
+    app = BaseApp(wincap)
+    app.loop()
 
     logger.info("Finish app")

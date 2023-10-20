@@ -1,19 +1,13 @@
-import cv2
 import numpy as np
+import cv2
 
 from app.ocr.recognition import NumbersRecognition
-from app.parser.base import BaseParser
-from app.template import GraciaTemplates
-
-
-class FishingResult:
-    is_fishing = False
-    seconds_left = None
-    hp_percent = None
+from app.parser.base import BaseParser, FishingResult, NearTargetParser
+from app.template import GraciaRebornTemplates
 
 
 class GraciaFishing(BaseParser):
-    def __init__(self, templates: GraciaTemplates, debug=False):
+    def __init__(self, templates: GraciaRebornTemplates, debug=False):
         super().__init__(debug)
         self.templates = templates
         self.ocr = NumbersRecognition()
@@ -83,3 +77,9 @@ class GraciaFishing(BaseParser):
                 return int(hp_width * 100 / resized_width)
 
         return None
+
+
+class GraciaNearTargetsParser(NearTargetParser):
+    # Color segmentation
+    lower_color = np.array([0, 0, 0])
+    upper_color = np.array([0, 255, 255])

@@ -1,13 +1,13 @@
 import unittest
 
-from app.parser.fishing import GraciaFishing
-from app.template import GraciaTemplates
+from app.parser.gracia import GraciaFishing
+from app.template import GraciaRebornTemplates
 from tests.base import read_input_img
 
 
 class TestGraciaFishing(unittest.TestCase):
     def setUp(self):
-        self.templates = GraciaTemplates("../res/templates")
+        self.templates = GraciaRebornTemplates()
         self.parser = GraciaFishing(self.templates, debug=False)
 
     def test_fishing_dialog_exist(self):

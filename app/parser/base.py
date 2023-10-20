@@ -1,7 +1,23 @@
+import math
 from abc import ABC, abstractmethod
+from threading import Thread
 
 import cv2
 import numpy as np
+
+from app.ocr.recognition import TextRecognition
+
+
+class FishingResult:
+    is_fishing = False
+    seconds_left = None
+    hp_percent = None
+
+
+class NearTargetResult:
+    def __init__(self, name, distance):
+        self.name = name
+        self.distance = distance
 
 
 class BaseParser(ABC):
@@ -62,3 +78,94 @@ class BaseParser(ABC):
     def draw_match_squares(image, points, width, height):
         for pt in points:
             cv2.rectangle(image, pt, (pt[0] + width, pt[1] + height), (0, 0, 255), 1)
+
+
+class TemplateExist(BaseParser):
+    def __init__(self, template, show_match):
+        super().__init__(show_match)
+        self.template = template
+
+    def parse_image(self, rgb, grey, *args, **kwargs):
+        return self.match_template(grey, self.template) is not None
+
+
+class NearTargetParser(BaseParser):
+    lower_color = np.array([0, 0, 0])
+    upper_color = np.array([0, 0, 0])
+
+    def __init__(self, debug=False):
+        super().__init__(debug)
+        self.ocr = TextRecognition()
+
+    def parse_image(self, rgb, gray, *args, **kwargs):
+        title_boxes = self._find_title_boxes(rgb)
+        threads = []
+        result = []
+
+        for box in title_boxes:
+            t = Thread(target=self._parse_title_thread, args=[gray, box, result], daemon=False)
+            t.start()
+            threads.append(t)
+
+        for x in threads:
+            x.join()
+
+        return sorted(result, key=lambda r: r.distance)
+
+    def _parse_title_thread(self, gray, box_data, result):
+        [x, y, w, h] = box_data
+        # Just increase a box on 2 pixels around
+        title_box = gray[y - 2:y + h + 2, x - 2:x + w + 2]
+        player_position = (gray.shape[1] / 2, gray.shape[0] / 2)
+        distance = math.dist(player_position, (x, y))
+
+        name = self.ocr.extract(title_box, 3)
+        if name is not None and len(name) > 1:
+            result.append(NearTargetResult(name, distance))
+
+    def _find_title_boxes(self, rgb):
+
+        masked = self.hsv_mask(rgb, self.lower_color, self.upper_color)
+        contours, hierarchy = self.find_contours(masked)
+
+        result = []
+
+        for contour in contours:
+            # get rectangle bounding contour
+            [x, y, w, h] = cv2.boundingRect(contour)
+
+            # Don't plot small false positives that aren't text
+            if (w < 20 or h < 10) or h > 20:
+                continue
+
+            # so if title has 2 words. we need to find same boxes on the same y coordinate and join it.
+            is_merged = False
+            for idx in range(len(result)):
+                already_added = result[idx]
+
+                if already_added[1] == y:
+                    extended = self._union(already_added, [x, y, w, h])
+                    result[idx] = extended
+                    is_merged = True
+                    break
+
+            # just increase the box by 2 pixels around
+            if not is_merged:
+                result.append([x, y, w, h])
+
+        if self.debug:
+            rgb_copy = rgb.copy()
+            for [x, y, w, h] in result:
+                # draw rectangle around contour
+                cv2.rectangle(rgb_copy, (x, y), (x + w, y + h), (0, 0, 255), 1)
+            self.show_im(rgb_copy, "Found titles")
+
+        return result
+
+    @staticmethod
+    def _union(a, b):
+        x = min(a[0], b[0])
+        y = min(a[1], b[1])
+        w = max(a[0] + a[2], b[0] + b[2]) - x
+        h = max(a[1] + a[3], b[1] + b[3]) - y
+        return (x, y, w, h)
