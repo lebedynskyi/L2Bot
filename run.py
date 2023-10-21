@@ -4,7 +4,7 @@ import sys
 from logging.handlers import RotatingFileHandler
 
 from app.base import BaseApp
-from app.keyboard import SoftKeyboard
+from app.keyboard import ArduinoKeyboard
 from app.template import GraciaRebornTemplates
 
 logger = logging.getLogger()
@@ -17,7 +17,7 @@ def init_logger():
 
     formatter = logging.Formatter(fmt="%(asctime)s: %(name)s: %(message)s")
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.level = logging.INFO
+    console_handler.level = logging.DEBUG
     console_handler.setFormatter(formatter)
 
     file_handler = RotatingFileHandler(filename='res/output/logs/l2auto.log', maxBytes=1 * 1024 * 1024,
@@ -81,9 +81,9 @@ if __name__ == "__main__":
 
     init_logger()
     check_dependencies()
-    keyboard = SoftKeyboard()
+    keyboard = ArduinoKeyboard("COM3")
 
-    gracia_templates = GraciaRebornTemplates()
+    gracia_templates = GraciaRebornTemplates("res/templates")
 
     if not os.name == 'nt':
         logger.error("Finish app due to invalid OS")

@@ -7,7 +7,7 @@ from tests.base import read_input_img
 
 class TestGraciaFishing(unittest.TestCase):
     def setUp(self):
-        self.templates = GraciaRebornTemplates()
+        self.templates = GraciaRebornTemplates("../res/templates")
         self.parser = GraciaFishing(self.templates, debug=False)
 
     def test_fishing_dialog_exist(self):

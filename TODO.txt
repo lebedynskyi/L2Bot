@@ -1,0 +1,2 @@
+check admin permission now working
+bool vvariable forr loin debu or info

@@ -16,13 +16,10 @@ class BaseApp:
     def loop(self):
         while True:
             try:
-                screenshot = self.wincap.screen1()
+                screenshot = self.wincap.screenshot()
                 screen_bgr = np.array(screenshot)
                 screen_rgb = cv2.cvtColor(screen_bgr, cv2.COLOR_BGR2RGB)
                 screen_grey = cv2.cvtColor(screen_rgb, cv2.COLOR_BGR2GRAY)
-
-                cv2.imshow("Screenshot", screen_rgb)
-                cv2.waitKey(0)
             except Exception as e:
                 logger.exception("Unable to take screenshot, %s", e)
                 self.wait_tick()
@@ -34,6 +31,7 @@ class BaseApp:
                 except Exception as e:
                     logger.exception("Error to handle tick in %s, %s", h.__class__.__name__, e)
 
+            logger.debug("On tick")
             self.wait_tick()
 
     def wait_tick(self):

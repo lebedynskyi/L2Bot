@@ -41,7 +41,7 @@ class Template:
 
 
 class GraciaRebornTemplates(Template):
-    def __init__(self):
-        super().__init__("../res/templates", "gracia")
+    def __init__(self, folder):
+        super().__init__(folder, "gracia")
         self.captcha_dualbox = None
         self.captcha_solo = None
