@@ -9,7 +9,7 @@ from src.capture import MockCap
 from src.keyboard import ArduinoKeyboard, BaseKeyboard
 from src.parser.c3 import C3NearTargetsParser
 
-DEVELOP = True
+DEVELOP = False
 logger = logging.getLogger()
 l2_window = None
 
@@ -103,11 +103,11 @@ def run_farm():
     import src.capture as capture
     wincap = capture.WinCap(l2_window)
 
-    keyboard = ArduinoKeyboard(capture=wincap, port="COM3")
-    controller_spoil_auto_farm = ControllerSpoilerAutoFarm(keyboard)
+    keyboard = ArduinoKeyboard(port="COM3")
+    controller_spoil_auto_farm = ControllerSpoilerAutoFarm(keyboard, wincap)
 
     parser_near_target = C3NearTargetsParser()
-    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target)
+    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, "Goblin Snooper")
 
     app = BaseApp(wincap, handler_spoil_auto_farm)
     app.loop()
@@ -117,7 +117,7 @@ def run_develop():
     mock_cap = MockCap("res/input/c3/Shot00004.bmp", "res/input/c3/Shot00008.bmp")
     parser_near_target = C3NearTargetsParser()
     BaseKeyboard()
-    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(None, parser_near_target, "Gremilin")
+    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(None, parser_near_target, "Goblin Snooper")
     app = BaseApp(mock_cap, handler_spoil_auto_farm)
     app.loop()
     logger.info("Finish due to develop")

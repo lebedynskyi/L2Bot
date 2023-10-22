@@ -30,6 +30,7 @@ class WinCap(Capture):
         self._update_window_position()
 
     def screenshot(self):
+        import win32gui, win32ui
         left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
         w = right - left
         h = bot - top
@@ -66,6 +67,7 @@ class WinCap(Capture):
 
     # get the window size and position
     def _update_window_position(self):
+        import win32gui
         window_rect = win32gui.GetWindowRect(self.hwnd)
         w = window_rect[2] - window_rect[0]
         h = window_rect[3] - window_rect[1]

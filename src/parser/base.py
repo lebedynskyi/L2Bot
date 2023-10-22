@@ -108,7 +108,7 @@ class NearTargetParser(BaseParser):
         player_position = (gray.shape[1] / 2, gray.shape[0] / 2)
         distance = math.dist(player_position, (x, y))
 
-        name = self.ocr.extract(title_box, 3)
+        name = self.ocr.extract(title_box, 2)
         if name is not None and len(name) > 1:
             result.append(NearTargetResult(x, y, name, distance))
 

@@ -1,14 +1,16 @@
 from fuzzywuzzy import fuzz
 
 from src.bot.base import BaseHandler, STATE_IDLE
+from src.capture import Capture
 from src.controller import BaseController
 from src.keyboard import BaseKeyboard
 from src.parser.base import NearTargetParser
 
 
 class ControllerSpoilerAutoFarm(BaseController):
-    def __int__(self, keyboard: BaseKeyboard):
+    def __int__(self, keyboard: BaseKeyboard,  capture: Capture):
         self.keyboard = keyboard
+        self.capture = capture
 
     def spoil(self):
         self.keyboard.f1()

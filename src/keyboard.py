@@ -1,5 +1,7 @@
 import logging
 
+import pyautogui
+
 
 class BaseKeyboard:
 
@@ -66,7 +68,7 @@ class ArduinoKeyboard(BaseKeyboard):
     arduino = None
     logger = logging.getLogger("ArduinoKeyboard")
 
-    def __init__(self, capture, port, baudrate=9600, time_out=0.01):
+    def __init__(self, port, baudrate=9600, time_out=0.01):
         question = str.encode("Initialization")
 
         self.arduino = self.serial.Serial(port=port, baudrate=baudrate, timeout=time_out)
