@@ -1,6 +1,6 @@
 from abc import ABC
 
-from app.keyboard import BaseKeyboard
+from src.keyboard import BaseKeyboard
 
 
 class BaseController(ABC):

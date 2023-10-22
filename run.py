@@ -3,10 +3,13 @@ import os
 import sys
 from logging.handlers import RotatingFileHandler
 
-from app.base import BaseApp
-from app.keyboard import ArduinoKeyboard
-from app.template import GraciaRebornTemplates
+from src.base import BaseApp
+from src.bot.spoiler import HandlerSpoilerAutoFarm, ControllerSpoilerAutoFarm
+from src.capture import MockCap
+from src.keyboard import ArduinoKeyboard, BaseKeyboard
+from src.parser.c3 import C3NearTargetsParser
 
+DEVELOP = True
 logger = logging.getLogger()
 l2_window = None
 
@@ -76,15 +79,7 @@ def find_l2_window_callback(hwnd, extra):
         logger.info("Check Dependencies OK")
 
 
-if __name__ == "__main__":
-    print("--------------  Welcome to Vetalll bot --------------  ")
-
-    init_logger()
-    check_dependencies()
-    keyboard = ArduinoKeyboard("COM3")
-
-    gracia_templates = GraciaRebornTemplates("res/templates")
-
+def initialize_on_windows():
     if not os.name == 'nt':
         logger.error("Finish app due to invalid OS")
         exit(1)
@@ -98,9 +93,43 @@ if __name__ == "__main__":
         logger.error("Finish app due to  l2 Window not found")
         exit(1)
 
-    from app.capture_tmep import WinCap
-    wincap = WinCap(l2_window)
-    app = BaseApp(wincap)
+
+def run_manor_trade():
+    pass
+
+
+def run_farm():
+    initialize_on_windows()
+    import src.capture as capture
+    wincap = capture.WinCap(l2_window)
+
+    keyboard = ArduinoKeyboard(capture=wincap, port="COM3")
+    controller_spoil_auto_farm = ControllerSpoilerAutoFarm(keyboard)
+
+    parser_near_target = C3NearTargetsParser()
+    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target)
+
+    app = BaseApp(wincap, handler_spoil_auto_farm)
     app.loop()
 
-    logger.info("Finish app")
+
+def run_develop():
+    mock_cap = MockCap("res/input/c3/Shot00004.bmp", "res/input/c3/Shot00008.bmp")
+    parser_near_target = C3NearTargetsParser()
+    BaseKeyboard()
+    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(None, parser_near_target, "Gremilin")
+    app = BaseApp(mock_cap, handler_spoil_auto_farm)
+    app.loop()
+    logger.info("Finish due to develop")
+
+
+if __name__ == "__main__":
+    print("--------------  Welcome to Vetalll bot --------------  ")
+    init_logger()
+    check_dependencies()
+
+    if DEVELOP:
+        run_develop()
+    else:
+        run_farm()
+        # run_manor_trade()

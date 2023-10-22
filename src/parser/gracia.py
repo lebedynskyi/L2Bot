@@ -1,9 +1,10 @@
-import numpy as np
 import cv2
+import numpy as np
 
-from app.ocr.recognition import NumbersRecognition
-from app.parser.base import BaseParser, FishingResult, NearTargetParser
-from app.template import GraciaRebornTemplates
+from src.ocr.recognition import NumbersRecognition
+from src.parser.base import BaseParser, NearTargetParser
+from src.parser.result import FishingResult
+from src.template import GraciaRebornTemplates
 
 
 class GraciaFishing(BaseParser):
@@ -12,7 +13,7 @@ class GraciaFishing(BaseParser):
         self.templates = templates
         self.ocr = NumbersRecognition()
 
-    def parse_image(self, rgb, grey, *args, **kwargs):
+    def parse(self, rgb, grey, *args, **kwargs):
         result = FishingResult()
 
         fishing_match = self.match_template(grey, self.templates.ui_fishing_dialog)
@@ -80,6 +81,5 @@ class GraciaFishing(BaseParser):
 
 
 class GraciaNearTargetsParser(NearTargetParser):
-    # Color segmentation
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 255, 255])

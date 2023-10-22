@@ -1,81 +1,62 @@
 import logging
-from abc import ABC, abstractmethod
 
 
-class BaseKeyboard(ABC):
-    @abstractmethod
+class BaseKeyboard:
+
     def f1(self):
         pass
 
-    @abstractmethod
     def f2(self):
         pass
 
-    @abstractmethod
     def f3(self):
         pass
 
-    @abstractmethod
     def f4(self):
         pass
 
-    @abstractmethod
     def f5(self):
         pass
 
-    @abstractmethod
     def f6(self):
         pass
 
-    @abstractmethod
     def f7(self):
         pass
 
-    @abstractmethod
     def f8(self):
         pass
 
-    @abstractmethod
     def f9(self):
         pass
 
-    @abstractmethod
     def f10(self):
         pass
 
-    @abstractmethod
     def f11(self):
         pass
 
-    @abstractmethod
     def f12(self):
         pass
 
-    @abstractmethod
     def enter(self):
         pass
 
-    @abstractmethod
     def esc(self):
         pass
 
-    @abstractmethod
     def text(self, text):
         pass
 
-    @abstractmethod
     def mouse_move(self, x, y):
         pass
 
-    @abstractmethod
     def mouse_click(self, btn, cords):
         pass
 
-    @abstractmethod
     def mouse_down(self, btn):
         pass
 
-    @abstractmethod
     def mouse_up(self, btn):
         pass
 
@@ -85,14 +66,14 @@ class ArduinoKeyboard(BaseKeyboard):
     arduino = None
     logger = logging.getLogger("ArduinoKeyboard")
 
-    def __init__(self, port, baudrate=9600, time_out=0.01):
+    def __init__(self, capture, port, baudrate=9600, time_out=0.01):
         question = str.encode("Initialization")
 
         self.arduino = self.serial.Serial(port=port, baudrate=baudrate, timeout=time_out)
         self.arduino.write(question)
         answer = self.arduino.readline()
 
-        self.logger.info("Arduino initialization answer -> %s",  answer)
+        self.logger.info("Arduino initialization answer -> %s", answer)
         if answer != question:
             raise ConnectionError("Not expected answer from arduino keyboard")
 

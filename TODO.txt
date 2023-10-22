@@ -1,2 +1,2 @@
 check admin permission now working
-bool vvariable forr loin debu or info
+bool variable for logger. Debug or info

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.bot.base import BaseHandler
+from src.bot.base import BaseHandler
 
 STATE_IDLE = 0
 STATE_FISHING = 1

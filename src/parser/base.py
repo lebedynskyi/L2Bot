@@ -5,19 +5,8 @@ from threading import Thread
 import cv2
 import numpy as np
 
-from app.ocr.recognition import TextRecognition
-
-
-class FishingResult:
-    is_fishing = False
-    seconds_left = None
-    hp_percent = None
-
-
-class NearTargetResult:
-    def __init__(self, name, distance):
-        self.name = name
-        self.distance = distance
+from src.ocr.recognition import TextRecognition
+from src.parser.result import NearTargetResult
 
 
 class BaseParser(ABC):
@@ -25,7 +14,7 @@ class BaseParser(ABC):
         self.debug = debug
 
     @abstractmethod
-    def parse_image(self, rgb, gray, *args, **kwargs):
+    def parse(self, rgb, gray, *args, **kwargs):
         raise NotImplementedError("Handler is not implemented")
 
     def match_template(self, source_grey, target_grey):
@@ -97,7 +86,7 @@ class NearTargetParser(BaseParser):
         super().__init__(debug)
         self.ocr = TextRecognition()
 
-    def parse_image(self, rgb, gray, *args, **kwargs):
+    def parse(self, rgb, gray, *args, **kwargs):
         title_boxes = self._find_title_boxes(rgb)
         threads = []
         result = []
@@ -121,7 +110,7 @@ class NearTargetParser(BaseParser):
 
         name = self.ocr.extract(title_box, 3)
         if name is not None and len(name) > 1:
-            result.append(NearTargetResult(name, distance))
+            result.append(NearTargetResult(x, y, name, distance))
 
     def _find_title_boxes(self, rgb):
 
@@ -144,7 +133,7 @@ class NearTargetParser(BaseParser):
                 already_added = result[idx]
 
                 if already_added[1] == y:
-                    extended = self._union(already_added, [x, y, w, h])
+                    extended = union(already_added, [x, y, w, h])
                     result[idx] = extended
                     is_merged = True
                     break
@@ -158,14 +147,14 @@ class NearTargetParser(BaseParser):
             for [x, y, w, h] in result:
                 # draw rectangle around contour
                 cv2.rectangle(rgb_copy, (x, y), (x + w, y + h), (0, 0, 255), 1)
-            self.show_im(rgb_copy, "Found titles")
+            self.show_im(rgb_copy, "Found mobs titles")
 
         return result
 
-    @staticmethod
-    def _union(a, b):
-        x = min(a[0], b[0])
-        y = min(a[1], b[1])
-        w = max(a[0] + a[2], b[0] + b[2]) - x
-        h = max(a[1] + a[3], b[1] + b[3]) - y
-        return (x, y, w, h)
+
+def union(a, b):
+    x = min(a[0], b[0])
+    y = min(a[1], b[1])
+    w = max(a[0] + a[2], b[0] + b[2]) - x
+    h = max(a[1] + a[3], b[1] + b[3]) - y
+    return (x, y, w, h)

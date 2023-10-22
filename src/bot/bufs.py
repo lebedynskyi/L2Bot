@@ -1,8 +1,8 @@
 import logging
 from abc import ABC, abstractmethod
 
-from app.bot.base import BaseHandler
-from app.controller import BaseController
+from src.bot.base import BaseHandler
+from src.controller import BaseController
 
 
 class ControllerUseBottles(BaseController, ABC):
