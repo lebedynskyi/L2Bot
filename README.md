@@ -20,7 +20,6 @@ Here I've used next technologies:
 
 # TODO
 * Check admin permission not working
-* bool variable to configure logger. Debug mode should enable debug logs
 * Finish at least auto farm
 * Unittest. Some magic with start folder. Need to teach 
 

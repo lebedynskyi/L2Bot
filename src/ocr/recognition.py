@@ -39,7 +39,7 @@ class Recognition(ABC):
             logger.debug("Parsed text is -> '%s'", text)
             return text
         except BaseException as e:
-            logger.debug("Unable to parse text, %s", e)
+            logger.warning("Unable to parse text, %s", e)
         return None
 
 

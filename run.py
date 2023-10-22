@@ -22,7 +22,10 @@ def init_logger():
 
     formatter = logging.Formatter(fmt="%(asctime)s: %(name)s: %(message)s")
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.level = logging.DEBUG
+    if DEVELOP:
+        console_handler.level = logging.DEBUG
+    else:
+        console_handler.level = logging.INFO
     console_handler.setFormatter(formatter)
 
     file_handler = RotatingFileHandler(filename='res/output/logs/l2auto.log', maxBytes=1 * 1024 * 1024,
@@ -116,7 +119,7 @@ def run_farm():
                                                      parser_near_target, parser_target,
                                                      "Gremlin")
 
-    app = BaseApp(wincap, handler_spoil_auto_farm)
+    app = BaseApp(wincap, handler_spoil_auto_farm, tick_delay_seconds=0.5)
     app.loop()
 
 
