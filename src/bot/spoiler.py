@@ -43,7 +43,6 @@ class ControllerSpoilerAutoFarm(BaseController):
 
 
 class HandlerSpoilerAutoFarm(BaseHandler):
-    STATE_TARGET = 1
     STATE_SPOIL = 2
     STATE_MANOR = 3
     logger = logging.getLogger("SpoilerAutoFarm")
@@ -62,7 +61,6 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         # Add parsing of name
         target = self.target_parser.parse(screen_rgb, screen_gray)
         if self.state == STATE_IDLE:
-            self.state = self.STATE_TARGET
             self.logger.info("State IDLE. LOOK for target")
             if target.exist:
                 self.logger.info("State IDLE. target already exist. Aggr or target already found")
@@ -77,7 +75,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 # Bot got stuck. Not able to select target in move
                 self.target_counter = 0
                 self.logger.warning("Bot got stuck. Wait a little")
-                time.sleep(5)
+                time.sleep(3)
                 return True
 
             if target is not None:
@@ -86,14 +84,17 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.target_counter = self.target_counter + 1
                 time.sleep(0.2)
                 self.controller.spoil()
+                self.state = self.STATE_SPOIL
                 return True
             else:
                 self.controller.next_target()
                 time.sleep(0.2)
                 self.controller.spoil()
-                self.logger.info("State IDLE. Target selected by next target")
+                self.logger.info("State IDLE. Target selected by target")
+                self.state = self.STATE_SPOIL
                 return True
 
+        # TODO Add timer to reset target and sleect via target
         if self.state == self.STATE_SPOIL:
             if not target.exist:
                 self.logger.warning("State SPOIL, Target not exist. Reset state")
@@ -114,6 +115,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 return True
 
             if target.hp == 0:
+                self.logger.info("Tared killed. Sweep / Harvest")
                 self.controller.sweep()
                 time.sleep(0.2)
                 self.controller.harvest()
