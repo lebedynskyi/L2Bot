@@ -1,2 +1,0 @@
-check admin permission now working
-bool variable for logger. Debug or info
