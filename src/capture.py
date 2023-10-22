@@ -8,12 +8,6 @@ logger = logging.getLogger("WinCap")
 
 
 class Capture(ABC):
-    @abstractmethod
-    def screenshot(self):
-        pass
-
-
-class WinCap(Capture):
     hwnd = None
     cropped_x = 0
     cropped_y = 0
@@ -22,6 +16,12 @@ class WinCap(Capture):
     w = 0
     h = 0
 
+    @abstractmethod
+    def screenshot(self):
+        pass
+
+
+class WinCap(Capture):
     def __init__(self, hwnd):
         from ctypes import windll
 
@@ -82,8 +82,8 @@ class WinCap(Capture):
 
         # set the cropped coordinates offset so we can translate screenshot
         # images into actual screen positions
-        self.offset_x = window_rect[0] + self.cropped_x
-        self.offset_y = window_rect[1] + self.cropped_y
+        self.offset_x = window_rect[0]
+        self.offset_y = window_rect[1]
 
         logger.debug("Updated l2 window coordinates, w=%s, h=%s, offset_x=%s, offset_y=%s",
                      self.w, self.h, self.offset_x, self.offset_y)

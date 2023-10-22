@@ -5,7 +5,9 @@ class FishingResult:
 
 
 class NearTargetResult:
-    def __init__(self, x, y, name, distance):
+    def __init__(self, x, y, w, h, name, distance):
+        self.h = h
+        self.w = w
         self.x = x
         self.y = y
         self.name = name

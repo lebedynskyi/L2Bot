@@ -4,6 +4,9 @@ import pyautogui
 
 
 class BaseKeyboard:
+    KEY_MOUSE_LEFT = 1
+    KEY_MOUSE_RIGHT = 2
+    KEY_MOUSE_MIDDLE = 4
 
     def f1(self):
         pass

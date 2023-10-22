@@ -1,3 +1,6 @@
+import threading
+import time
+
 from fuzzywuzzy import fuzz
 
 from src.bot.base import BaseHandler, STATE_IDLE
@@ -8,8 +11,8 @@ from src.parser.base import NearTargetParser
 
 
 class ControllerSpoilerAutoFarm(BaseController):
-    def __int__(self, keyboard: BaseKeyboard,  capture: Capture):
-        self.keyboard = keyboard
+    def __init__(self, keyboard: BaseKeyboard, capture: Capture):
+        super().__init__(keyboard)
         self.capture = capture
 
     def spoil(self):
@@ -31,7 +34,11 @@ class ControllerSpoilerAutoFarm(BaseController):
         self.keyboard.f6()
 
     def select_target(self, target):
-        self.keyboard.mouse_move(target.x, target.y)
+        x = target.x + self.capture.offset_x + (target.w / 2)
+        y = target.y + self.capture.offset_y + (target.h / 2) + 5
+        self.keyboard.mouse_move(x, y)
+        time.sleep(0.2)
+        self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT)
 
 
 class HandlerSpoilerAutoFarm(BaseHandler):
@@ -49,6 +56,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
             else:
                 # TODO we can even use /target command
                 self.controller.next_target()
+                self.controller.spoil()
             return True
 
         return False

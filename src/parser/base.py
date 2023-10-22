@@ -110,7 +110,7 @@ class NearTargetParser(BaseParser):
 
         name = self.ocr.extract(title_box, 2)
         if name is not None and len(name) > 1:
-            result.append(NearTargetResult(x, y, name, distance))
+            result.append(NearTargetResult(x, y, w, h, name, distance))
 
     def _find_title_boxes(self, rgb):
 

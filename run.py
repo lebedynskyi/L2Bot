@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import time
 from logging.handlers import RotatingFileHandler
 
 from src.base import BaseApp
@@ -131,5 +132,6 @@ if __name__ == "__main__":
     if DEVELOP:
         run_develop()
     else:
+        time.sleep(3)
         run_farm()
         # run_manor_trade()
