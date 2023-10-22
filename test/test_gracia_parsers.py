@@ -1,7 +1,7 @@
 import unittest
 
 from src.template import GraciaRebornTemplates
-from test.base import read_input_img
+from test.tools import read_input_img
 from src.parser.gracia import GraciaFishing
 
 
@@ -71,7 +71,3 @@ class TestGraciaFishing(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         assert result is not None
         self.assertEqual(11, result.hp_percent)
-
-
-if __name__ == "__main__":
-    unittest.main()

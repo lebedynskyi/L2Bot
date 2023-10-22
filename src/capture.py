@@ -9,8 +9,6 @@ logger = logging.getLogger("WinCap")
 
 class Capture(ABC):
     hwnd = None
-    cropped_x = 0
-    cropped_y = 0
     offset_x = 0
     offset_y = 0
     w = 0
@@ -77,8 +75,6 @@ class WinCap(Capture):
         titlebar_pixels = 30
         self.w = w - (border_pixels * 2)
         self.wh = h - titlebar_pixels - border_pixels
-        self.cropped_x = border_pixels
-        self.cropped_y = titlebar_pixels
 
         # set the cropped coordinates offset so we can translate screenshot
         # images into actual screen positions

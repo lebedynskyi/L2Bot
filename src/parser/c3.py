@@ -13,5 +13,5 @@ class C3TargetParser(TargetParser):
     y_offset = 0
     w = 0
     h = 0
-    lower_color = np.array([109, 0, 242])
+    lower_color = np.array([0, 145, 153])
     upper_color = np.array([179, 255, 255])

@@ -8,7 +8,8 @@ from src.base import BaseApp
 from src.bot.spoiler import HandlerSpoilerAutoFarm, ControllerSpoilerAutoFarm
 from src.capture import MockCap
 from src.keyboard import ArduinoKeyboard, BaseKeyboard
-from src.parser.c3 import C3NearTargetsParser
+from src.parser.c3 import C3NearTargetsParser, C3TargetParser
+from src.template import C3Templates
 
 DEVELOP = False
 logger = logging.getLogger()
@@ -107,8 +108,13 @@ def run_farm():
     keyboard = ArduinoKeyboard(port="COM3")
     controller_spoil_auto_farm = ControllerSpoilerAutoFarm(keyboard, wincap)
 
+    c3_templates = C3Templates("res/templates")
+
     parser_near_target = C3NearTargetsParser()
-    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, "Goblin Snooper")
+    parser_target = C3TargetParser(c3_templates)
+    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm,
+                                                     parser_near_target, parser_target,
+                                                     "Gremlin")
 
     app = BaseApp(wincap, handler_spoil_auto_farm)
     app.loop()

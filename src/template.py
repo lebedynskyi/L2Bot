@@ -33,6 +33,7 @@ class Template:
             exit(1)
 
         self.ui_fishing_dialog = self._read_template(res_folder, sub_folder, "dialog_fishing.png")
+        self.ui_target = self._read_template(res_folder, sub_folder, "target.png")
 
     @staticmethod
     def _read_template(res_folder, sub_folder, name):
@@ -45,3 +46,8 @@ class GraciaRebornTemplates(Template):
         super().__init__(folder, "gracia")
         self.captcha_dualbox = None
         self.captcha_solo = None
+
+
+class C3Templates(Template):
+    def __init__(self, folder):
+        super().__init__(folder, "c3")

@@ -118,7 +118,6 @@ class NearTargetParser(BaseParser):
         contours, hierarchy = self.find_contours(masked)
 
         result = []
-
         for contour in contours:
             # get rectangle bounding contour
             [x, y, w, h] = cv2.boundingRect(contour)
@@ -160,14 +159,51 @@ class TargetParser(BaseParser):
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 0, 0])
 
-    def __init__(self, template, debug=False):
+    def __init__(self, templates, debug=False):
         super().__init__(debug)
-        self.template = template
+        self.templates = templates
 
     def parse(self, rgb, gray, *args, **kwargs):
         result = TargetResult()
-        found_target = self.match_template(gray, self.template)
-        print("ddd")
+        target_match = self.match_template(gray, self.templates.ui_target)
+        if target_match is not None:
+            result.exist = True
+            result.hp = self._parse_hp(rgb, target_match)
+        return result
+
+    def _parse_hp(self, rgb, match):
+        croped = rgb[match[1] + 26:match[1] + 30, match[0] + 12:match[0] + 168]
+        if self.debug:
+            self.show_im(croped, "Target HP area")
+
+        width = int(croped.shape[1] * 2)
+        height = int(croped.shape[0] * 2)
+        dim = (width, height)
+
+        # resize image
+        resized = cv2.resize(croped, dim, interpolation=cv2.INTER_AREA)
+        if self.debug:
+            self.show_im(resized, "Resized target hp target")
+
+        masked = self.hsv_mask(resized, self.lower_color, self.upper_color)
+        contours, hierarchy = self.find_contours(masked)
+
+        if contours:
+            cnt = contours[0]
+            approx = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
+            if cv2.contourArea(cnt) > 10:  # to discard noise from the color segmentation
+                contour_poly = cv2.approxPolyDP(cnt, 3, True)
+                center, radius = cv2.minEnclosingCircle(contour_poly)
+
+                if self.debug:
+                    color = (0, 255, 0)
+                    cv2.circle(resized, (int(center[0]), int(center[1])), int(radius), color, 2)
+                    self.show_im(resized, "Found limits")
+
+                resized_width = int(resized.shape[1])
+                hp_width = radius * 2
+
+                return int(hp_width * 100 / resized_width)
 
 
 def union(a, b):

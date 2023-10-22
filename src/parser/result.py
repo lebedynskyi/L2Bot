@@ -13,5 +13,7 @@ class NearTargetResult:
         self.name = name
         self.distance = distance
 
+
 class TargetResult:
-    has_target = False
+    exist = False
+    hp = 0
