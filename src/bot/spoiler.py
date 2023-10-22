@@ -1,4 +1,3 @@
-import threading
 import time
 
 from fuzzywuzzy import fuzz

@@ -12,3 +12,6 @@ class NearTargetResult:
         self.y = y
         self.name = name
         self.distance = distance
+
+class TargetResult:
+    has_target = False

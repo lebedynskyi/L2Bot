@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 
 from src.ocr.recognition import TextRecognition
-from src.parser.result import NearTargetResult
+from src.parser.result import NearTargetResult, TargetResult
 
 
 class BaseParser(ABC):
@@ -150,6 +150,24 @@ class NearTargetParser(BaseParser):
             self.show_im(rgb_copy, "Found mobs titles")
 
         return result
+
+
+class TargetParser(BaseParser):
+    x_offset = 0
+    y_offset = 0
+    w = 0
+    h = 0
+    lower_color = np.array([0, 0, 0])
+    upper_color = np.array([0, 0, 0])
+
+    def __init__(self, template, debug=False):
+        super().__init__(debug)
+        self.template = template
+
+    def parse(self, rgb, gray, *args, **kwargs):
+        result = TargetResult()
+        found_target = self.match_template(gray, self.template)
+        print("ddd")
 
 
 def union(a, b):

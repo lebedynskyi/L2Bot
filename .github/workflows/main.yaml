@@ -31,4 +31,7 @@ jobs:
 
       # Running project unit tests rom run_tests.py file
       - name: Run unit tests
-        run: python -m unittest
+        run: |
+          cd test
+          export PYTHONPATH=../
+          python -m unittest
