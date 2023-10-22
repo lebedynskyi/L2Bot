@@ -205,6 +205,8 @@ class TargetParser(BaseParser):
 
                 return int(hp_width * 100 / resized_width)
 
+        return 0
+
 
 def union(a, b):
     x = min(a[0], b[0])

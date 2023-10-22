@@ -27,5 +27,5 @@ class HandlerFishing(BaseHandler):
         self.controller = controller
         self.state = STATE_IDLE
 
-    def _on_tick(self, screen_rgb, screen_grey, time, delta):
+    def _on_tick(self, screen_rgb, screen_gray, delta):
         pass

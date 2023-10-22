@@ -37,17 +37,23 @@ class TestTarget(unittest.TestCase):
     def test_parsing_5hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_5.bmp")
         result = self.parser.parse(rgb, grey)
-        self.assertTrue(result.has_target)
+        self.assertTrue(result.exist)
         self.assertEqual(5, result.hp)
 
     def test_parsing_50hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_50.bmp")
         result = self.parser.parse(rgb, grey)
-        self.assertTrue(result.has_target)
+        self.assertTrue(result.exist)
         self.assertEqual(50, result.hp)
 
     def test_parsing_78hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_78.bmp")
         result = self.parser.parse(rgb, grey)
-        self.assertTrue(result.has_target)
-        self.assertEqual(78 , result.hp)
+        self.assertTrue(result.exist)
+        self.assertEqual(78, result.hp)
+
+    def test_parsing_0hp(self):
+        rgb, grey = read_input_img("../res/input/c3/HP_0.bmp")
+        result = self.parser.parse(rgb, grey)
+        self.assertTrue(result.exist)
+        self.assertEqual(0, result.hp)

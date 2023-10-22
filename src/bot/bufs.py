@@ -17,7 +17,7 @@ class HandlerUseBottles(BaseHandler):
     def __init__(self, controller: ControllerUseBottles):
         self.controller = controller
 
-    def _on_tick(self, screen_rgb, screen_grey, time, delta):
+    def _on_tick(self, screen_rgb, screen_gray, delta):
         if delta > 1150:
             self.logger.info("Use bottle")
             self.controller.use_bottle()

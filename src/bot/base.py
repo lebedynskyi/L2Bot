@@ -17,9 +17,9 @@ class BaseHandler(ABC):
         if not self.is_paused:
             delta = time - self.last_action_time
 
-            if self._on_tick(screen_rgb, screen_gray, time, delta):
+            if self._on_tick(screen_rgb, screen_gray, delta):
                 self.last_action_time = time
 
     @abstractmethod
-    def _on_tick(self, screen_rgb, screen_gray, time, delta):
+    def _on_tick(self, screen_rgb, screen_gray, delta):
         pass
