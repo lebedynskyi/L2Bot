@@ -1,7 +1,8 @@
-Pillow~=8.3.2
-numpy==1.19.5
-opencv-python~=4.5.1.48
-pyautogui~=0.9.53
-pytesseract~=0.3.7
-wmi
-pyserial
+Pillow==10.0.1
+numpy==1.26.0
+opencv-python~=4.8.1.78
+pytesseract==0.3.10
+pywin32==306
+pyserial==3.5
+PyAutoGUI==0.9.54
+fuzzywuzzy==0.18.0
