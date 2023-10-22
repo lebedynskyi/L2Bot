@@ -119,7 +119,7 @@ def run_farm():
                                                      parser_near_target, parser_target,
                                                      "Gremlin")
 
-    app = BaseApp(wincap, handler_spoil_auto_farm, tick_delay_seconds=0.5)
+    app = BaseApp(wincap, handler_spoil_auto_farm, tick_delay_seconds=0.8)
     app.loop()
 
 

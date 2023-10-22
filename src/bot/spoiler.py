@@ -35,7 +35,7 @@ class ControllerSpoilerAutoFarm(BaseController):
 
     def select_target(self, target):
         x = target.x + self.capture.offset_x + (target.w / 2)
-        y = target.y + self.capture.offset_y + (target.h / 2) + 10
+        y = target.y + self.capture.offset_y + (target.h / 2) + 12
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
 
     def cancel(self):
@@ -67,6 +67,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
             if target.exist:
                 self.logger.info("State IDLE. target already exist. Aggr or target already found")
                 self.controller.spoil()
+                self.target_counter = 0
                 self.state = self.STATE_SPOIL
                 return True
 
@@ -75,6 +76,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
             if self.target_counter >= 3:
                 # Bot got stuck. Not able to select target in move
                 self.target_counter = 0
+                self.logger.warning("Bot got stuck. Wait a little")
                 time.sleep(5)
                 return True
 
