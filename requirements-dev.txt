@@ -5,5 +5,3 @@ pytesseract==0.3.10
 pyserial==3.5
 PyAutoGUI==0.9.54
 fuzzywuzzy==0.18.0
-
-pywin32==306

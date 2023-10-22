@@ -1,6 +1,6 @@
 # Lineage 2 bot 
 
-![Python unit tests](https://github.com/lebedynskyi/l2_bot/actions/workflows/main.yml/badge.svg)
+![Python unit tests](https://github.com/lebedynskyi/L2Bot/actions/workflows/main.yaml/badge.svg)
 
 This is a bot - kind of mix of auto clicker and computer vision.
 Bot has general logic and specific **Parsers** for different L2 chronicles. Parser is using computer vision to determine current hp of target, find target and etc  
