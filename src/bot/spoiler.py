@@ -48,6 +48,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
     STATE_MANOR = 3
     logger = logging.getLogger("SpoilerAutoFarm")
     after_kill = False
+    random_choice = False
     target_counter = 0
 
     def __init__(self, controller: ControllerSpoilerAutoFarm,
@@ -90,7 +91,6 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.controller.spoil()
                 self.target_counter = 0
                 self.logger.info("State IDLE. Target selected by command")
-                self.state = self.STATE_SPOIL
                 return True
 
         # TODO Add timer to reset target and sleect via target
