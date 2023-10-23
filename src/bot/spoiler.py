@@ -48,7 +48,6 @@ class HandlerSpoilerAutoFarm(BaseHandler):
     logger = logging.getLogger("SpoilerAutoFarm")
     after_kill = False
     target_counter = 0
-    attack_time
 
     def __init__(self, controller: ControllerSpoilerAutoFarm,
                  near_target_parser: NearTargetParser,
@@ -85,12 +84,14 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.target_counter = self.target_counter + 1
                 time.sleep(0.2)
                 self.controller.spoil()
+                self.target_counter = 0
                 self.state = self.STATE_SPOIL
                 return True
             else:
                 self.controller.next_target()
                 time.sleep(0.2)
                 self.controller.spoil()
+                self.target_counter = 0
                 self.logger.info("State IDLE. Target selected by command")
                 self.state = self.STATE_SPOIL
                 return True
