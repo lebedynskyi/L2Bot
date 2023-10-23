@@ -22,8 +22,13 @@ class ControllerSpoilerAutoFarm(BaseController):
     def sweep(self):
         self.keyboard.f2()
 
-    def next_target(self):
-        self.keyboard.f3()
+    def next_target(self, target):
+        if target is not None:
+            self.keyboard.text("/target %s" % target)
+        else:
+            self.keyboard.text("/targetnext")
+        time.sleep(0.3)
+        self.keyboard.enter()
 
     def pick_up(self):
         self.keyboard.f4()
@@ -69,19 +74,18 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         target = self.target_parser.parse(screen_rgb, screen_gray)
         if self.state == STATE_IDLE:
             if target.exist:
-                self.logger.info("State IDLE. Target exist. Agr or found.")
+                self.logger.info("State IDLE. Target exist. Agr or target found.")
                 self.controller.spoil()
                 self.target_counter = 0
                 self.state = self.STATE_SPOIL
                 return True
 
             target = self._find_target(screen_rgb, screen_gray, self.random_choice)
-            if self.target_counter >= 3:
-                # Bot got stuck. Not able to select target in move or character or mob
+            if self.target_counter >= 2:
+                self.logger.warning("Cannot select target by mouse. Stop and retry")
                 self.target_counter = 0
                 self.controller.move(screen_rgb[1] / 2, screen_rgb[0] / 2)
-                self.logger.warning("Got stuck. Wait a little")
-                time.sleep(1)
+                time.sleep(0.2)
                 return True
 
             if target is not None:
@@ -92,14 +96,17 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.controller.spoil()
                 return True
             else:
-                self.controller.next_target()
+                if self.mobs:
+                    self.controller.next_target(random.choice(self.mobs))
+                else:
+                    self.controller.next_target(None)
                 time.sleep(0.2)
                 self.controller.spoil()
                 self.target_counter = 0
                 self.logger.info("State IDLE. Target selected by command")
                 return True
 
-        # TODO Add timer to reset target and sleect via target
+        # TODO Add timer to reset target and select via target
         if self.state == self.STATE_SPOIL:
             if not target.exist:
                 self.logger.warning("State SPOIL, Target not exist. Reset state")
