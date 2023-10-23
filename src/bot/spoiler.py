@@ -62,9 +62,8 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         # Add parsing of name
         target = self.target_parser.parse(screen_rgb, screen_gray)
         if self.state == STATE_IDLE:
-            self.logger.info("State IDLE. LOOK for target")
             if target.exist:
-                self.logger.info("State IDLE. target already exist. Aggr or target already found")
+                self.logger.info("State IDLE. Target exist. Agr or found.")
                 self.controller.spoil()
                 self.target_counter = 0
                 self.state = self.STATE_SPOIL
@@ -83,9 +82,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.logger.info("State IDLE. Target selected by mouse, distance %s", target.distance)
                 self.target_counter = self.target_counter + 1
                 time.sleep(0.2)
-                self.target_counter = 0
                 self.controller.spoil()
-                self.state = self.STATE_SPOIL
                 return True
             else:
                 self.controller.next_target()
@@ -123,7 +120,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 return True
 
             if target.hp == 0:
-                self.logger.info("Tared killed. Sweep / Harvest")
+                self.logger.info("Target killed. Sweep / Harvest")
                 self.controller.sweep()
                 time.sleep(0.2)
                 self.controller.harvest()
@@ -152,7 +149,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         interested_mobs = []
         for target in targets:
             for mob in self.mobs:
-                if fuzz.ratio(target.name, mob) >= 65:
+                if fuzz.ratio(target.name, mob) >= 75:
                     interested_mobs.append(target)
 
         if interested_mobs:
