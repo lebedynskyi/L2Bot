@@ -74,7 +74,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
             if self.target_counter >= 3:
                 # Bot got stuck. Not able to select target in move
                 self.target_counter = 0
-                self.logger.warning("Bot got stuck. Wait a little")
+                self.logger.warning("Got stuck. Wait a little")
                 time.sleep(3)
                 return True
 

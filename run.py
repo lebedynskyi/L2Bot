@@ -117,7 +117,7 @@ def run_farm():
     parser_target = C3TargetParser(c3_templates)
     handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm,
                                                      parser_near_target, parser_target,
-                                                     "Gremlin")
+                                                     "Longtail Keltir", "Elder Longtail Keltir")
 
     app = BaseApp(wincap, handler_spoil_auto_farm, tick_delay_seconds=0.8)
     app.loop()
