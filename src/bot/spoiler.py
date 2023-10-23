@@ -27,8 +27,9 @@ class ControllerSpoilerAutoFarm(BaseController):
             self.keyboard.text("/target %s" % target)
         else:
             self.keyboard.text("/targetnext")
-        time.sleep(0.3)
+        time.sleep(0.5)
         self.keyboard.enter()
+        pass
 
     def pick_up(self):
         self.keyboard.f4()
