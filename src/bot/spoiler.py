@@ -79,13 +79,12 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 return True
 
             if target is not None:
-                self.logger.info("State IDLE. Target selected by mouse")
                 self.controller.select_target(target)
+                self.logger.info("State IDLE. Target selected by mouse, distance %s", target.distance)
                 self.target_counter = self.target_counter + 1
                 time.sleep(0.2)
                 self.target_counter = 0
                 self.controller.spoil()
-                self.target_counter = 0
                 self.state = self.STATE_SPOIL
                 return True
             else:
@@ -112,8 +111,8 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
             if delta > 6 and target.hp > 90:
                 self.logger.info("State SPOIL, Probably got stuck. Select another target by command")
-                self.controller.next_target()
-                self.controller.spoil()
+                self.controller.cancel()
+                self._reset()
                 return True
 
             self.logger.info("State SPOIL, Keep fighting. Target hp %s", target.hp)
@@ -143,6 +142,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         return False
 
     def _reset(self):
+        self.controller.cancel()
         self.after_kill = False
         self.state = STATE_IDLE
 
