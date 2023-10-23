@@ -9,9 +9,10 @@ class C3NearTargetsParser(NearTargetParser):
 
 
 class C3TargetParser(TargetParser):
-    x_offset = 0
-    y_offset = 0
-    w = 0
-    h = 0
+    x_offset = 16
+    y_offset = 26
+    w = 150
+    h = 5
+
     lower_color = np.array([0, 145, 153])
     upper_color = np.array([179, 255, 255])

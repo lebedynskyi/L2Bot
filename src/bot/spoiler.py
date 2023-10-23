@@ -1,4 +1,5 @@
 import logging
+import random
 import time
 
 from fuzzywuzzy import fuzz
@@ -69,8 +70,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.state = self.STATE_SPOIL
                 return True
 
-            # TODO skip killed monster. It is nearest. Need to adjust logic to skip nearest? After spoil it disappear
-            target = self._find_target(screen_rgb, screen_gray)
+            target = self._find_target(screen_rgb, screen_gray, self.random_choice)
             if self.target_counter >= 3:
                 # Bot got stuck. Not able to select target in move
                 self.target_counter = 0
@@ -110,8 +110,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 return True
 
             if delta > 6 and target.hp > 90:
-                self.logger.info("State SPOIL, Probably got stuck. Select another target by command")
-                self.controller.cancel()
+                self.logger.info("State SPOIL, Probably got stuck. Reset state")
                 self._reset()
                 return True
 
@@ -136,6 +135,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.controller.cancel()
                 self.state = STATE_IDLE
                 self.after_kill = True
+                self.random_choice = False
                 return True
 
             self.logger.info("State MANOR, Keep fighting. Target hp %s", target.hp)
@@ -145,8 +145,9 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         self.controller.cancel()
         self.after_kill = False
         self.state = STATE_IDLE
+        self.random_choice = True
 
-    def _find_target(self, screen_rgb, screen_gray):
+    def _find_target(self, screen_rgb, screen_gray, random_choice=False):
         targets = self.near_target_parser.parse(screen_rgb, screen_gray)
         interested_mobs = []
         for target in targets:
@@ -155,8 +156,11 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                     interested_mobs.append(target)
 
         if interested_mobs:
+            if random_choice:
+                return random.choice(interested_mobs)
+
             if self.after_kill and len(interested_mobs) > 1:
-                if interested_mobs[0].distance > 50:
+                if interested_mobs[0].distance > 60:
                     return interested_mobs[0]
 
                 return interested_mobs[1]

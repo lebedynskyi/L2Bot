@@ -172,16 +172,17 @@ class TargetParser(BaseParser):
         return result
 
     def _parse_hp(self, rgb, match):
-        croped = rgb[match[1] + 26:match[1] + 30, match[0] + 12:match[0] + 168]
+        cropped = rgb[match[1] + self.y_offset:match[1] + self.y_offset + self.h,
+                  match[0] + self.x_offset:match[0] + self.x_offset + self.w]
         if self.debug:
-            self.show_im(croped, "Target HP area")
+            self.show_im(cropped, "Target HP area")
 
-        width = int(croped.shape[1] * 2)
-        height = int(croped.shape[0] * 2)
+        width = int(cropped.shape[1] * 3)
+        height = int(cropped.shape[0] * 3)
         dim = (width, height)
 
         # resize image
-        resized = cv2.resize(croped, dim, interpolation=cv2.INTER_AREA)
+        resized = cv2.resize(cropped, dim, interpolation=cv2.INTER_AREA)
         if self.debug:
             self.show_im(resized, "Resized target hp target")
 
