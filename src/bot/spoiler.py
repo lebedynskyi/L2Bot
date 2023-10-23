@@ -48,6 +48,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
     logger = logging.getLogger("SpoilerAutoFarm")
     after_kill = False
     target_counter = 0
+    attack_time
 
     def __init__(self, controller: ControllerSpoilerAutoFarm,
                  near_target_parser: NearTargetParser,
@@ -90,7 +91,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.controller.next_target()
                 time.sleep(0.2)
                 self.controller.spoil()
-                self.logger.info("State IDLE. Target selected by target")
+                self.logger.info("State IDLE. Target selected by command")
                 self.state = self.STATE_SPOIL
                 return True
 
@@ -101,10 +102,16 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self._reset()
                 return True
 
+            # TODO 1 time action
             if target.hp <= 50:
                 self.controller.manor()
                 self.state = self.STATE_MANOR
                 return True
+
+            if delta > 5:
+                self.logger.info("State SPOIL, Probably got stuck. Select another target by command")
+                self.controller.next_target()
+                self.controller.spoil()
 
             self.logger.info("State SPOIL, Keep fighting. Target hp %s", target.hp)
 
