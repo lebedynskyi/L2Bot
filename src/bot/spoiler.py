@@ -114,6 +114,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.logger.info("State SPOIL, Probably got stuck. Select another target by command")
                 self.controller.next_target()
                 self.controller.spoil()
+                return True
 
             self.logger.info("State SPOIL, Keep fighting. Target hp %s", target.hp)
 
@@ -155,6 +156,9 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
         if interested_mobs:
             if self.after_kill and len(interested_mobs) > 1:
+                if interested_mobs[0].distance > 50:
+                    return interested_mobs[0]
+
                 return interested_mobs[1]
             else:
                 return interested_mobs[0]
