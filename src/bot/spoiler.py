@@ -39,6 +39,11 @@ class ControllerSpoilerAutoFarm(BaseController):
         y = target.y + self.capture.offset_y + (target.h / 2) + 12
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
 
+    def move(self, x, y):
+        x = x + self.capture.offset_x
+        y = y + self.capture.offset_y
+        self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
+
     def cancel(self):
         self.keyboard.esc()
 
@@ -72,10 +77,11 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
             target = self._find_target(screen_rgb, screen_gray, self.random_choice)
             if self.target_counter >= 3:
-                # Bot got stuck. Not able to select target in move
+                # Bot got stuck. Not able to select target in move or character or mob
                 self.target_counter = 0
+                self.controller.move(screen_rgb[1] / 2, screen_rgb[0] / 2)
                 self.logger.warning("Got stuck. Wait a little")
-                time.sleep(3)
+                time.sleep(1)
                 return True
 
             if target is not None:
