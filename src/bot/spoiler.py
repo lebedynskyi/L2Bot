@@ -83,6 +83,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.controller.select_target(target)
                 self.target_counter = self.target_counter + 1
                 time.sleep(0.2)
+                self.target_counter = 0
                 self.controller.spoil()
                 self.target_counter = 0
                 self.state = self.STATE_SPOIL
@@ -109,7 +110,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.state = self.STATE_MANOR
                 return True
 
-            if delta > 5:
+            if delta > 6 and target.hp > 90:
                 self.logger.info("State SPOIL, Probably got stuck. Select another target by command")
                 self.controller.next_target()
                 self.controller.spoil()
@@ -149,7 +150,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         interested_mobs = []
         for target in targets:
             for mob in self.mobs:
-                if fuzz.ratio(target.name, mob) >= 60:
+                if fuzz.ratio(target.name, mob) >= 65:
                     interested_mobs.append(target)
 
         if interested_mobs:
