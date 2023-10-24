@@ -6,7 +6,7 @@ from src.template import C3Templates
 from test.tools import read_input_img
 
 
-class TestNearestTargets(unittest.TestCase):
+class TestNearestTargetsParser(unittest.TestCase):
     def setUp(self):
         self.parser = C3NearTargetsParser(debug=False)
 
@@ -29,7 +29,7 @@ class TestNearestTargets(unittest.TestCase):
         print("\nFinish %s" % datetime.datetime.now())
 
 
-class TestTarget(unittest.TestCase):
+class TestC3TargetParser(unittest.TestCase):
     def setUp(self):
         templates = C3Templates("../res/templates")
         self.parser = C3TargetParser(templates, debug=True)

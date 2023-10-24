@@ -128,8 +128,8 @@ def run_develop():
     mock_cap = MockCap("res/input/c3/Shot00004.bmp", "res/input/c3/Shot00008.bmp")
     parser_near_target = C3NearTargetsParser()
     BaseKeyboard()
-    handler_spoil_auto_farm = HandlerSpoilerAutoFarm(None, parser_near_target, "Goblin Snooper")
-    app = BaseApp(mock_cap, handler_spoil_auto_farm)
+    # handler_spoil_auto_farm = HandlerSpoilerAutoFarm(None, parser_near_target, "Goblin Snooper")
+    app = BaseApp(mock_cap, )
     app.loop()
     logger.info("Finish due to develop")
 

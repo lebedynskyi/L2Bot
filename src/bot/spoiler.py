@@ -11,6 +11,7 @@ from src.keyboard import BaseKeyboard
 from src.parser.base import NearTargetParser, TargetParser
 
 
+# todo need to click near mob title to start moving with pathfinding
 class ControllerSpoilerAutoFarm(BaseController):
     def __init__(self, keyboard: BaseKeyboard, capture: Capture):
         super().__init__(keyboard)
@@ -55,8 +56,8 @@ class ControllerSpoilerAutoFarm(BaseController):
 
 
 class HandlerSpoilerAutoFarm(BaseHandler):
-    STATE_SPOIL = 2
-    STATE_MANOR = 3
+    STATE_START_FIGHT = 2
+    STATE_FIGHT = 3
     logger = logging.getLogger("SpoilerAutoFarm")
     after_kill = False
     random_choice = False
@@ -73,83 +74,96 @@ class HandlerSpoilerAutoFarm(BaseHandler):
     def _on_tick(self, screen_rgb, screen_gray, delta):
         # Add parsing of name
         target = self.target_parser.parse(screen_rgb, screen_gray)
+
         if self.state == STATE_IDLE:
-            if target.exist:
-                self.logger.info("State IDLE. Target exist. Agr or target found.")
-                self.controller.spoil()
-                self.target_counter = 0
-                self.state = self.STATE_SPOIL
-                return True
+            return self._handle_state_idle(screen_rgb, screen_gray, target)
 
-            target = self._find_target(screen_rgb, screen_gray, self.random_choice)
-            if self.target_counter >= 2:
-                self.logger.warning("Cannot select target by mouse. Stop and retry")
-                self.target_counter = 0
-                self.controller.move(screen_rgb[1] / 2, screen_rgb[0] / 2)
-                time.sleep(0.2)
-                return True
+        if self.state == self.STATE_START_FIGHT:
+            return self._handle_state_spoil(screen_rgb, screen_gray, target, delta
+                                            )
+        if self.state == self.STATE_FIGHT:
+            return self._handle_state_manor(screen_rgb, screen_gray, target, delta)
 
-            if target is not None:
-                self.controller.select_target(target)
-                self.logger.info("State IDLE. Target selected by mouse, distance %s", target.distance)
-                self.target_counter = self.target_counter + 1
-                time.sleep(0.2)
-                self.controller.spoil()
-                return True
+        return False
+
+    def _handle_state_idle(self, screen_rgb, screen_gray, target):
+        if target.exist:
+            self.logger.info("State IDLE. Target exist. Agr or target found.")
+            self.controller.spoil()
+            self.target_counter = 0
+            self.state = self.STATE_START_FIGHT
+            return True
+
+        target = self._find_target(screen_rgb, screen_gray, self.random_choice)
+        if self.target_counter >= 2:
+            self.logger.warning("Cannot select target by mouse. Stop and retry")
+            self.target_counter = 0
+            self.controller.move(screen_rgb.shape[1] / 2, screen_rgb.shape[0] / 2)
+            time.sleep(0.2)
+            return True
+
+        if target is not None:
+            self.controller.select_target(target)
+            self.logger.info("State IDLE. Target selected by mouse, distance %s", target.distance)
+            self.target_counter = self.target_counter + 1
+            time.sleep(0.2)
+            self.controller.spoil()
+            return True
+        else:
+            if self.mobs:
+                self.controller.next_target(random.choice(self.mobs))
             else:
-                if self.mobs:
-                    self.controller.next_target(random.choice(self.mobs))
-                else:
-                    self.controller.next_target(None)
-                time.sleep(0.2)
-                self.controller.spoil()
-                self.target_counter = 0
-                self.logger.info("State IDLE. Target selected by command")
-                return True
+                self.controller.next_target(None)
+            time.sleep(0.2)
+            self.controller.spoil()
+            self.target_counter = 0
+            self.logger.info("State IDLE. Target selected by command")
+            return True
 
+    def _handle_state_spoil(self, screen_rgb, screen_gray, target, delta):
         # TODO Add timer to reset target and select via target
-        if self.state == self.STATE_SPOIL:
-            if not target.exist:
-                self.logger.warning("State SPOIL, Target not exist. Reset state")
-                self._reset()
-                return True
+        if not target.exist:
+            self.logger.warning("State SPOIL, Target not exist. Reset state")
+            self._reset()
+            return True
 
-            # TODO 1 time action
-            if target.hp <= 50:
-                self.controller.manor()
-                self.state = self.STATE_MANOR
-                return True
+        # TODO 1 time action
+        if target.hp <= 50:
+            self.controller.manor()
+            self.state = self.STATE_FIGHT
+            return True
 
-            if delta > 6 and target.hp > 90:
-                self.logger.info("State SPOIL, Probably got stuck. Reset state")
-                self._reset()
-                return True
+        if delta > 6 and target.hp > 90:
+            self.logger.info("State SPOIL, Probably got stuck. Reset state")
+            self._reset()
+            return True
 
-            self.logger.info("State SPOIL, Keep fighting. Target hp %s", target.hp)
+        self.logger.info("State SPOIL, Keep fighting. Target hp %s", target.hp)
+        return False
 
-        if self.state == self.STATE_MANOR:
-            if not target.exist:
-                self.logger.warning("State MANOR, Target not exist. Reset state")
-                self._reset()
-                return True
+    def _handle_state_manor(self, screen_rgb, screen_gray, target, delta):
+        if not target.exist:
+            self.logger.warning("State MANOR, Target not exist. Reset state")
+            self._reset()
+            return True
 
-            if target.hp == 0:
-                self.logger.info("Target killed. Sweep / Harvest")
-                self.controller.sweep()
-                time.sleep(0.2)
-                self.controller.harvest()
-                time.sleep(0.2)
-                self.controller.pick_up()
-                time.sleep(0.2)
-                self.controller.pick_up()
-                time.sleep(0.2)
-                self.controller.cancel()
-                self.state = STATE_IDLE
-                self.after_kill = True
-                self.random_choice = False
-                return True
+        if target.hp == 0:
+            self.logger.info("Target killed. Sweep / Harvest")
+            self.controller.sweep()
+            time.sleep(0.2)
+            self.controller.harvest()
+            time.sleep(0.2)
+            self.controller.pick_up()
+            time.sleep(0.2)
+            self.controller.pick_up()
+            time.sleep(0.2)
+            self.controller.cancel()
+            self.state = STATE_IDLE
+            self.after_kill = True
+            self.random_choice = False
+            return True
 
-            self.logger.info("State MANOR, Keep fighting. Target hp %s", target.hp)
+        self.logger.info("State MANOR, Keep fighting. Target hp %s", target.hp)
         return False
 
     def _reset(self):

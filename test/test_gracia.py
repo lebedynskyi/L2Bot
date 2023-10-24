@@ -1,11 +1,11 @@
 import unittest
 
+from src.parser.gracia import GraciaFishing, GraciaTargetParser
 from src.template import GraciaRebornTemplates
 from test.tools import read_input_img
-from src.parser.gracia import GraciaFishing
 
 
-class TestGraciaFishing(unittest.TestCase):
+class TestGraciaFishingParser(unittest.TestCase):
     def setUp(self):
         self.templates = GraciaRebornTemplates("../res/templates")
         self.parser = GraciaFishing(self.templates, debug=False)
@@ -71,3 +71,30 @@ class TestGraciaFishing(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         assert result is not None
         self.assertEqual(11, result.hp_percent)
+
+
+class TestGraciaTargetParser(unittest.TestCase):
+    def setUp(self):
+        self.templates = GraciaRebornTemplates("../res/templates")
+        self.parser = GraciaTargetParser(self.templates, debug=False)
+
+    def test_hp_5(self):
+        rgb, grey = read_input_img("../res/input/gracia/HP_4.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertTrue(result.exist)
+        self.assertEqual(5, result.hp)
+
+    def test_hp_66(self):
+        rgb, grey = read_input_img("../res/input/gracia/HP_70.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertTrue(result.exist)
+        self.assertEqual(66, result.hp)
+
+    def test_hp_100(self):
+        rgb, grey = read_input_img("../res/input/gracia/HP_100.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertTrue(result.exist)
+        self.assertEqual(97, result.hp) # TODO FIX SIzes
