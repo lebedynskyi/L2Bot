@@ -34,7 +34,7 @@ class Recognition(ABC):
             # cv2.imshow("blurred", blur)
             # cv2.waitKey(0)
 
-            tesseract_config = r"--oem 3 --psm 10 -l eng -c tessedit_char_whitelist=%s" % whitelist
+            tesseract_config = r"--oem 3 --psm 13 -l eng -c tessedit_char_whitelist=%s" % whitelist
             text = pytesseract.image_to_string(blur, config=tesseract_config)
             logger.debug("Parsed text is -> '%s'", text)
             return text
