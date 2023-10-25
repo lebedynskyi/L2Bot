@@ -1,8 +1,20 @@
 import unittest
 
-from src.parser.classic import ClassicTargetParser
+from src.parser.classic import ClassicTargetParser, ClassicNearTargetsParser
 from src.template import ClassicTemplates
 from test.tools import read_input_img
+
+
+class TestClassicNearestTargetsParser(unittest.TestCase):
+    def setUp(self):
+        self.parser = ClassicNearTargetsParser(debug=False)
+
+    def test_parsing1(self):
+        rgb, grey = read_input_img("../res/input/classic/targets.bmp")
+
+        result = self.parser.parse(rgb, grey)
+        for r in result:
+            print("%s distance -> %s" % (r.name, r.distance))
 
 
 class TestClassicTargetParser(unittest.TestCase):

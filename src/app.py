@@ -20,9 +20,12 @@ class ClassicEveFarmApp(BaseApp):
 
         parser_near_target = ClassicNearTargetsParser()
         parser_target = ClassicTargetParser(templates)
-        handler_spoil_auto_farm = HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, parser_target)
 
-        super().__init__(win_cap, 1, [handler_spoil_auto_farm])
+        handlers = [
+            HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, parser_target)
+        ]
+
+        super().__init__(win_cap, 1, handlers)
 
 
 class C3ElmoreFarmApp(BaseApp):
