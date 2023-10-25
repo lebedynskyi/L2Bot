@@ -1,19 +1,41 @@
 import logging
+import random
 import time
+from abc import ABC, abstractmethod
 
 import cv2
 import numpy as np
-
-from src.capture import Capture
+from PIL import Image
 
 logger = logging.getLogger("BaseApp")
 
 
+class Capture(ABC):
+    hwnd = None
+    offset_x = 0
+    offset_y = 0
+    w = 0
+    h = 0
+
+    @abstractmethod
+    def screenshot(self):
+        pass
+
+
+class MockCap(Capture):
+    def __init__(self, *screen_files):
+        self.screen_files = screen_files
+
+    def screenshot(self):
+        random_index = random.randrange(len(self.screen_files))
+        return Image.open(self.screen_files[random_index])
+
+
 class BaseApp:
-    def __init__(self, capture: Capture, *handlers, tick_delay_seconds=3):
+    def __init__(self, capture: Capture, tick_delay_seconds=3, handlers=[]):
+        self.handlers = handlers
         self.capture = capture
         self.tick_delay = tick_delay_seconds
-        self.handlers = handlers
 
     def loop(self):
         while True:

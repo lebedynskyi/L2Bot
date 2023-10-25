@@ -86,7 +86,7 @@ class GraciaNearTargetsParser(NearTargetParser):
 
 
 class GraciaTargetParser(TargetParser):
-    x_offset = 16
+    x_offset = 20
     y_offset = 26
     w = 150
     h = 5

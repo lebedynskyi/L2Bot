@@ -51,3 +51,8 @@ class GraciaRebornTemplates(Template):
 class C3Templates(Template):
     def __init__(self, folder):
         super().__init__(folder, "c3")
+
+
+class ClassicTemplates(Template):
+    def __init__(self, folder):
+        super().__init__(folder, "classic")

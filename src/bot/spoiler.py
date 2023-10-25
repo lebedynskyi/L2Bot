@@ -5,7 +5,7 @@ import time
 from fuzzywuzzy import fuzz
 
 from src.bot.base import BaseHandler, STATE_IDLE
-from src.capture import Capture
+from src.win_capture import Capture
 from src.controller import BaseController
 from src.keyboard import BaseKeyboard
 from src.parser.base import NearTargetParser, TargetParser
@@ -65,7 +65,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
     def __init__(self, controller: ControllerSpoilerAutoFarm,
                  near_target_parser: NearTargetParser,
-                 target_parser: TargetParser, *mobs):
+                 target_parser: TargetParser, mobs=[]):
         self.target_parser = target_parser
         self.near_target_parser = near_target_parser
         self.controller = controller

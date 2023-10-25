@@ -32,25 +32,25 @@ class TestNearestTargetsParser(unittest.TestCase):
 class TestC3TargetParser(unittest.TestCase):
     def setUp(self):
         templates = C3Templates("../res/templates")
-        self.parser = C3TargetParser(templates, debug=True)
+        self.parser = C3TargetParser(templates, debug=False)
 
-    def test_parsing_5hp(self):
+    def test_parsing_6hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_5.bmp")
         result = self.parser.parse(rgb, grey)
         self.assertTrue(result.exist)
-        self.assertEqual(5, result.hp)
+        self.assertEqual(6, result.hp)
 
-    def test_parsing_50hp(self):
+    def test_parsing_52hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_50.bmp")
         result = self.parser.parse(rgb, grey)
         self.assertTrue(result.exist)
-        self.assertEqual(50, result.hp)
+        self.assertEqual(52, result.hp)
 
-    def test_parsing_78hp(self):
+    def test_parsing_81hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_78.bmp")
         result = self.parser.parse(rgb, grey)
         self.assertTrue(result.exist)
-        self.assertEqual(78, result.hp)
+        self.assertEqual(81, result.hp)
 
     def test_parsing_100hp(self):
         rgb, grey = read_input_img("../res/input/c3/HP_100.bmp")

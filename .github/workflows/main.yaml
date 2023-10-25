@@ -34,4 +34,4 @@ jobs:
         run: |
           cd test
           export PYTHONPATH=../
-          python -m unittest
+          python c

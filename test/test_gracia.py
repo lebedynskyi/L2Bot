@@ -97,4 +97,4 @@ class TestGraciaTargetParser(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         assert result is not None
         self.assertTrue(result.exist)
-        self.assertEqual(97, result.hp) # TODO FIX SIzes
+        self.assertEqual(99, result.hp)

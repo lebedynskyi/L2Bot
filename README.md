@@ -9,7 +9,7 @@ Here I've used next technologies:
 
 * **OpenCV** for computer vision for template matching and graphic filtering 
 * **Tesseract** for text recognition
-* **Arduino micro** for emulating native keyboard to bypass some game protections
+* **Arduino micro** for emulating native keyboard to bypass game protectors
 * 3rd party libraries like Pillow, PyAutoGUI, pywin32 ,etc
 
 # Main components of the bot:
@@ -17,21 +17,19 @@ Here I've used next technologies:
 * **Handler** - part of the logic. Looper call **Handler.on_tick()** method every N time (depends on settings for looper)
 * **Parser** - simple parser of the image. In takes screenshot as input and gives some result. The type of the result is unknown. Developer takes care of handling it.
 
-
 # TODO
 * Check admin permission not working
 * Finish at least auto farm
-* Unittest. Some magic with start folder. Need to teach 
+* The most biggest issue is to teach bot find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
 
 # How to use the bot:
 
-
 **Simple way:**
 ```python
-
+pass
 ```
 
 **Full way:**
 ```python
-
+pass
 ```
