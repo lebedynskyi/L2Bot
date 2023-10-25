@@ -9,7 +9,7 @@ from src.template import GraciaRebornTemplates
 
 class ClassicNearTargetsParser(NearTargetParser):
     lower_color = np.array([0, 0, 0])
-    upper_color = np.array([0, 49, 255])
+    upper_color = np.array([0, 0, 255])
 
 
 class ClassicTargetParser(TargetParser):

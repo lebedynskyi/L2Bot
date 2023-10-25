@@ -7,10 +7,17 @@ from test.tools import read_input_img
 
 class TestClassicNearestTargetsParser(unittest.TestCase):
     def setUp(self):
-        self.parser = ClassicNearTargetsParser(debug=False)
+        self.parser = ClassicNearTargetsParser(debug=True)
+
+    def test_parsing(self):
+        rgb, grey = read_input_img("../res/input/classic/targets.bmp")
+
+        result = self.parser.parse(rgb, grey)
+        for r in result:
+            print("%s distance -> %s" % (r.name, r.distance))
 
     def test_parsing1(self):
-        rgb, grey = read_input_img("../res/input/classic/targets.bmp")
+        rgb, grey = read_input_img("../res/input/classic/targets1.bmp")
 
         result = self.parser.parse(rgb, grey)
         for r in result:
