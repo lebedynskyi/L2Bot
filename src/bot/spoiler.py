@@ -21,7 +21,7 @@ class ControllerSpoilerAutoFarm(BaseController):
         self.keyboard.f1()
 
     def spoil(self):
-        self.keyboard.f3()
+        self.keyboard.f2()
 
     def sweep(self):
         self.keyboard.f3()
@@ -50,7 +50,7 @@ class ControllerSpoilerAutoFarm(BaseController):
 
     def select_target(self, target):
         x = target.x + self.capture.offset_x + (target.w / 2)
-        y = target.y + self.capture.offset_y + (target.h / 2) + 12
+        y = target.y + self.capture.offset_y + (target.h / 2) + 30
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
 
     def move(self, x, y):
@@ -153,6 +153,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         if target.exist and target.hp == 0:
             self.logger.info("State FIGHT, Target killed")
             self.state = self.STATE_POST_FIGHT
+            return True
 
         if delta > 10 and target.hp >= 99:
             self.logger.info("State FIGHT, Probably got stuck. Reset state")
@@ -160,13 +161,15 @@ class HandlerSpoilerAutoFarm(BaseHandler):
             self._reset(screen_rgb)
             return True
 
-        if not self.action_used and target.hp <= 70:
+        if not self.action_used and target.hp <= 80:
+            self.logger.info("State FIGHT, Use action")
             self.controller.spoil()
             time.sleep(0.2)
             self.controller.manor()
             self.action_used = True
-            return True
 
+        if int(delta) % 3 == 0:
+            self.controller.attack()
         self.logger.info("State FIGHT, Keep fighting. Target hp %s", target.hp)
         return False
 
@@ -174,17 +177,18 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         self.logger.warning("State POST FIGHT, Target not exist. Reset state")
 
         if target.exist:
-            self.controller.harvest()
-            time.sleep(0.2)
+            # self.controller.harvest()
+            # time.sleep(0.2)
             self.controller.sweep()
-            time.sleep(0.2)
+            time.sleep(0.3)
 
         self.controller.pick_up()
-        time.sleep(0.1)
+        time.sleep(0.3)
         self.controller.pick_up()
-        time.sleep(0.1)
+        time.sleep(0.3)
         self.controller.pick_up()
-        time.sleep(0.1)
+        time.sleep(0.3)
+        self.controller.pick_up()
         self.controller.cancel()
 
         self.state = STATE_IDLE
