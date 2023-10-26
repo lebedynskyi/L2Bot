@@ -41,10 +41,11 @@ class ControllerSpoilerAutoFarm(BaseController):
     def next_target(self, target):
         if target is not None:
             self.keyboard.text("/target %s" % target)
+            time.sleep(0.6)
         else:
             self.keyboard.text("/targetnext")
+            time.sleep(0.3)
 
-        time.sleep(0.5)
         self.keyboard.enter()
         pass
 
@@ -52,11 +53,13 @@ class ControllerSpoilerAutoFarm(BaseController):
         x = target.x + self.capture.offset_x + (target.w / 2)
         y = target.y + self.capture.offset_y + (target.h / 2) + 30
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
+        time.sleep(0.5)
 
     def move(self, x, y):
         x = x + self.capture.offset_x
         y = y + self.capture.offset_y
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
+        time.sleep(0.5)
 
 
 class HandlerSpoilerAutoFarm(BaseHandler):
