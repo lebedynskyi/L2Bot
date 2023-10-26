@@ -11,6 +11,8 @@ os.environ['OMP_THREAD_LIMIT'] = '1'
 
 class Recognition(ABC):
     i = 0
+    oem = 3
+    psm = 13
 
     @abstractmethod
     def extract(self, img_grey, scale):
@@ -24,19 +26,14 @@ class Recognition(ABC):
             width = int(thresh.shape[1] * scale)
             dim = (width, height)
 
-            # resize image
             resized = cv2.resize(thresh, dim, interpolation=cv2.INTER_AREA)
             blur = cv2.GaussianBlur(resized, (5, 5), 0)
-
-            # cv2.imwrite("%s.png" % self.i, blur)
-            # self.i = self.i + 1
 
             # cv2.imshow("blurred", blur)
             # cv2.waitKey(0)
 
-            tesseract_config = r"--oem 3 --psm 13 -l eng -c tessedit_char_whitelist=%s" % whitelist
-            text = pytesseract.image_to_string(blur, config=tesseract_config)
-            logger.debug("Parsed text is -> '%s'", text)
+            tes_config = r"--oem %s --psm %s -l eng -c tessedit_char_whitelist=%s" % (self.oem, self.psm, whitelist)
+            text = pytesseract.image_to_string(blur, config=tes_config)
             return text
         except BaseException as e:
             logger.warning("Unable to parse text, %s", e)
@@ -46,12 +43,11 @@ class Recognition(ABC):
 class NumbersRecognition(Recognition):
     def extract(self, img_grey, scale):
         text = self.parse_text(img_grey, scale, "0123456789")
+        logger.debug("Parsed text is -> '%s'", text)
         try:
             return int(text.strip())
         except:
-            pass
-
-        return None
+            return None
 
 
 class TextRecognition(Recognition):

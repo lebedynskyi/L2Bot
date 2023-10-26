@@ -25,6 +25,7 @@ class WinCap(Capture):
 
         self.window_name = window_name
         self._find_l2_window()
+        self._update_window_position()
 
         if self.hwnd is None:
             logger.error("Finish app due to l2 Window not found")

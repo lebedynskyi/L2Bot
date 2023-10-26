@@ -8,7 +8,7 @@ from test.tools import read_input_img
 
 class TestNearestTargetsParser(unittest.TestCase):
     def setUp(self):
-        self.parser = C3NearTargetsParser(debug=True)
+        self.parser = C3NearTargetsParser(debug=False)
 
     def test_parsing1(self):
         rgb, grey = read_input_img("../res/input/c3/Shot00004.bmp")
