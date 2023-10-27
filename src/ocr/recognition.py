@@ -12,7 +12,7 @@ os.environ['OMP_THREAD_LIMIT'] = '1'
 class Recognition(ABC):
     i = 0
     oem = 3
-    psm = 13
+    psm = 12
 
     @abstractmethod
     def extract(self, img_grey, scale):
@@ -53,6 +53,7 @@ class NumbersRecognition(Recognition):
 class TextRecognition(Recognition):
     def extract(self, img_grey, scale):
         text = self.parse_text(img_grey, scale, "")
+        logger.debug("Parsed text is -> '%s'", text)
         if text:
             return text.strip()
         return None

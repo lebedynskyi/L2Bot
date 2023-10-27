@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 
 from src.app import ClassicEveFarmApp
 
-DEVELOP = False
+DEVELOP = True
 logger = logging.getLogger()
 
 
