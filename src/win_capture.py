@@ -77,6 +77,7 @@ class WinCap(Capture):
     def _update_window_position(self):
         import win32gui
         window_rect = win32gui.GetWindowRect(self.hwnd)
+
         w = window_rect[2] - window_rect[0]
         h = window_rect[3] - window_rect[1]
 
@@ -90,6 +91,7 @@ class WinCap(Capture):
         # images into actual screen positions
         self.offset_x = window_rect[0]
         self.offset_y = window_rect[1]
+        self.center = (int((self.offset_x + w) / 2), int((self.offset_y + h) / 2))
 
         logger.debug("Updated l2 window coordinates, w=%s, h=%s, offset_x=%s, offset_y=%s",
                      self.w, self.h, self.offset_x, self.offset_y)

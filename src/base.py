@@ -16,6 +16,7 @@ class Capture(ABC):
     offset_y = 0
     w = 0
     h = 0
+    center = (0, 0)
 
     @abstractmethod
     def screenshot(self):

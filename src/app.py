@@ -21,11 +21,12 @@ class ClassicEveFarmApp(BaseApp):
         parser_near_target = ClassicNearTargetsParser()
         parser_target = ClassicTargetParser(templates)
         mobs = [
-            "Opal Beast",
-            "Boogle Ratman",
-            "Will-O-Wisp",
-            "Akaste Bone Archer",
-            "Akaste Bone Warlord"
+            {"name": "Opal Beast", "is_aggr": True},
+            {"name": "Akaste Bone Warlord", "is_aggr": True},
+            {"name": "Boogle Ratman", "is_aggr": False},
+            {"name": "Will-O-Wisp", "is_aggr": False},
+            {"name": "Akaste Bone Archer", "is_aggr": False},
+
         ]
         handlers = [
             HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, parser_target, mobs)

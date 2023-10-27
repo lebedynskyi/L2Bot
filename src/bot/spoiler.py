@@ -60,6 +60,19 @@ class ControllerSpoilerAutoFarm(BaseController):
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
         time.sleep(0.5)
 
+    def scroll_screen(self, is_left=False):
+        center_x, center_y = self.capture.center
+
+        self.keyboard.mouse_move(center_x, center_y)
+        time.sleep(0.2)
+        self.keyboard.mouse_down(self.keyboard.KEY_MOUSE_RIGHT)
+        if is_left:
+            self.keyboard.mouse_move(center_x - 100, center_y)
+        else:
+            self.keyboard.mouse_move(center_x + 100, center_y)
+        time.sleep(0.2)
+        self.keyboard.mouse_up(self.keyboard.KEY_MOUSE_RIGHT)
+
 
 class HandlerSpoilerAutoFarm(BaseHandler):
     logger = logging.getLogger("SpoilerAutoFarm")
@@ -79,6 +92,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
     just_killed = False
     got_stuck = False
     action_used = False
+    last_killed_target = None
 
     def __init__(self, controller: ControllerSpoilerAutoFarm, near_target_parser: NearTargetParser,
                  target_parser: TargetParser, mobs=None):
@@ -140,8 +154,15 @@ class HandlerSpoilerAutoFarm(BaseHandler):
                 self.target_state = self.TARGET_COMMAND
 
         if self.target_state == self.TARGET_COMMAND and self.mobs:
-            self.controller.next_target(random.choice(self.mobs))
-            self.logger.info("State IDLE. Target selected by command")
+            # TODO need to select agro mobs.s
+            aggrs = list(filter(lambda mob: mob["is_aggr"], self.mobs))
+            if aggrs:
+                mob = random.choice(aggrs)
+            else:
+                mob = random.choice(self.mobs)
+
+            self.controller.next_target(mob["name"])
+            self.logger.info("State IDLE. Target selected by command-> %s", mob["name"])
             return True
 
         return False
@@ -203,11 +224,13 @@ class HandlerSpoilerAutoFarm(BaseHandler):
         self.controller.cancel()
         self.controller.move(screen_rgb.shape[1] / 2, screen_rgb.shape[0] / 2)
         self.just_killed = False
+        self.last_killed_target = None
         self.state = STATE_IDLE
 
     def _find_target(self, screen_rgb, screen_gray):
         targets = self.near_target_parser.parse(screen_rgb, screen_gray)
 
+        # TODO nearest killed mob still selecting. Use last_killed_target
         interested_mobs = []
         for target in targets:
             for mob in self.mobs:
