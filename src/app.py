@@ -31,7 +31,7 @@ class ClassicEveFarmApp(BaseApp):
             HandlerSpoilerAutoFarm(controller_spoil_auto_farm, parser_near_target, parser_target, mobs)
         ]
 
-        super().__init__(win_cap, 0.6, handlers)
+        super().__init__(win_cap, 0.8, handlers)
 
 
 class C3ElmoreFarmApp(BaseApp):

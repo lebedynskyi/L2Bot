@@ -41,11 +41,10 @@ class ControllerSpoilerAutoFarm(BaseController):
     def next_target(self, target):
         if target is not None:
             self.keyboard.text("/target %s" % target)
-            time.sleep(0.6)
         else:
             self.keyboard.text("/targetnext")
-            time.sleep(0.3)
 
+        time.sleep(0.7)
         self.keyboard.enter()
         pass
 
