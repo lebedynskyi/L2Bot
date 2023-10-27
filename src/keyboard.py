@@ -190,6 +190,7 @@ class ArduinoKeyboard(BaseKeyboard):
     def mouse_click(self, btn, cords=None):
         if cords is not None:
             self.mouse_move(cords[0], cords[1])
+            time.sleep(0.2)
 
         data = str.encode("6{}".format(btn))
         self.arduino.write(data)

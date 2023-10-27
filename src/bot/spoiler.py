@@ -58,7 +58,6 @@ class ControllerSpoilerAutoFarm(BaseController):
         x = x + self.capture.offset_x
         y = y + self.capture.offset_y
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
-        time.sleep(0.5)
 
     def scroll_screen(self, is_left=False):
         center_x, center_y = self.capture.center
@@ -229,6 +228,7 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
     def _find_target(self, screen_rgb, screen_gray):
         targets = self.near_target_parser.parse(screen_rgb, screen_gray)
+        self.logger.debug("Targets: Found next targets on screen %s", targets)
 
         # TODO nearest killed mob still selecting. Use last_killed_target
         interested_mobs = []
