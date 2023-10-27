@@ -228,18 +228,21 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
     def _find_target(self, screen_rgb, screen_gray):
         targets = self.near_target_parser.parse(screen_rgb, screen_gray)
-        self.logger.debug("Targets: Found next targets on screen %s", targets)
 
-        # TODO nearest killed mob still selecting. Use last_killed_target
+
         interested_mobs = []
         for target in targets:
             for mob in self.mobs:
-                if fuzz.ratio(target.name, mob) >= 70 and target.name != "Taro":
+                if fuzz.ratio(target.name.lower(), mob.lower()) >= 70 and target.name != "Taro":
                     interested_mobs.append(target)
 
-        if interested_mobs:
-            if self.just_killed and len(interested_mobs) > 1 and interested_mobs[0].distance > 60:
-                # return second mob if nearest distance below 60. prevent selection of dead monster
-                return interested_mobs[1]
-            else:
-                return interested_mobs[0]
+        return interested_mobs[0]
+
+        # TODO nearest killed mob still selecting. Use last_killed_target
+        # if interested_mobs:
+        #     if self.just_killed and len(interested_mobs) > 1 and interested_mobs[0].distance > 60:
+        #         # return second mob if nearest distance below 60. prevent selection of dead monster
+        #         just_killed = False
+        #         return interested_mobs[1]
+        #     else:
+        #         return interested_mobs[0]
