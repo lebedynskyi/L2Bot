@@ -192,7 +192,12 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
         if int(delta) % 3 == 0:
             self.controller.attack()
-        self.logger.info("State FIGHT, Keep fighting. Target hp %s", target.hp)
+
+        if target.hp >= 99:
+            self.logger.info("State FIGHT, Move to Target. Target hp %s", target.hp)
+        else:
+            self.logger.info("State FIGHT, Keep fighting. Target hp %s", target.hp)
+
         return False
 
     def _handle_state_post_fight(self, screen_rgb, screen_gray, target, delta):
@@ -228,7 +233,6 @@ class HandlerSpoilerAutoFarm(BaseHandler):
 
     def _find_target(self, screen_rgb, screen_gray):
         targets = self.near_target_parser.parse(screen_rgb, screen_gray)
-
 
         interested_mobs = []
         for target in targets:

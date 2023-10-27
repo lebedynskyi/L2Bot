@@ -135,7 +135,6 @@ class NearTargetParser(BaseParser):
                     extended = union(already_added, [x, y, w, h])
                     result[idx] = extended
                     is_merged = True
-                    break
 
             # just increase the box by 2 pixels around
             if not is_merged:
