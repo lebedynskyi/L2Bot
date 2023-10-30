@@ -15,7 +15,17 @@ def farm_app():
 
     return (
         HandlerSpoilerAutoFarm(controller, vision, mobs=(
-            {"name": "Hobgoblin", "is_aggr": False},
+            # {"name": "Hobgoblin", "is_aggr": False},
+            {"name": "Boogle Ratman Leader", "is_aggr": False},
+            {"name": "Corpse Candle", "is_aggr": False},
+            {"name": "Pitchstone Golem", "is_aggr": False},
+            {"name": "Ore Bat", "is_aggr": False},
+            
+            # {"name": "Gamstone beast", "is_aggr": False},
+            # {"name": "Mineshaft Bat", "is_aggr": False},
+            # {"name": "Monster Eye Tracker", "is_aggr": False},
+            # {"name": "Akaste Bone Soldier", "is_aggr": True},
+            # {"name": "Darkstone Golem", "is_aggr": False},
         )),
         HandlerUseBottles(ControllerUseBottles(keyboard))
     )

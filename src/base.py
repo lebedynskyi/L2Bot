@@ -35,11 +35,11 @@ class Looper:
     logger = logging.getLogger("Looper")
     thread_lock = threading.Condition()
 
-    active = False
+    active = True
     exit = False
     thread = None
 
-    def __init__(self, tick_delay=0.5, *handlers):
+    def __init__(self, *handlers, tick_delay=0.5):
         self.tick_delay = tick_delay
         self.handlers = handlers
 

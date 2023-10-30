@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import time
 from logging.handlers import RotatingFileHandler
 
 from pynput import keyboard
@@ -93,4 +94,5 @@ if __name__ == "__main__":
         exit_callback=lambda: looper.stop()
     )
 
+    time.sleep(5)
     looper.start()

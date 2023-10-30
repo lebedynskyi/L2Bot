@@ -37,14 +37,18 @@ class ControllerSpoilerAutoFarm(BaseController):
 
     def cancel(self):
         self.keyboard.esc()
+        time.sleep(0.1)
 
     def next_target(self, target):
+        self.keyboard.enter()
+        time.sleep(0.1)
         if target is not None:
             self.keyboard.text("/target %s" % target)
+            time.sleep(0.5)
         else:
             self.keyboard.text("/targetnext")
+            time.sleep(0.3)
 
-        time.sleep(0.6)
         self.keyboard.enter()
         pass
 
@@ -52,7 +56,6 @@ class ControllerSpoilerAutoFarm(BaseController):
         x = target.x + self.capture.offset_x + (target.w / 2)
         y = target.y + self.capture.offset_y + (target.h / 2) + 40
         self.keyboard.mouse_click(self.keyboard.KEY_MOUSE_LEFT, (x, y))
-        time.sleep(0.5)
 
     def move(self, point):
         x, y = point
@@ -105,6 +108,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         self.vision = vision
         self.controller = controller
         self.mobs = mobs
+        self.state = self.STATE_TARGET
 
     def _on_tick(self, delta):
         if self.state == self.STATE_TARGET:
@@ -131,8 +135,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         if self.target_state == self.TARGET_NEXT:
             self.controller.next_target(None)
             self.target_state = self.TARGET_MOUSE
-            # ping + delay for drawing
-            return self.default_delay
+            return
 
         if self.target_state == self.TARGET_MOUSE:
             if self.target_mouse_counter >= 2:
@@ -140,7 +143,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 self.target_mouse_counter = 0
                 self.controller.move(self.vision.capture.center)
                 # ping + delay for drawing
-                return self.default_delay
+                return 1
 
             target = self._find_target()
             # no visible target on screen
@@ -208,28 +211,33 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         else:
             self.logger.info("State FIGHT, Keep fighting. Target hp %s", target.hp)
 
-        return 1
+        return .5
 
     def _handle_state_post_fight(self):
         self.logger.warning("State POST FIGHT. Harvest  / Sweep / PickUp")
 
         if self.use_manor:
             self.controller.harvest()
+            time.sleep(0.1)
             self.controller.harvest()
             time.sleep(0.3)
 
         if self.use_spoil:
             self.controller.sweep()
+            time.sleep(0.1)
             self.controller.sweep()
             time.sleep(0.3)
 
         self.controller.pick_up()
+        time.sleep(0.1)
         self.controller.pick_up()
         time.sleep(0.4)
         self.controller.pick_up()
+        time.sleep(0.1)
         self.controller.pick_up()
         time.sleep(0.4)
         self.controller.pick_up()
+        time.sleep(0.1)
         self.controller.pick_up()
 
         self.controller.cancel()

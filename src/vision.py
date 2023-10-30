@@ -24,7 +24,7 @@ class ClassicVision(Vision):
     def __init__(self, capture: Capture, templates: ClassicTemplates):
         super().__init__(capture)
         self.parser_target = ClassicTargetParser(templates)
-        self.parser_near_targets = ClassicNearTargetsParser(templates)
+        self.parser_near_targets = ClassicNearTargetsParser()
 
     def target(self):
         rgb, grey = self.capture.screenshot()
