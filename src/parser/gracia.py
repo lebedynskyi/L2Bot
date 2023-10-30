@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from src.ocr.recognition import NumbersRecognition
-from src.parser.base import BaseParser, NearTargetParser, TargetParser
+from src.parser.base import BaseParser, NearTargetsParser, TargetParser
 from src.parser.result import FishingResult
 from src.template import GraciaRebornTemplates
 
@@ -80,7 +80,7 @@ class GraciaFishing(BaseParser):
         return None
 
 
-class GraciaNearTargetsParser(NearTargetParser):
+class GraciaNearTargetsParser(NearTargetsParser):
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 255, 255])
 

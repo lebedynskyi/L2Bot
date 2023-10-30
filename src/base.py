@@ -1,10 +1,9 @@
 import logging
 import random
+import threading
 import time
 from abc import ABC, abstractmethod
 
-import cv2
-import numpy as np
 from PIL import Image
 
 logger = logging.getLogger("BaseApp")
@@ -19,8 +18,8 @@ class Capture(ABC):
     center = (0, 0)
 
     @abstractmethod
-    def screenshot(self):
-        pass
+    def screenshot(self) -> int:
+        raise NotImplementedError("screenshot() is not implemented for base  Capture class")
 
 
 class MockCap(Capture):
@@ -32,32 +31,71 @@ class MockCap(Capture):
         return Image.open(self.screen_files[random_index])
 
 
-class BaseApp:
-    def __init__(self, capture: Capture, tick_delay_seconds=3, handlers=[]):
+class Looper:
+    logger = logging.getLogger("Looper")
+    thread_lock = threading.Condition()
+
+    active = False
+    exit = False
+    thread = None
+
+    def __init__(self, tick_delay=0.5, *handlers):
+        self.tick_delay = tick_delay
         self.handlers = handlers
-        self.capture = capture
-        self.tick_delay = tick_delay_seconds
 
-    def loop(self):
+    def start(self):
+        self.thread = threading.Thread(name="BotLooper", target=self._loop)
+        self.thread.start()
+        self.thread.join()
+
+    def stop(self):
+        self.logger.info("Stop")
+        self.exit = True
+
+        if not self.active:
+            self.active = True
+            self._release_lock()
+
+    def toggle_pause(self):
+        self.active = not self.active
+        if self.active:
+            self.logger.info("Resume loop")
+        else:
+            self.logger.info("Pause loop")
+
+        self._release_lock()
+
+    def _loop(self):
+        self.logger.debug("Start loop")
+
         while True:
-            try:
-                screenshot = self.capture.screenshot()
-                screen_bgr = np.array(screenshot)
-                screen_rgb = cv2.cvtColor(screen_bgr, cv2.COLOR_BGR2RGB)
-                screen_grey = cv2.cvtColor(screen_rgb, cv2.COLOR_BGR2GRAY)
-            except Exception as e:
-                logger.exception("Unable to take screenshot, %s", e)
-                self.wait_tick()
-                continue
+            if not self.active:
+                self.logger.debug("Looper is paused. Sleep")
+                self._wait_lock()
+                self.logger.debug("Looper is resumed. Wake UP")
 
-            for h in self.handlers:
-                try:
-                    h.on_tick(screen_rgb, screen_grey, time.time())
-                except Exception as e:
-                    logger.exception("Error to handle tick in %s, %s", h.__class__.__name__, e)
+            if self.exit:
+                exit(0)
 
-            self.wait_tick()
+            if self.active:
+                for h in self.handlers:
+                    self._on_tick_handler(h)
 
-    def wait_tick(self):
-        if self.tick_delay > 0:
-            time.sleep(self.tick_delay)
+                if self.tick_delay > 0:
+                    time.sleep(self.tick_delay)
+
+    def _wait_lock(self):
+        self.thread_lock.acquire()
+        self.thread_lock.wait()
+        self.thread_lock.release()
+
+    def _release_lock(self):
+        self.thread_lock.acquire()
+        self.thread_lock.notify_all()
+        self.thread_lock.release()
+
+    def _on_tick_handler(self, h):
+        try:
+            h.on_tick(time.time())
+        except BaseException as e:
+            self.logger.exception("Error during tick in %s. Error -> %s", h.__class__.__name__, e)

@@ -1,25 +1,22 @@
 import logging
 
-from abc import ABC, abstractmethod
-
 logger = logging.getLogger("Handler")
 
-STATE_IDLE = 0
 
-
-class BaseHandler(ABC):
-    last_action_time = 0
+class BehaviourHandler:
     is_paused = False
-    state = STATE_IDLE
 
-    def on_tick(self, screen_rgb, screen_gray, time):
-        logger.debug("On tick. time %s", time)
+    last_action_time = 0
+    next_action_time = 0
+
+    def on_tick(self, time):
         if not self.is_paused:
-            delta = time - self.last_action_time
-
-            if self._on_tick(screen_rgb, screen_gray, delta):
+            if time > self.next_action_time:
+                time_shift = self._on_tick(time - self.last_action_time)
                 self.last_action_time = time
 
-    @abstractmethod
-    def _on_tick(self, screen_rgb, screen_gray, delta):
-        pass
+                if time_shift is not None:
+                    self.next_action_time = time + time_shift
+
+    def _on_tick(self, delta):
+        return None

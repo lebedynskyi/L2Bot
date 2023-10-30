@@ -19,8 +19,9 @@ Here I've used next technologies:
 
 # TODO
 * Check admin permission not working
-* Finish at least auto farm
 * The most biggest issue is to teach bot find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
+* Redesign handlers and use minimal delay before taking screenshot? Reuse screen shot if handler wants to switch to next action ?
+
 
 # How to use the bot:
 
