@@ -37,7 +37,6 @@ class ControllerSpoilerAutoFarm(BaseController):
 
     def cancel(self):
         self.keyboard.esc()
-        time.sleep(0.1)
 
     def next_target(self, target):
         self.keyboard.enter()
@@ -191,7 +190,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
             return
 
         if not self.action_used and target.hp <= 80:
-            self.logger.info("State FIGHT, Use action if need.")
+            self.logger.info("State FIGHT, Use action if need. Target hp %s", target.hp)
 
             if self.use_spoil:
                 self.controller.spoil()
@@ -229,17 +228,11 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
             time.sleep(0.3)
 
         self.controller.pick_up()
-        time.sleep(0.1)
+        time.sleep(0.4)
         self.controller.pick_up()
         time.sleep(0.4)
         self.controller.pick_up()
-        time.sleep(0.1)
-        self.controller.pick_up()
         time.sleep(0.4)
-        self.controller.pick_up()
-        time.sleep(0.1)
-        self.controller.pick_up()
-
         self.controller.cancel()
 
         self.state = self.STATE_TARGET

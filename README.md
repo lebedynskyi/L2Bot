@@ -18,9 +18,10 @@ Here I've used next technologies:
 * **Parser** - simple parser of the image. In takes screenshot as input and gives some result. The type of the result is unknown. Developer takes care of handling it.
 
 # TODO
-* Check admin permission not working
-* The most biggest issue is to teach bot find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
-* Redesign handlers and use minimal delay before taking screenshot? Reuse screen shot if handler wants to switch to next action ?
+* The biggest issue is to teach bot how to find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
+* Add checking if target under the mouse pointer before click.. Additional time for target selection. But it will help to avoid movement around environment
+* When merge cells for title boxes. Need work with bottom line. Not top
+* Need add delay for arduino keyboard. or add Some queue? and looper with looper and thread conditions/lock?
 
 
 # How to use the bot:
