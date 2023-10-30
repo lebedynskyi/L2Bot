@@ -7,6 +7,7 @@ import numpy as np
 
 from src.ocr.recognition import TextRecognition
 from src.parser.result import NearTargetResult, TargetResult
+from src.template import Template
 
 
 class BaseParser(ABC):
@@ -78,7 +79,7 @@ class TemplateExist(BaseParser):
         return self.match_template(grey, self.template) is not None
 
 
-class NearTargetParser(BaseParser):
+class NearTargetsParser(BaseParser):
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 0, 0])
 
@@ -158,7 +159,7 @@ class TargetParser(BaseParser):
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 0, 0])
 
-    def __init__(self, templates, debug=False):
+    def __init__(self, templates: Template, debug=False):
         super().__init__(debug)
         self.templates = templates
 

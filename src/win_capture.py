@@ -2,6 +2,8 @@ import logging
 import os
 from ctypes import windll
 
+import cv2
+import numpy as np
 import win32gui
 import win32ui
 from PIL import Image
@@ -23,13 +25,13 @@ class WinCap(Capture):
             logger.error("Finish app due to lack of admin rights")
             exit(1)
 
-        self.window_name = window_name
-        self._find_l2_window()
-        self._update_window_position()
+        self._find_l2_window(window_name)
 
         if self.hwnd is None:
             logger.error("Finish app due to l2 Window not found")
             exit(1)
+
+        self._update_window_position()
 
     def screenshot(self):
         left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
@@ -53,7 +55,7 @@ class WinCap(Capture):
         bmpinfo = saveBitMap.GetInfo()
         bmpstr = saveBitMap.GetBitmapBits(True)
 
-        im = Image.frombuffer(
+        screenshot = Image.frombuffer(
             'RGB',
             (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
             bmpstr, 'raw', 'BGRX', 0, 1)
@@ -62,12 +64,16 @@ class WinCap(Capture):
         saveDC.DeleteDC()
         mfcDC.DeleteDC()
         win32gui.ReleaseDC(self.hwnd, hwndDC)
-        return im
 
-    def _find_l2_window(self):
+        screen_bgr = np.array(screenshot)
+        screen_rgb = cv2.cvtColor(screen_bgr, cv2.COLOR_BGR2RGB)
+        screen_grey = cv2.cvtColor(screen_rgb, cv2.COLOR_BGR2GRAY)
+        return screen_rgb, screen_grey
+
+    def _find_l2_window(self, win_name):
         def callback(hwnd, extra):
             title = win32gui.GetWindowText(hwnd)
-            if self.window_name.lower() in title.lower():
+            if win_name.lower() in title.lower():
                 logger.info("Lineage 2 window found. Full name - %s", title)
                 self.hwnd = hwnd
 

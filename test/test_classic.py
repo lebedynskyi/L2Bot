@@ -7,7 +7,7 @@ from test.tools import read_input_img
 
 class TestClassicNearestTargetsParser(unittest.TestCase):
     def setUp(self):
-        self.parser = ClassicNearTargetsParser(debug=True)
+        self.parser = ClassicNearTargetsParser(debug=False)
 
     def test_parsing(self):
         rgb, grey = read_input_img("../res/input/classic/targets.bmp")
