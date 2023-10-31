@@ -43,12 +43,12 @@ class TestClassicTargetParser(unittest.TestCase):
         self.assertTrue(result.exist)
         self.assertEqual(0, result.hp)
 
-    def test_hp_45(self):
-        rgb, grey = read_input_img("../res/input/classic/HP_45.bmp")
+    def test_hp_46(self):
+        rgb, grey = read_input_img("../res/input/classic/HP_46.bmp")
         result = self.parser.parse(rgb, grey)
         assert result is not None
         self.assertTrue(result.exist)
-        self.assertEqual(45, result.hp)
+        self.assertEqual(46, result.hp)
 
     def test_hp_72(self):
         rgb, grey = read_input_img("../res/input/classic/HP_75.bmp")

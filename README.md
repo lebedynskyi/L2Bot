@@ -2,14 +2,15 @@
 
 ![Python unit tests](https://github.com/lebedynskyi/L2Bot/actions/workflows/main.yaml/badge.svg)
 
-This is a bot - kind of mix of auto clicker and computer vision.
-Bot has general logic and specific **Parsers** for different L2 chronicles. Parser is using computer vision to determine current hp of target, find target and etc  
+This bot - is kind of mix of auto clicker and computer vision.
+Bot has general logic and specific **Parsers** for different L2 chronicles. Parsers are using computer vision to determine current HP of target, find target on the screen and etc  
 
 Here I've used next technologies:
 
 * **OpenCV** for computer vision for template matching and graphic filtering 
 * **Tesseract** for text recognition
 * **Arduino micro** for emulating native keyboard to bypass game protectors
+* **Python multithreading** for hotkey listening and main bot looping
 * 3rd party libraries like Pillow, PyAutoGUI, pywin32 ,etc
 
 # Main components of the bot:
@@ -19,8 +20,7 @@ Here I've used next technologies:
 
 # TODO
 * The biggest issue is to teach bot how to find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
-* Add checking if target under the mouse pointer before click.. Additional time for target selection. But it will help to avoid movement around environment
-* When merge cells for title boxes. Need work with bottom line. Not top
+* Add checking if target under the mouse pointer before click. Additional time for target selection. But it will help to avoid movement around environment
 * Need add delay for arduino keyboard. or add Some queue? and looper with looper and thread conditions/lock?
 
 

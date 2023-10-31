@@ -131,8 +131,9 @@ class NearTargetsParser(BaseParser):
             is_merged = False
             for idx in range(len(result)):
                 already_added = result[idx]
-
-                if already_added[1] == y:
+                added_center_line = already_added[1] + int(already_added[3] / 2)
+                current_center_line = y + int(h / 2)
+                if already_added[1] == y or abs(added_center_line - current_center_line) < 2:
                     extended = union(already_added, [x, y, w, h])
                     result[idx] = extended
                     is_merged = True
