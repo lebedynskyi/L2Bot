@@ -14,5 +14,5 @@ class ClassicTargetParser(TargetParser):
     w = 145
     h = 5
 
-    lower_color = np.array([0, 145, 153])
+    lower_color = np.array([0, 145, 0])
     upper_color = np.array([179, 255, 255])

@@ -92,6 +92,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
 
     use_spoil = True
     use_manor = False
+    use_next_target = False
     just_killed = False
     # TODO use this variable
     got_stuck = False
@@ -132,7 +133,8 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
             return
 
         if self.target_state == self.TARGET_NEXT:
-            self.controller.next_target(None)
+            if self.use_next_target:
+                self.controller.next_target(None)
             self.target_state = self.TARGET_MOUSE
             return
 
@@ -142,7 +144,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 self.target_mouse_counter = 0
                 self.controller.move(self.vision.capture.center)
                 # ping + delay for drawing
-                return 1
+                return 2
 
             target = self._find_target()
             # no visible target on screen
@@ -177,7 +179,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         if target.exist and target.hp == 0:
             self.logger.info("State FIGHT, Target killed")
             self.state = self.STATE_POST_FIGHT
-            return
+            return 0.5
 
         if time.time() - self.start_fight_time > 10 and target.hp >= 99:
             self.logger.info("State FIGHT, Probably got stuck. Reset state")
@@ -223,7 +225,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
 
         if self.use_spoil:
             self.controller.sweep()
-            time.sleep(0.1)
+            time.sleep(0.2)
             self.controller.sweep()
             time.sleep(0.3)
 
