@@ -123,8 +123,8 @@ class NearTargetsParser(BaseParser):
             # get rectangle bounding contour
             [x, y, w, h] = cv2.boundingRect(contour)
 
-            # Don't plot small false positives that aren't text
-            if w < 10 or h < 10:
+            # Don't plot small and big false positives that aren't text
+            if w < 10 or h < 10 or h > 50:
                 continue
 
             # so if title has 2 -3 words. we need to find same boxes on the same y coordinate and join it.
