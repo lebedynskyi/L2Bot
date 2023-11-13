@@ -34,6 +34,7 @@ class Template:
 
         self.ui_fishing_dialog = self._read_template(res_folder, sub_folder, "dialog_fishing.png")
         self.ui_target = self._read_template(res_folder, sub_folder, "target.png")
+        self.user_status = self._read_template(res_folder, sub_folder, "user_status.png")
 
     @staticmethod
     def _read_template(res_folder, sub_folder, name):

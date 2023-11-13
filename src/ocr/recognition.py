@@ -36,24 +36,30 @@ class Recognition(ABC):
             text = pytesseract.image_to_string(blur, config=tes_config)
             return text
         except BaseException as e:
-            logger.warning("Unable to parse text, %s", e)
+            logger.warning("Unable to parse text -> %s", e)
         return None
 
 
 class NumbersRecognition(Recognition):
     def extract(self, img_grey, scale):
-        text = self.parse_text(img_grey, scale, "0123456789")
-        logger.debug("Parsed text is -> '%s'", text)
+        text = None
         try:
+            text = self.parse_text(img_grey, scale, "0123456789/")
+            logger.debug("Parsed text is -> '%s'", text)
             return int(text.strip())
-        except:
-            return None
+        except BaseException as e:
+            logger.debug("Cannot parse int, text is '%s'", text)
+        return None
 
 
 class TextRecognition(Recognition):
     def extract(self, img_grey, scale):
-        text = self.parse_text(img_grey, scale, "")
-        logger.debug("Parsed text is -> '%s'", text)
-        if text:
-            return text.strip()
+        try:
+            text = self.parse_text(img_grey, scale, "")
+            logger.debug("Parsed text is -> '%s'", text)
+            if text:
+                return text.strip()
+        except BaseException as e:
+            pass
+
         return None

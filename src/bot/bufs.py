@@ -1,7 +1,21 @@
 import logging
+import time
 
 from src.bot.base import BehaviourHandler
 from src.controller import BaseController
+from src.vision import Vision
+
+
+class ControllerRest(BaseController):
+    def sit(self):
+        self.keyboard.enter()
+        time.sleep(0.1)
+        self.keyboard.text("/sit")
+
+    def stand(self):
+        self.keyboard.enter()
+        time.sleep(0.1)
+        self.keyboard.text("/stand")
 
 
 class ControllerUseBottles(BaseController):
@@ -17,4 +31,26 @@ class HandlerUseBottles(BehaviourHandler):
 
     def _on_tick(self, delta):
         self.controller.use_bottle()
+        return 1190  # almost 20 minutes
+
+
+class HandlerRest(BehaviourHandler):
+    logger = logging.getLogger("HandlerUseBottles")
+
+    def __init__(self, vision: Vision, controller: ControllerUseBottles, *pausable_handler):
+        self.vision = vision
+        self.controller = controller
+        self.pause_handlers = pausable_handler
+
+    def _on_tick(self, delta):
+        user_status = self.vision.user_status()
+
         return 1190
+
+    def _pause_handlers(self):
+        for p in self.pause_handlers:
+            p.is_paused = True
+
+    def _resume_handlers(self):
+        for p in self.pause_handlers:
+            p.is_paused = False

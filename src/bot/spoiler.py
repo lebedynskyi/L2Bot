@@ -11,7 +11,7 @@ from src.keyboard import BaseKeyboard
 from src.vision import Vision
 
 
-# todo need to click near mob title to start moving with pathfinding
+# todo need to click near mob title to start moving with pathfinding ?
 class ControllerSpoilerAutoFarm(BaseController):
     def __init__(self, keyboard: BaseKeyboard, capture: Capture):
         super().__init__(keyboard)

@@ -3,7 +3,7 @@ import unittest
 
 from src.parser.c3 import C3NearTargetsParser, C3TargetParser
 from src.template import C3Templates
-from test.tools import read_input_img
+from test import read_input_img
 
 
 class TestNearestTargetsParser(unittest.TestCase):

@@ -2,7 +2,7 @@ import unittest
 
 from src.parser.gracia import GraciaFishing, GraciaTargetParser
 from src.template import GraciaRebornTemplates
-from test.tools import read_input_img
+from test import read_input_img
 
 
 class TestGraciaFishingParser(unittest.TestCase):

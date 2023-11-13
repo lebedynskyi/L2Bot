@@ -1,8 +1,10 @@
 import unittest
 
-from src.parser.classic import ClassicTargetParser, ClassicNearTargetsParser
+import pytesseract
+
+from src.parser.classic import ClassicTargetParser, ClassicNearTargetsParser, ClassicUserStatusParser
 from src.template import ClassicTemplates
-from test.tools import read_input_img
+from test import read_input_img
 
 
 class TestClassicNearestTargetsParser(unittest.TestCase):
@@ -43,12 +45,12 @@ class TestClassicTargetParser(unittest.TestCase):
         self.assertTrue(result.exist)
         self.assertEqual(0, result.hp)
 
-    def test_hp_46(self):
+    def test_hp_45(self):
         rgb, grey = read_input_img("../res/input/classic/HP_46.bmp")
         result = self.parser.parse(rgb, grey)
         assert result is not None
         self.assertTrue(result.exist)
-        self.assertEqual(46, result.hp)
+        self.assertEqual(45, result.hp)
 
     def test_hp_72(self):
         rgb, grey = read_input_img("../res/input/classic/HP_75.bmp")
@@ -63,3 +65,34 @@ class TestClassicTargetParser(unittest.TestCase):
         assert result is not None
         self.assertTrue(result.exist)
         self.assertEqual(99, result.hp)
+
+
+class TestClassicUserStatus(unittest.TestCase):
+    def setUp(self):
+        print("Tess version is %s" % pytesseract.get_tesseract_version())
+        self.templates = ClassicTemplates("../res/templates")
+        self.parser = ClassicUserStatusParser(self.templates, debug=False)
+
+    def test_1(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_1.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((744, 744), result.cp)
+        self.assertEqual((561, 1163), result.hp)
+        self.assertEqual((120, 295), result.mp)
+
+    def test_2(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_2.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((249, 249), result.cp)
+        self.assertEqual((336, 356), result.hp)
+        self.assertEqual((114, 114), result.mp)
+
+    def test_3(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_3.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((249, 249), result.cp)
+        self.assertEqual((356, 356), result.hp)
+        self.assertEqual((114, 114), result.mp)

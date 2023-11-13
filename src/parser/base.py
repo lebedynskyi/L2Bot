@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 
 from src.ocr.recognition import TextRecognition
-from src.parser.result import NearTargetResult, TargetResult
+from src.parser.result import NearTargetResult, TargetResult, UserStatusResult
 from src.template import Template
 
 
@@ -33,7 +33,7 @@ class BaseParser(ABC):
                 (startX, startY) = maxLoc
                 end_x = startX + target_grey.shape[1]
                 end_y = startY + target_grey.shape[0]
-                cv2.rectangle(copy, (startX, startY), (end_x, end_y), (255, 255, 255), 3)
+                cv2.rectangle(copy, (startX, startY), (end_x, end_y), (0, 255, 0), 2)
                 cv2.imshow(title, copy)
                 cv2.waitKey(0)
 
@@ -75,11 +75,11 @@ class TemplateExist(BaseParser):
         super().__init__(show_match)
         self.template = template
 
-    def parse_image(self, rgb, grey, *args, **kwargs):
+    def parse(self, rgb, grey, *args, **kwargs):
         return self.match_template(grey, self.template) is not None
 
 
-class NearTargetsParser(BaseParser):
+class NearTargetsParser(BaseParser, ABC):
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 0, 0])
 
@@ -109,7 +109,7 @@ class NearTargetsParser(BaseParser):
         player_position = (gray.shape[1] / 2, gray.shape[0] / 2)
         distance = math.dist(player_position, (x, y))
 
-        name = self.ocr.extract(title_box, 3)
+        name = self.ocr.extract(title_box, 2)
         if name is not None and len(name) > 1:
             result.append(NearTargetResult(x, y, w, h, name, distance))
 
@@ -127,7 +127,7 @@ class NearTargetsParser(BaseParser):
             if w < 10 or h < 10 or h > 50:
                 continue
 
-            # so if title has 2 -3 words. we need to find same boxes on the same y coordinate and join it.
+            # so if title has 2 - 3 words. we need to find same boxes on the same y coordinate and join it.
             is_merged = False
             for idx in range(len(result)):
                 already_added = result[idx]
@@ -152,7 +152,7 @@ class NearTargetsParser(BaseParser):
         return result
 
 
-class TargetParser(BaseParser):
+class TargetParser(BaseParser, ABC):
     x_offset = 0
     y_offset = 0
     w = 0
@@ -208,6 +208,88 @@ class TargetParser(BaseParser):
                 return int(hp_width * 100 / resized_width)
 
         return 0
+
+
+class UserStatusParser(BaseParser, ABC):
+    hp_x_offset = 0
+    hp_y_offset = 0
+    hp_h = 0
+    hp_w = 0
+
+    mp_x_offset = 0
+    mp_y_offset = 0
+    mp_h = 0
+    mp_w = 0
+
+    cp_x_offset = 0
+    cp_y_offset = 0
+    cp_h = 0
+    cp_w = 0
+
+    lower_color = np.array([0, 0, 0])
+    upper_color = np.array([0, 0, 0])
+
+    def __init__(self, templates: Template, debug=False):
+        super().__init__(debug)
+        self.templates = templates
+        self.ocr = TextRecognition()
+
+    def parse(self, rgb, gray, *args, **kwargs):
+        result = UserStatusResult()
+        status_match = self.match_template(gray, self.templates.user_status)
+        if status_match is not None:
+            masked = self.hsv_mask(rgb, self.lower_color, self.upper_color)
+            grey_scaled = cv2.cvtColor(masked, cv2.COLOR_RGB2GRAY)
+
+            result.hp = self._parse_hp(grey_scaled, status_match)
+            result.mp = self._parse_mp(grey_scaled, status_match)
+            result.cp = self._parse_cp(grey_scaled, status_match)
+        return result
+
+    def _parse_hp(self, grey, match):
+        cropped = grey[match[1] + self.hp_y_offset:match[1] + self.hp_y_offset + self.hp_h,
+                  match[0] + self.hp_x_offset:match[0] + self.hp_x_offset + self.hp_w]
+
+        if self.debug:
+            self.show_im(cropped, "Status HP area")
+
+        try:
+            hp = self.ocr.extract(cropped, 2)
+            split = hp.split("/")
+            return int(split[0]), int(split[1])
+        except:
+            pass
+        return None
+
+    def _parse_mp(self, grey, match):
+        cropped = grey[match[1] + self.mp_y_offset:match[1] + self.mp_y_offset + self.mp_h,
+                  match[0] + self.mp_x_offset:match[0] + self.mp_x_offset + self.mp_w]
+
+        if self.debug:
+            self.show_im(cropped, "Status MP area")
+
+        try:
+            mp = self.ocr.extract(cropped, 2)
+            split = mp.split("/")
+            return int(split[0]), int(split[1])
+        except:
+            pass
+        return None
+
+    def _parse_cp(self, grey, match):
+        cropped = grey[match[1] + self.cp_y_offset:match[1] + self.cp_y_offset + self.cp_h,
+                  match[0] + self.cp_x_offset:match[0] + self.cp_x_offset + self.cp_w]
+
+        if self.debug:
+            self.show_im(cropped, "Status CP area")
+
+        try:
+            cp = self.ocr.extract(cropped, 2)
+            split = cp.split("/")
+            return int(split[0]), int(split[1])
+        except:
+            pass
+        return None
 
 
 def union(a, b):

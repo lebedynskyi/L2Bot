@@ -17,3 +17,9 @@ class NearTargetResult:
 class TargetResult:
     exist = False
     hp = 0
+
+
+class UserStatusResult:
+    hp = 0
+    mp = 0
+    cp = 0
