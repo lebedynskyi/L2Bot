@@ -30,14 +30,14 @@ class Recognition(ABC):
             dim = (width, height)
 
             resized = cv2.resize(thresh, dim, interpolation=cv2.INTER_AREA)
-            blur = cv2.blur(resized, (5,5))
-            # blur = cv2.GaussianBlur(resized, (5,5), 0)
+            # blur = cv2.blur(resized, (5,5))
+            blur = cv2.GaussianBlur(resized, (5,5), 0)
 
             if self.debug:
                 cv2.imshow("Blured OCR Image", blur)
                 cv2.waitKey(0)
 
-            tes_config = r"--oem %s --psm %s -l eng -c tessedit_char_whitelist=%s" % (self.oem, self.psm, whitelist)
+            tes_config = r"--oem %s --psm %s -l eng -c tessedit_char_whitelist='%s'" % (self.oem, self.psm, whitelist)
             text = pytesseract.image_to_string(blur, config=tes_config)
             return text
         except BaseException as e:

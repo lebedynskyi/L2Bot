@@ -104,12 +104,12 @@ class NearTargetsParser(BaseParser, ABC):
 
     def _parse_title_thread(self, gray, box_data, result):
         [x, y, w, h] = box_data
-        # Just increase a box on 2 pixels around
-        title_box = gray[y - 2:y + h + 2, x - 2:x + w + 2]
+        # Just increase a box on 4 pixels around
+        title_box = gray[y - 4:y + h + 4, x - 4:x + w + 4]
         player_position = (gray.shape[1] / 2, gray.shape[0] / 2)
         distance = math.dist(player_position, (x, y))
 
-        name = self.ocr.extract(title_box, 2)
+        name = self.ocr.extract(title_box, 2, whitelist="ABCDEFGHIJKLMNOPQRSTUVWXVZabcdefghijklmnopqrstuvwxvz ")
         if name is not None and len(name) > 1:
             result.append(NearTargetResult(x, y, w, h, name, distance))
 
@@ -138,7 +138,6 @@ class NearTargetsParser(BaseParser, ABC):
                     result[idx] = extended
                     is_merged = True
 
-            # just increase the box by 2 pixels around
             if not is_merged:
                 result.append([x, y, w, h])
 

@@ -21,7 +21,7 @@ Here I've used next technologies:
 # TODO
 * The biggest issue is to teach bot how to find targets. Even if scroll camera. On some servers some limitation of range. Titles not seen. Need to move mouse to target the mob.
 * Add checking if target under the mouse pointer before click. Additional time for target selection. But it will help to avoid movement around environment
-* Need add delay for arduino keyboard. or add Some queue? and looper with looper and thread conditions/lock?
+* Need to introduce apropriate tests for near targets. it will help not to break OCR
 
 
 # How to use the bot:

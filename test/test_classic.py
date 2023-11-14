@@ -17,6 +17,7 @@ class TestClassicNearestTargetsParser(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         for r in result:
             print("%s distance -> %s" % (r.name, r.distance))
+        print("----------------")
 
     def test_parsing1(self):
         rgb, grey = read_input_img("../res/input/classic/targets1.bmp")
@@ -24,6 +25,7 @@ class TestClassicNearestTargetsParser(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         for r in result:
             print("%s distance -> %s" % (r.name, r.distance))
+        print("----------------")
 
     def test_parsing2(self):
         rgb, grey = read_input_img("../res/input/classic/targets2.bmp")
@@ -31,6 +33,7 @@ class TestClassicNearestTargetsParser(unittest.TestCase):
         result = self.parser.parse(rgb, grey)
         for r in result:
             print("%s distance -> %s" % (r.name, r.distance))
+        print("----------------")
 
 
 class TestClassicTargetParser(unittest.TestCase):
