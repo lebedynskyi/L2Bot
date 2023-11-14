@@ -7,7 +7,7 @@ from src.vision import ClassicVision
 
 def farm_app():
     from src.win_capture import WinCap
-    win_cap = WinCap("Tui")
+    win_cap = WinCap("Taro")
     keyboard = ArduinoKeyboard(port="COM3")
     controller = ControllerSpoilerAutoFarm(keyboard, win_cap)
     templates = ClassicTemplates("res/templates")
@@ -15,11 +15,10 @@ def farm_app():
 
     return (
         HandlerSpoilerAutoFarm(controller, vision, mobs=(
+            {"name": "Grave robber ranger", "is_aggr": False},
+            {"name": " Grave robber lookout", "is_aggr": False},
+            {"name": "Grave robber guard", "is_aggr": True},
             # {"name": "Hobgoblin", "is_aggr": False},
-            {"name": "Boogle Ratman Leader", "is_aggr": False},
-            {"name": "Corpse Candle", "is_aggr": False},
-            {"name": "Pitchstone Golem", "is_aggr": False},
-            {"name": "Ore Bat", "is_aggr": False},
             
             # {"name": "Gamstone beast", "is_aggr": False},
             # {"name": "Mineshaft Bat", "is_aggr": False},
@@ -27,7 +26,7 @@ def farm_app():
             # {"name": "Akaste Bone Soldier", "is_aggr": True},
             # {"name": "Darkstone Golem", "is_aggr": False},
         )),
-        HandlerUseBottles(ControllerUseBottles(keyboard))
+        # HandlerUseBottles(ControllerUseBottles(keyboard))
     )
 
 

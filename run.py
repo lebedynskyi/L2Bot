@@ -93,5 +93,4 @@ if __name__ == "__main__":
         exit_callback=lambda: looper.stop()
     )
 
-    time.sleep(5)
     looper.start()

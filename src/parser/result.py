@@ -20,6 +20,6 @@ class TargetResult:
 
 
 class UserStatusResult:
-    hp = 0
-    mp = 0
-    cp = 0
+    hp = (0, 0)
+    mp = (0, 0)
+    cp = (0, 0)

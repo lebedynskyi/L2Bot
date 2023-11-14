@@ -35,16 +35,16 @@ class Looper:
     logger = logging.getLogger("Looper")
     thread_lock = threading.Condition()
 
-    active = True
+    active = False
     exit = False
     thread = None
 
-    def __init__(self, *handlers, tick_delay=0.5):
+    def __init__(self, *handlers, tick_delay=0.2):
         self.tick_delay = tick_delay
         self.handlers = handlers
 
     def start(self):
-        self.thread = threading.Thread(name="BotLooper", target=self._loop)
+        self.thread = threading.Thread(name="AppLooper", target=self._loop)
         self.thread.start()
         self.thread.join()
 
@@ -63,6 +63,7 @@ class Looper:
         else:
             self.logger.info("Pause loop")
 
+        time.sleep(1)
         self._release_lock()
 
     def _loop(self):

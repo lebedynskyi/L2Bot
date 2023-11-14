@@ -241,9 +241,9 @@ class UserStatusParser(BaseParser, ABC):
             masked = self.hsv_mask(rgb, self.lower_color, self.upper_color)
             grey_scaled = cv2.cvtColor(masked, cv2.COLOR_RGB2GRAY)
 
+            # result.cp = self._parse_cp(grey_scaled, status_match)
             result.hp = self._parse_hp(grey_scaled, status_match)
-            result.mp = self._parse_mp(grey_scaled, status_match)
-            result.cp = self._parse_cp(grey_scaled, status_match)
+            # result.mp = self._parse_mp(grey_scaled, status_match)
         return result
 
     def _parse_hp(self, grey, match):

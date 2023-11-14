@@ -24,16 +24,16 @@ class ControllerSpoilerAutoFarm(BaseController):
         self.keyboard.f2()
 
     def sweep(self):
-        self.keyboard.f3()
+        self.keyboard.f5()
 
     def pick_up(self):
         self.keyboard.f4()
 
     def manor(self):
-        self.keyboard.f5()
+        self.keyboard.f1()
 
     def harvest(self):
-        self.keyboard.f6()
+        self.keyboard.f3()
 
     def cancel(self):
         self.keyboard.esc()
@@ -41,16 +41,17 @@ class ControllerSpoilerAutoFarm(BaseController):
     def sit(self):
         self.keyboard.enter()
         self.keyboard.text("/sit")
+        self.keyboard.enter()
 
     def stand(self):
         self.keyboard.enter()
         self.keyboard.text("/stand")
+        self.keyboard.enter()
 
     def next_target(self, target):
         self.keyboard.enter()
         if target is not None:
             self.keyboard.text("/target %s" % target)
-            time.sleep(0.4)
         else:
             self.keyboard.f11()
             # self.keyboard.text("/targetnext")
@@ -99,7 +100,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
     target_state = TARGET_NEXT
 
     use_spoil = True
-    use_manor = False
+    use_manor = True
     just_killed = False
     # TODO use this variable
     got_stuck = False
@@ -123,8 +124,6 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
             return self._handle_state_fight()
         if self.state == self.STATE_POST_FIGHT:
             return self._handle_state_post_fight()
-
-        return False
 
     def _handle_state_target(self):
         target = self.vision.target()
@@ -152,11 +151,15 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 # delay for movement. It depends on Camera.
                 return 1
 
-            if self.vision.user_status()[0] < 400:
+            status = self.vision.user_status()
+            if status.hp[0] < 800:
+                self.logger.warning("STATE TARGET. Low hp. Rest Hp is (%s / %s)", status.hp[0], status.hp[1])
                 self.controller.sit()
                 time.sleep(30)
                 self.controller.stand()
                 self.target_state = self.TARGET_NEXT
+                self.logger.warning("STATE TARGET. Rest finish")
+
                 return
 
             target = self._find_target()
@@ -223,22 +226,24 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         return .5
 
     def _handle_state_post_fight(self):
-        self.logger.warning("State POST FIGHT. Harvest  / Sweep / PickUp")
-
+        self.logger.warning("State POST FIGHT")
+        time.sleep(1)
         if self.use_manor:
+            self.logger.warning("State POST FIGHT: Harvest")
             self.controller.harvest()
-            time.sleep(0.2)
+            time.sleep(0.3)
 
         if self.use_spoil:
+            self.logger.warning("State POST FIGHT: Sweep")
             self.controller.sweep()
             time.sleep(0.3)
 
+        self.logger.warning("State POST FIGHT: pick up")
         self.controller.pick_up()
-        time.sleep(0.4)
+        time.sleep(0.5)
         self.controller.pick_up()
-        time.sleep(0.4)
+        time.sleep(0.5)
         self.controller.pick_up()
-        time.sleep(0.4)
         self.controller.cancel()
         self.controller.next_target(None)
 
@@ -246,8 +251,6 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         self.action_used = False
         self.just_killed = True
         self.start_fight_time = 0
-
-        return False
 
     def _reset(self):
         self.controller.cancel()
@@ -279,3 +282,4 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 return interested_mobs[0]
         else:
             # todo scroll camera to find mob ? No need to use command  at all ?
+            pass

@@ -73,7 +73,7 @@ class ArduinoKeyboard(BaseKeyboard):
     logger = logging.getLogger("ArduinoKeyboard")
 
     def __init__(self, port, baudrate=9600, time_out=0.01):
-        self.logger.info("Arduino initialization", answer)
+        self.logger.info("Arduino initialization")
         self.arduino = self.serial.Serial(port=port, baudrate=baudrate, timeout=time_out)
 
         question = str.encode("Initialized")
@@ -156,6 +156,7 @@ class ArduinoKeyboard(BaseKeyboard):
     def text(self, text):
         data = str.encode("2{}".format(text))
         answer = self._arduino_write(data)
+        time.sleep(0.07 * len(text))
         return data == answer
 
     def mouse_down(self, btn):
@@ -192,6 +193,6 @@ class ArduinoKeyboard(BaseKeyboard):
 
     def _arduino_write(self, data):
         self.arduino.write(data)
-        time.sleep(0.1)
+        time.sleep(0.2)
         answer = self.arduino.readline()
         return answer
