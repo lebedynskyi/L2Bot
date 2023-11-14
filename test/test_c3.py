@@ -13,20 +13,20 @@ class TestNearestTargetsParser(unittest.TestCase):
     def test_parsing1(self):
         rgb, grey = read_input_img("../res/input/c3/Shot00004.bmp")
 
-        print("Start %s\n" % datetime.datetime.now())
+        print("Start %s" % datetime.datetime.now())
         result = self.parser.parse(rgb, grey)
         for r in result:
             print("%s distance -> %s" % (r.name, r.distance))
-        print("\nFinish %s\n" % datetime.datetime.now())
+        print("Finish %s\n\n" % datetime.datetime.now())
 
     def test_parsing2(self):
         rgb, grey = read_input_img("../res/input/c3/Shot00008.bmp")
 
-        print("Start %s\n" % datetime.datetime.now())
+        print("Start %s" % datetime.datetime.now())
         result = self.parser.parse(rgb, grey)
         for r in result:
             print("%s distance -> %s" % (r.name, r.distance))
-        print("\nFinish %s" % datetime.datetime.now())
+        print("Finish %s\n\n" % datetime.datetime.now())
 
 
 class TestC3TargetParser(unittest.TestCase):

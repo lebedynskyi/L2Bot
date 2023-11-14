@@ -5,8 +5,7 @@ import time
 from fuzzywuzzy import fuzz
 
 from src.base import Capture
-from src.bot.base import BehaviourHandler
-from src.controller import BaseController
+from src.bot.base import BehaviourHandler, BaseController
 from src.keyboard import BaseKeyboard
 from src.vision import Vision
 

@@ -5,7 +5,7 @@ from threading import Thread
 import cv2
 import numpy as np
 
-from src.ocr.recognition import TextRecognition, NumbersRecognition
+from src.ocr.recognition import TextRecognition
 from src.parser.result import NearTargetResult, TargetResult, UserStatusResult
 from src.template import Template
 
@@ -232,7 +232,7 @@ class UserStatusParser(BaseParser, ABC):
     def __init__(self, templates: Template, debug=False):
         super().__init__(debug)
         self.templates = templates
-        self.ocr = TextRecognition()
+        self.ocr = TextRecognition(debug=debug)
 
     def parse(self, rgb, gray, *args, **kwargs):
         result = UserStatusResult()
@@ -253,18 +253,26 @@ class UserStatusParser(BaseParser, ABC):
         cropped = grey[match[1] + self.hp_y_offset:match[1] + self.hp_y_offset + self.hp_h,
                   match[0] + self.hp_x_offset:match[0] + self.hp_x_offset + self.hp_w]
 
-        inverted = cv2.bitwise_not(cropped)
+        # inverted = cv2.bitwise_not(cropped)
 
         if self.debug:
-            self.show_im(inverted, "Status HP area")
+            self.show_im(cropped, "Status HP area")
 
         try:
-            hp = self.ocr.extract(inverted, 2, whitelist="0123456789/")
+            hp = self.ocr.extract(cropped, 3, whitelist="0123456789/")
             split = hp.split("/")
-            return int(split[0]), int(split[1])
+            return self._cleanup_values(int(split[0]), int(split[1]))
         except:
             pass
         return None
+
+    def _cleanup_values(self, cur, max):
+        s_cur = str(cur)
+        s_max = str(cur)
+        if len(s_cur) > len(s_max) or cur > max:
+            return int(s_cur[1:]), max
+
+        return cur, max
 
     def _parse_mp(self, grey, match):
         cropped = grey[match[1] + self.mp_y_offset:match[1] + self.mp_y_offset + self.mp_h,

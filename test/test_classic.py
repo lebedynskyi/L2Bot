@@ -69,7 +69,6 @@ class TestClassicTargetParser(unittest.TestCase):
 
 class TestClassicUserStatus(unittest.TestCase):
     def setUp(self):
-        print("Tess version is %s" % pytesseract.get_tesseract_version())
         self.templates = ClassicTemplates("../res/templates")
         self.parser = ClassicUserStatusParser(self.templates, debug=False)
 

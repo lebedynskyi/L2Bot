@@ -10,9 +10,12 @@ os.environ['OMP_THREAD_LIMIT'] = '1'
 
 
 class Recognition(ABC):
+    def __init__(self, debug=False):
+        self.debug = debug
+
     i = 0
     oem = 3
-    psm = 12
+    psm = 7
 
     @abstractmethod
     def extract(self, img_grey, scale, whitelist=""):
@@ -27,10 +30,12 @@ class Recognition(ABC):
             dim = (width, height)
 
             resized = cv2.resize(thresh, dim, interpolation=cv2.INTER_AREA)
-            blur = cv2.GaussianBlur(resized, (5, 5), 0)
+            blur = cv2.blur(resized, (5,5))
+            # blur = cv2.GaussianBlur(resized, (5,5), 0)
 
-            # cv2.imshow("blurred", blur)
-            # cv2.waitKey(0)
+            if self.debug:
+                cv2.imshow("Blured OCR Image", blur)
+                cv2.waitKey(0)
 
             tes_config = r"--oem %s --psm %s -l eng -c tessedit_char_whitelist=%s" % (self.oem, self.psm, whitelist)
             text = pytesseract.image_to_string(blur, config=tes_config)

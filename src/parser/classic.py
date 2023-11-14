@@ -35,4 +35,4 @@ class ClassicUserStatusParser(UserStatusParser):
     mp_w = 100
 
     lower_color = np.array([0, 0, 0])
-    upper_color = np.array([179, 27, 255])
+    upper_color = np.array([179, 60, 255])

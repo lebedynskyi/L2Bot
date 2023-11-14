@@ -1,6 +1,11 @@
-import logging
+from abc import ABC
 
-logger = logging.getLogger("Handler")
+from src.keyboard import BaseKeyboard
+
+
+class BaseController(ABC):
+    def __init__(self, keyboard: BaseKeyboard):
+        self.keyboard = keyboard
 
 
 class BehaviourHandler:

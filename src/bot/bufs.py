@@ -1,8 +1,7 @@
 import logging
 import time
 
-from src.bot.base import BehaviourHandler
-from src.controller import BaseController
+from src.bot.base import BehaviourHandler, BaseController
 from src.vision import Vision
 
 

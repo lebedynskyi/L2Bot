@@ -39,7 +39,8 @@ class Template:
     @staticmethod
     def _read_template(res_folder, sub_folder, name):
         template_file = os.path.join(res_folder, sub_folder, name)
-        return cv2.imread(template_file, flags=cv2.IMREAD_GRAYSCALE)
+        if os.path.exists(template_file):
+            return cv2.imread(template_file, flags=cv2.IMREAD_GRAYSCALE)
 
 
 class GraciaRebornTemplates(Template):
