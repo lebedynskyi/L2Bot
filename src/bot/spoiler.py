@@ -179,7 +179,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         if target.exist and target.hp == 0:
             self.logger.info("State FIGHT, Target killed")
             self.state = self.STATE_POST_FIGHT
-            return 0.5
+            return 1
 
         if time.time() - self.start_fight_time > 10 and target.hp >= 99:
             self.logger.info("State FIGHT, Probably got stuck. Reset state")
@@ -235,6 +235,8 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         time.sleep(0.4)
         self.controller.pick_up()
         time.sleep(0.4)
+        self.controller.pick_up()
+        time.sleep(0.1)
         self.controller.cancel()
 
         self.state = self.STATE_TARGET

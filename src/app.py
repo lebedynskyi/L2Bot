@@ -16,6 +16,7 @@ def farm_app():
     return (
         HandlerSpoilerAutoFarm(controller, vision, mobs=(
             {"name": "Hobgoblin", "is_aggr": False},
+            {"name": "Dion Grizzly", "is_aggr": False},
             # {"name": "Boogle Ratman Leader", "is_aggr": False},
             # {"name": "Corpse Candle", "is_aggr": False},
             # {"name": "Pitchstone Golem", "is_aggr": False},
