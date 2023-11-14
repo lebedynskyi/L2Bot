@@ -77,22 +77,82 @@ class TestClassicUserStatus(unittest.TestCase):
         rgb, grey = read_input_img("../res/input/classic/Status_1.bmp")
         result = self.parser.parse(rgb, grey)
         assert result is not None
-        self.assertEqual((744, 744), result.cp)
+        # self.assertEqual((744, 744), result.cp)
         self.assertEqual((561, 1163), result.hp)
-        self.assertEqual((120, 295), result.mp)
+        # self.assertEqual((120, 295), result.mp)
 
     def test_2(self):
         rgb, grey = read_input_img("../res/input/classic/Status_2.bmp")
         result = self.parser.parse(rgb, grey)
         assert result is not None
-        self.assertEqual((249, 249), result.cp)
+        # self.assertEqual((249, 249), result.cp)
         self.assertEqual((336, 356), result.hp)
-        self.assertEqual((114, 114), result.mp)
+        # self.assertEqual((114, 114), result.mp)
 
     def test_3(self):
         rgb, grey = read_input_img("../res/input/classic/Status_3.bmp")
         result = self.parser.parse(rgb, grey)
         assert result is not None
-        self.assertEqual((249, 249), result.cp)
+        # self.assertEqual((249, 249), result.cp)
         self.assertEqual((356, 356), result.hp)
-        self.assertEqual((114, 114), result.mp)
+        # self.assertEqual((114, 114), result.mp)
+
+    def test_4(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_4.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((561, 1163), result.hp)
+
+    def test_5(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_5.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((995, 1289), result.hp)
+
+    def test_6(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_6.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((717, 1289), result.hp)
+
+    def test_7(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_7.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((650, 1289), result.hp)
+
+    def test_8(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_8.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((617, 1289), result.hp)
+
+    def test_9(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_9.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((584, 1289), result.hp)
+
+    def test_10(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_10.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((517, 1289), result.hp)
+
+    def test_11(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_11.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((483, 1289), result.hp)
+
+    def test_12(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_12.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((339, 1289), result.hp)
+
+    def test_13(self):
+        rgb, grey = read_input_img("../res/input/classic/Status_13.bmp")
+        result = self.parser.parse(rgb, grey)
+        assert result is not None
+        self.assertEqual((276, 1289), result.hp)

@@ -25,8 +25,8 @@ class ClassicUserStatusParser(UserStatusParser):
     cp_w = 100
 
     hp_x_offset = 25
-    hp_y_offset = 11
-    hp_h = 12
+    hp_y_offset = 10
+    hp_h = 16
     hp_w = 100
 
     mp_x_offset = 25
@@ -35,4 +35,4 @@ class ClassicUserStatusParser(UserStatusParser):
     mp_w = 100
 
     lower_color = np.array([0, 0, 0])
-    upper_color = np.array([179, 38, 255])
+    upper_color = np.array([179, 27, 255])

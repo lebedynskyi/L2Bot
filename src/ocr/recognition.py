@@ -15,7 +15,7 @@ class Recognition(ABC):
     psm = 12
 
     @abstractmethod
-    def extract(self, img_grey, scale):
+    def extract(self, img_grey, scale, whitelist=""):
         pass
 
     def parse_text(self, img_grey, scale, whitelist):
@@ -41,10 +41,10 @@ class Recognition(ABC):
 
 
 class NumbersRecognition(Recognition):
-    def extract(self, img_grey, scale):
+    def extract(self, img_grey, scale, whitelist="0123456789"):
         text = None
         try:
-            text = self.parse_text(img_grey, scale, "0123456789/")
+            text = self.parse_text(img_grey, scale, whitelist)
             logger.debug("Parsed text is -> '%s'", text)
             return int(text.strip())
         except BaseException as e:
@@ -53,9 +53,9 @@ class NumbersRecognition(Recognition):
 
 
 class TextRecognition(Recognition):
-    def extract(self, img_grey, scale):
+    def extract(self, img_grey, scale, whitelist=""):
         try:
-            text = self.parse_text(img_grey, scale, "")
+            text = self.parse_text(img_grey, scale, whitelist)
             logger.debug("Parsed text is -> '%s'", text)
             if text:
                 return text.strip()

@@ -5,7 +5,7 @@ from threading import Thread
 import cv2
 import numpy as np
 
-from src.ocr.recognition import TextRecognition
+from src.ocr.recognition import TextRecognition, NumbersRecognition
 from src.parser.result import NearTargetResult, TargetResult, UserStatusResult
 from src.template import Template
 
@@ -239,6 +239,9 @@ class UserStatusParser(BaseParser, ABC):
         status_match = self.match_template(gray, self.templates.user_status)
         if status_match is not None:
             masked = self.hsv_mask(rgb, self.lower_color, self.upper_color)
+            if self.debug:
+                self.show_im(masked, "Masked image")
+
             grey_scaled = cv2.cvtColor(masked, cv2.COLOR_RGB2GRAY)
 
             # result.cp = self._parse_cp(grey_scaled, status_match)
@@ -250,11 +253,13 @@ class UserStatusParser(BaseParser, ABC):
         cropped = grey[match[1] + self.hp_y_offset:match[1] + self.hp_y_offset + self.hp_h,
                   match[0] + self.hp_x_offset:match[0] + self.hp_x_offset + self.hp_w]
 
+        inverted = cv2.bitwise_not(cropped)
+
         if self.debug:
-            self.show_im(cropped, "Status HP area")
+            self.show_im(inverted, "Status HP area")
 
         try:
-            hp = self.ocr.extract(cropped, 2)
+            hp = self.ocr.extract(inverted, 2, whitelist="0123456789/")
             split = hp.split("/")
             return int(split[0]), int(split[1])
         except:

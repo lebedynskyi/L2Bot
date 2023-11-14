@@ -71,5 +71,5 @@ def run_color_picker(img_file):
 
 
 if __name__ == "__main__":
-    run_color_picker("res/input/classic/Status_1.bmp")
+    run_color_picker("res/input/classic/Status_11.bmp")
     # run_color_picker("res/input/gracia/HP_78.bmp")
