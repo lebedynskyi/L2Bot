@@ -279,4 +279,3 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 return interested_mobs[0]
         else:
             # todo scroll camera to find mob ? No need to use command  at all ?
-            pass
