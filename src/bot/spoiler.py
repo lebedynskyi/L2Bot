@@ -38,15 +38,23 @@ class ControllerSpoilerAutoFarm(BaseController):
     def cancel(self):
         self.keyboard.esc()
 
+    def sit(self):
+        self.keyboard.enter()
+        self.keyboard.text("/sit")
+
+    def stand(self):
+        self.keyboard.enter()
+        self.keyboard.text("/stand")
+
     def next_target(self, target):
         self.keyboard.enter()
-        time.sleep(0.1)
         if target is not None:
             self.keyboard.text("/target %s" % target)
-            time.sleep(0.5)
+            time.sleep(0.4)
         else:
-            self.keyboard.text("/targetnext")
-            time.sleep(0.3)
+            self.keyboard.f11()
+            # self.keyboard.text("/targetnext")
+            # time.sleep(0.2)
 
         self.keyboard.enter()
         pass
@@ -69,9 +77,9 @@ class ControllerSpoilerAutoFarm(BaseController):
         time.sleep(0.2)
         self.keyboard.mouse_down(self.keyboard.KEY_MOUSE_RIGHT)
         if is_left:
-            self.keyboard.mouse_move(center_x - 100, center_y)
+            self.keyboard.mouse_move(center_x - 150, center_y)
         else:
-            self.keyboard.mouse_move(center_x + 100, center_y)
+            self.keyboard.mouse_move(center_x + 150, center_y)
         time.sleep(0.2)
         self.keyboard.mouse_up(self.keyboard.KEY_MOUSE_RIGHT)
 
@@ -97,7 +105,6 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
     got_stuck = False
     action_used = False
     last_killed_target = None
-    default_delay = 0.2
     start_fight_time = 0
 
     def __init__(self, controller: ControllerSpoilerAutoFarm, vision: Vision, mobs=None):
@@ -139,19 +146,26 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         if self.target_state == self.TARGET_MOUSE:
             if self.target_mouse_counter >= 2:
                 self.logger.warning("STATE TARGET. Cannot select target by mouse. Stop and retry")
-                self.target_mouse_counter = 0
                 self.controller.move(self.vision.capture.center)
-                # ping + delay for drawing
+                self.target_mouse_counter = 0
+                self.target_state = self.TARGET_NEXT
+                # delay for movement. It depends on Camera.
                 return 1
+
+            if self.vision.user_status()[0] < 400:
+                self.controller.sit()
+                time.sleep(30)
+                self.controller.stand()
+                self.target_state = self.TARGET_NEXT
+                return
 
             target = self._find_target()
             # no visible target on screen
             if target is not None:
+                self.logger.info("State TARGET. Target selected by mouse, distance %s", target.distance)
                 self.controller.select_target(target)
                 self.target_mouse_counter = self.target_mouse_counter + 1
-                self.logger.info("State TARGET. Target selected by mouse, distance %s", target.distance)
-                # ping + delay for drawing
-                return self.default_delay
+                return 0.5
             else:
                 self.target_state = self.TARGET_COMMAND
 
@@ -183,7 +197,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
             self.logger.info("State FIGHT, Probably got stuck. Reset state")
             self.got_stuck = True
             self._reset()
-            return self.default_delay
+            return
 
         if int(time.time() - self.start_fight_time) % 3 == 0:
             self.controller.attack()
@@ -194,13 +208,9 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
 
             if self.use_spoil:
                 self.controller.spoil()
-                self.controller.spoil()
-                time.sleep(0.3)
 
             if self.use_manor:
                 self.controller.manor()
-                self.controller.manor()
-                time.sleep(0.3)
 
             self.action_used = True
             return
@@ -217,13 +227,9 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
 
         if self.use_manor:
             self.controller.harvest()
-            time.sleep(0.1)
-            self.controller.harvest()
-            time.sleep(0.3)
+            time.sleep(0.2)
 
         if self.use_spoil:
-            self.controller.sweep()
-            time.sleep(0.1)
             self.controller.sweep()
             time.sleep(0.3)
 
@@ -234,6 +240,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         self.controller.pick_up()
         time.sleep(0.4)
         self.controller.cancel()
+        self.controller.next_target(None)
 
         self.state = self.STATE_TARGET
         self.action_used = False
@@ -251,7 +258,7 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
         self.state = self.STATE_TARGET
         self.target_state = self.TARGET_NEXT
 
-    def _find_target(self, ):
+    def _find_target(self):
         targets = self.vision.near_targets()
 
         interested_mobs = []
@@ -270,3 +277,6 @@ class HandlerSpoilerAutoFarm(BehaviourHandler):
                 return interested_mobs[1]
             else:
                 return interested_mobs[0]
+        else:
+            # todo scroll camera to find mob ? No need to use command  at all ?
+            pass

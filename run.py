@@ -54,12 +54,11 @@ def register_hotkeys(toggle_callback, exit_callback):
     def on_press(key):
         try:
             keys.add(key.char)
-
             if (key.char == "s" or key.char == "S") and (
-                    keyboard.Key.ctrl in keys or keyboard.Key.ctrl_l in keys or keyboard.Key.ctrl_r in keys):
+                    keyboard.Key.alt in keys or keyboard.Key.alt_l in keys or keyboard.Key.alt_r in keys):
                 toggle_callback()
             if (key.char == "q" or key.char == "Q") and (
-                    keyboard.Key.ctrl in keys or keyboard.Key.ctrl_l in keys or keyboard.Key.ctrl_r in keys):
+                    keyboard.Key.alt in keys or keyboard.Key.alt_l in keys or keyboard.Key.alt_r in keys):
                 exit_callback()
         except AttributeError:
             keys.add(key)

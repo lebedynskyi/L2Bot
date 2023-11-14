@@ -73,104 +73,99 @@ class ArduinoKeyboard(BaseKeyboard):
     logger = logging.getLogger("ArduinoKeyboard")
 
     def __init__(self, port, baudrate=9600, time_out=0.01):
-        question = str.encode("Initialization")
-
+        self.logger.info("Arduino initialization", answer)
         self.arduino = self.serial.Serial(port=port, baudrate=baudrate, timeout=time_out)
-        self.arduino.write(question)
-        answer = self.arduino.readline()
 
-        self.logger.info("Arduino initialization answer -> %s", answer)
+        question = str.encode("Initialized")
+        answer = self._arduino_write(question)
+
+        self.logger.info("Arduino initialization answer -> '%s'", answer)
         if answer != question:
             raise ConnectionError("Not expected answer from arduino keyboard")
 
     def f1(self):
         data = str.encode("1{}".format(0xC2))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f2(self):
         data = str.encode("1{}".format(0xC3))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f3(self):
         data = str.encode("1{}".format(0xC4))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f4(self):
         data = str.encode("1{}".format(0xC5))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f5(self):
         data = str.encode("1{}".format(0xC6))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f6(self):
         data = str.encode("1{}".format(0xC7))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f7(self):
         data = str.encode("1{}".format(0xC8))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f8(self):
         data = str.encode("1{}".format(0xC9))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f9(self):
         data = str.encode("1{}".format(0xCA))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f10(self):
         data = str.encode("1{}".format(0xCB))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f11(self):
         data = str.encode("1{}".format(0xCC))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def f12(self):
         data = str.encode("1{}".format(0xCD))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def enter(self):
         data = str.encode("1{}".format(0xB0))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def esc(self):
         data = str.encode("1{}".format(0xB1))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
     def text(self, text):
         data = str.encode("2{}".format(text))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
+        return data == answer
+
+    def mouse_down(self, btn):
+        data = str.encode("7{}".format(btn))
+        answer = self._arduino_write(data)
+        return data == answer
+
+    def mouse_up(self, btn):
+        data = str.encode("8{}".format(btn))
+        answer = self._arduino_write(data)
         return data == answer
 
     def mouse_move(self, x, y):
@@ -183,28 +178,20 @@ class ArduinoKeyboard(BaseKeyboard):
 
         cords_value = abs(x_delta) * 0xFFFF + abs(y_delta)
         data = "5{}{}{}".format(znak_x, znak_y, cords_value)
-        self.arduino.write(data.encode())
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data.encode())
         return data == answer
 
     def mouse_click(self, btn, cords=None):
         if cords is not None:
             self.mouse_move(cords[0], cords[1])
-            time.sleep(0.3)
+            time.sleep(0.2)
 
         data = str.encode("6{}".format(btn))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
+        answer = self._arduino_write(data)
         return data == answer
 
-    def mouse_down(self, btn):
-        data = str.encode("7{}".format(btn))
+    def _arduino_write(self, data):
         self.arduino.write(data)
+        time.sleep(0.1)
         answer = self.arduino.readline()
-        return data == answer
-
-    def mouse_up(self, btn):
-        data = str.encode("8{}".format(btn))
-        self.arduino.write(data)
-        answer = self.arduino.readline()
-        return data == answer
+        return answer

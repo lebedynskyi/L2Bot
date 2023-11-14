@@ -43,9 +43,16 @@ class HandlerRest(BehaviourHandler):
         self.pause_handlers = pausable_handler
 
     def _on_tick(self, delta):
-        user_status = self.vision.user_status()
+        target = self.vision.target()
+        if target.exist:
+            return
 
-        return 1190
+        user_status = self.vision.user_status()
+        if user_status.hp[0] / user_status.hp[1] < 0.3:
+            # TODO add states
+            # wait till regen
+            # continue farm
+            pass
 
     def _pause_handlers(self):
         for p in self.pause_handlers:
