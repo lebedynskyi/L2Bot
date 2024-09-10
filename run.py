@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 
 from pynput import keyboard
 
-from src.app import farm_app
+from src.app import farm_app, manor_app
 from src.base import Looper
 
 DEVELOP = True
@@ -80,17 +80,18 @@ def register_hotkeys(toggle_callback, exit_callback):
 
 
 if __name__ == "__main__":
-    print("--------------  Welcome to Vetalll bot --------------")
-    print("--------------  Press 'CTRL + s/S' to start/pause --------------")
-    print("--------------  Press 'CTRL + q/Q' to stop/exit --------------")
-
     init_logger()
     check_dependencies()
-    looper = Looper(*farm_app())
+    # looper = Looper(*farm_app("Taro"))
+    looper = Looper(*manor_app("Lineage II"), tick_delay=0)
 
     register_hotkeys(
         toggle_callback=lambda: looper.toggle_pause(),
         exit_callback=lambda: looper.stop()
     )
+
+    print("--------------  Welcome to Vetalll bot --------------")
+    print("--------------  Press 'ALT + s/S' to start/pause --------------")
+    print("--------------  Press 'ALT + q/Q' to stop/exit --------------")
 
     looper.start()

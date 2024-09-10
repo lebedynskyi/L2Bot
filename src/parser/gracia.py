@@ -9,8 +9,7 @@ from src.template import GraciaRebornTemplates
 
 class GraciaFishing(BaseParser):
     def __init__(self, templates: GraciaRebornTemplates, debug=False):
-        super().__init__(debug)
-        self.templates = templates
+        super().__init__(templates, debug)
         self.ocr = NumbersRecognition()
 
     def parse(self, rgb, grey, *args, **kwargs):

@@ -21,9 +21,9 @@ class Template:
     user_pet = None
 
     manor_window = None
-    manor_crop_sales = None
-    manor_chooser = None
-    manor_chooser_expanded = None
+    manor_crop_list = None
+    manor_price_list = None
+    manor_price_list_chooser = None
 
     def __init__(self, res_folder, sub_folder):
         stub = self._read_template(res_folder, sub_folder, "stub.png")
@@ -35,6 +35,9 @@ class Template:
         self.ui_fishing_dialog = self._read_template(res_folder, sub_folder, "dialog_fishing.png")
         self.ui_target = self._read_template(res_folder, sub_folder, "target.png")
         self.user_status = self._read_template(res_folder, sub_folder, "user_status.png")
+        self.manor_window = self._read_template(res_folder, sub_folder, "manor_window.png")
+        self.manor_crop_list = self._read_template(res_folder, sub_folder, "manor_crop_list.png")
+        self.manor_price_list = self._read_template(res_folder, sub_folder, "manor_price_list.png")
 
     @staticmethod
     def _read_template(res_folder, sub_folder, name):
@@ -53,6 +56,11 @@ class GraciaRebornTemplates(Template):
 class C3Templates(Template):
     def __init__(self, folder):
         super().__init__(folder, "c3")
+
+
+class C4Templates(Template):
+    def __init__(self, folder):
+        super().__init__(folder, "c4")
 
 
 class ClassicTemplates(Template):

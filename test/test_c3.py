@@ -11,7 +11,7 @@ class TestNearestTargetsParser(unittest.TestCase):
         self.parser = C3NearTargetsParser(debug=False)
 
     def test_parsing1(self):
-        rgb, grey = read_input_img("../res/input/c3/Shot00004.bmp")
+        rgb, grey = read_input_img("../res/input/c3/NearTargets1.bmp")
 
         print("Start %s" % datetime.datetime.now())
         result = self.parser.parse(rgb, grey)
@@ -20,7 +20,7 @@ class TestNearestTargetsParser(unittest.TestCase):
         print("Finish %s\n\n" % datetime.datetime.now())
 
     def test_parsing2(self):
-        rgb, grey = read_input_img("../res/input/c3/Shot00008.bmp")
+        rgb, grey = read_input_img("../res/input/c3/NearTargets2.bmp")
 
         print("Start %s" % datetime.datetime.now())
         result = self.parser.parse(rgb, grey)

@@ -16,7 +16,7 @@ class BehaviourHandler:
 
     def on_tick(self, time):
         if not self.is_paused:
-            if time > self.next_action_time:
+            if time >= self.next_action_time:
                 time_shift = self._on_tick(time - self.last_action_time)
                 self.last_action_time = time
 

@@ -196,3 +196,39 @@ class ArduinoKeyboard(BaseKeyboard):
         time.sleep(0.2)
         answer = self.arduino.readline()
         return answer
+
+
+class SoftwareKeyboard(BaseKeyboard):
+    import pyautogui
+    KEY_MOUSE_LEFT = pyautogui.PRIMARY
+    KEY_MOUSE_RIGHT = pyautogui.SECONDARY
+    KEY_MOUSE_MIDDLE = pyautogui.MIDDLE
+
+    def init(self):
+        self.pyautogui.FAILSAFE = False
+        self.pyautogui.MINIMUM_DURATION = 0.01
+        self.pyautogui.PAUSE = 0.01
+
+    def press(self, value):
+        pyautogui.press(value)
+
+    def text(self, text):
+        pyautogui.typewrite(text)
+
+    def mouse_move(self, x, y):
+        pyautogui.moveTo(int(x), int(y))
+
+    def mouse_click(self, btn=KEY_MOUSE_LEFT, cords=None):
+        if cords:
+            self.mouse_move(int(cords[0]), int(cords[1]))
+            pyautogui.mouseDown(button=btn)
+            pyautogui.mouseUp(button=btn)
+        else:
+            pyautogui.mouseDown(button=btn)
+            pyautogui.mouseUp(button=btn)
+
+    def mouse_down(self, btn):
+        pyautogui.mouseDown()
+
+    def mouse_up(self, btn):
+        pyautogui.mouseUp()

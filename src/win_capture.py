@@ -67,15 +67,16 @@ class WinCap(Capture):
 
         screen_bgr = np.array(screenshot)
         screen_rgb = cv2.cvtColor(screen_bgr, cv2.COLOR_BGR2RGB)
-        screen_grey = cv2.cvtColor(screen_rgb, cv2.COLOR_BGR2GRAY)
+        screen_grey = cv2.cvtColor(screen_bgr, cv2.COLOR_BGR2GRAY)
         return screen_rgb, screen_grey
 
     def _find_l2_window(self, win_name):
         def callback(hwnd, extra):
             title = win32gui.GetWindowText(hwnd)
-            if win_name.lower() in title.lower():
+            if win_name.lower() in title.lower() and not self.hwnd:
                 logger.info("Lineage 2 window found. Full name - %s", title)
                 self.hwnd = hwnd
+
 
         win32gui.EnumWindows(callback, None)
 
